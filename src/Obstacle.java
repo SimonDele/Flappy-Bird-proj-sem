@@ -1,7 +1,8 @@
+import javax.swing.JLabel;
 
 public class Obstacle {
 	
-	public static int taille = 50;
+	public static int taille = 100;
 	private int largeur = 25; //Fixe
 	
 	private int posY; //Centre de l'obstacle
@@ -34,11 +35,11 @@ public class Obstacle {
 		return posX;
 	}
 	
-	public void update(int hauteurEcran, int largeurEcran) {
+	public void update(int hauteurEcran, int largeurEcran, JLabel labScore) {
 		posX -= speed;
 		if(posX < 0) {
+			labScore.setText(String.valueOf(++Main.score));
 			posX = largeurEcran;
-
 			posObstHaut = posY - Obstacle.taille/2;
 			posObstBas = posY + Obstacle.taille/2;
 			posY = Main.rand.nextInt(hauteurEcran);
