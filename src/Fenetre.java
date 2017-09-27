@@ -21,19 +21,13 @@ public class Fenetre extends JFrame {
 	}
 	
 	private void go() {
-		
 		while(true) {
-			
 			pjeu.repaint();
 			try {
-
-			      Thread.sleep(30);
-
-			    } catch (InterruptedException e) {
-
-			      e.printStackTrace();
-
-			    }
+				Thread.sleep(30);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

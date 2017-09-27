@@ -13,10 +13,10 @@ public class Obstacle {
 	
 	public Obstacle(int y, int x) {
 		posY = y;
-		posX = 500; //A changer, probleme à l'init vaut 0...
+		posX = x;
 		posObstHaut = y - Obstacle.taille/2;
 		posObstBas = y + Obstacle.taille/2;
-		System.out.println(posObstHaut);
+		System.out.println("Haut"+ posObstHaut + "Bas" + posObstBas);
 	}
 
 	public int getPosObstHaut() {
@@ -34,10 +34,20 @@ public class Obstacle {
 		return posX;
 	}
 	
-	public void update(int hauteurEcran) {
+	public void update(int hauteurEcran, int largeurEcran) {
 		posX -= speed;
-		posObstHaut = hauteurEcran - Obstacle.taille/2;
-		posObstBas = hauteurEcran + Obstacle.taille/2;
-		System.out.println(posObstHaut);
+		if(posX < 0) {
+			posX = largeurEcran;
+
+			posObstHaut = posY - Obstacle.taille/2;
+			posObstBas = posY + Obstacle.taille/2;
+			posY = Main.rand.nextInt(hauteurEcran);
+			System.out.println(posObstHaut);
+		}else {
+			/*posObstHaut = hauteurEcran - Obstacle.taille/2;
+			posObstBas = hauteurEcran + Obstacle.taille/2;*/
+		}
+
+		//System.out.println(posObstHaut);
 	}
 }
