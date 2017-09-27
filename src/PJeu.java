@@ -14,8 +14,10 @@ public class PJeu extends JPanel{
 	public PJeu() {
 		bird = new Bird(100);
 		this.setSize(new Dimension(300,500));
-		obstacles.add(new Obstacle(this.getHeight(),Main.rand.nextInt(this.getHeight())));
-		
+		System.out.println(this.getWidth());
+		obstacles.add(new Obstacle(Main.rand.nextInt(this.getHeight()),this.getWidth()));
+		obstacles.add(new Obstacle(Main.rand.nextInt(this.getHeight()),(int) (this.getWidth()*0.75)));
+		obstacles.add(new Obstacle(Main.rand.nextInt(this.getHeight()),(int) (this.getWidth()*0.5)));
 	}
 	public void paintComponent(Graphics g) {
 		

@@ -16,7 +16,7 @@ public class Obstacle {
 		posX = x;
 		posObstHaut = y - Obstacle.taille/2;
 		posObstBas = y + Obstacle.taille/2;
-		System.out.println("Haut"+ posObstHaut + "Bas" + posObstBas);
+		//System.out.println("Haut"+ posObstHaut + "Bas" + posObstBas);
 	}
 
 	public int getPosObstHaut() {
@@ -42,7 +42,7 @@ public class Obstacle {
 			posObstHaut = posY - Obstacle.taille/2;
 			posObstBas = posY + Obstacle.taille/2;
 			posY = Main.rand.nextInt(hauteurEcran);
-			System.out.println(posObstHaut);
+			//System.out.println(posObstHaut);
 		}else {
 			/*posObstHaut = hauteurEcran - Obstacle.taille/2;
 			posObstBas = hauteurEcran + Obstacle.taille/2;*/
