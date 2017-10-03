@@ -31,7 +31,7 @@ public class Main {
 		// Generation de la fenetre
 		Fenetre window = null;
 		try {
-			window = new Fenetre(DIMX, DIMY);
+			window = new Fenetre(Main.DIMX, Main.DIMY,jeu);
 			window.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();

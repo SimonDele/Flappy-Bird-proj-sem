@@ -2,7 +2,8 @@ package Vue;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import Modele.*;
+
+import Modele.Jeu;
 
 public class Fenetre extends JFrame {
 	
@@ -13,12 +14,13 @@ public class Fenetre extends JFrame {
 	private PJeu pjeu;
 	private Jeu jeu;
 
-	public Fenetre(int DIMX,int DIMY){
+	public Fenetre(int DIMX, int DIMY, Jeu jeu){
 		// Variables
 		Fenetre.DIMX = DIMX;
 		Fenetre.DIMY = DIMY;
 		title = new String("Flappy Bird");
-		jeu = new Jeu();
+		//jeu = new Jeu(); //Avant
+		this.jeu = jeu; //Apres
 		
 		// Window initialisation
 		
