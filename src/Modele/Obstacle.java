@@ -44,7 +44,9 @@ public class Obstacle {
 		return posX;
 	}
 	
-	public void update(int hauteurEcran, int largeurEcran, JLabel labScore) {
+	//A virer il me semble
+	/*
+	
 		posX -= speed;
 		if(posX < 0) {
 			labScore.setText(String.valueOf(++Main.score));
@@ -54,9 +56,10 @@ public class Obstacle {
 			posY = Main.rand.nextInt(hauteurEcran);
 		}
 	}
-	
+	*/
 	public boolean update() {
 		posX -= speed;
 		return posX + Obstacle.LARGEUR< 0; // returns whether to destroy it
+	
 	}
 }

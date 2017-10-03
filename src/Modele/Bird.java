@@ -13,8 +13,8 @@ public class Bird {
 	private float v0;
 	private float jumpHeight;
 
-	
-	public Bird() {
+	//Useless non ? 
+/*	public Bird() {
 		time = 0;
 		posY = 0;
 		posX = 10;
@@ -22,6 +22,7 @@ public class Bird {
 		gravity = 0.7f;
 		jumpHeight = Obstacle.INTERVAL / 2;
 	}
+	*/
 	public Bird(int y) {
 		time = 0;
 		posY = y;
@@ -51,18 +52,23 @@ public class Bird {
 	public void setSize(int size) {
 		this.size = size;
 	}
+	
+	//A virer ??
 	public void update() {
 		speed = -time*gravity + v0;
 		this.posY -= speed;
 		time++;	
 	}
 	
+	//Meme chose qu'au dessus...
 	public void update(boolean saut) {
 		speed = -time*gravity + v0;
 		this.posY -= speed;
 		time++;
 	}
 	
+	//C'est la même chose (ou presque) que dans la méthode end de la classe jeu non....?
+	// Elle est d'ailleur jamais appelé
 	public boolean aToucheObstacle() {
 		return ((this.getPosY() < 0) || (this.getPosY() > Fenetre.DIMY - 2*this.getSize()));
 	}

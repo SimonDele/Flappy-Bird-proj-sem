@@ -16,16 +16,17 @@ public class Fenetre extends JFrame {
 		// Variables
 		DIMX = 1000;
 		DIMY = 600;
-		title = new String("Smart Rockets");
+		title = new String("Flappy Bird");
 		jeu = new Jeu();
 		
-		// Initialisation fenetre
-		pjeu = new PJeu(DIMX, DIMY);
+		// Window initialisation
+		
 		this.setMinimumSize(new Dimension(DIMX,DIMY));
 		this.setTitle(title);
 	    this.setLocationRelativeTo(null);               
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			    
+		
+	    pjeu = new PJeu(DIMX, DIMY);
 		this.setContentPane(pjeu);
 		this.setVisible(true);
 		go();
