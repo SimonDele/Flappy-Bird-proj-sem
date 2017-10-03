@@ -6,8 +6,10 @@ import Controleur.*;
 
 public class Main {
 	public static Random rand = new Random();
-	public static int score = 0; //J'ai été obligé de le sortir de PJeu sinon il fait n'imorte quoi
-	
+	public static int score = 0; //J'ai été obligé de le sortir de PJeu sinon il fait n'importe quoi
+	public static int DIMX;
+	public static int DIMY;
+	/*
 	public static void main(String[] args) {
 		try {
 			Fenetre frame = new Fenetre();
@@ -16,8 +18,10 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void main2(String[] args) {
+	*/
+	public static void main(String[] args) {
+		DIMX = 1000;
+		DIMY = 600;
 		int delay = 15;
 		// Generation du Jeu (etat initial)
 		Jeu jeu = new Jeu();
@@ -27,7 +31,7 @@ public class Main {
 		// Generation de la fenetre
 		Fenetre window = null;
 		try {
-			window = new Fenetre();
+			window = new Fenetre(DIMX, DIMY);
 			window.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();

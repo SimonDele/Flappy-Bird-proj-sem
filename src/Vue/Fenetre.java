@@ -8,14 +8,15 @@ public class Fenetre extends JFrame {
 	
 	public static int DIMX;
 	public static int DIMY;
+	
 	private String title;
 	private PJeu pjeu;
 	private Jeu jeu;
 
-	public Fenetre(){
+	public Fenetre(int DIMX,int DIMY){
 		// Variables
-		DIMX = 1000;
-		DIMY = 600;
+		Fenetre.DIMX = DIMX;
+		Fenetre.DIMY = DIMY;
 		title = new String("Flappy Bird");
 		jeu = new Jeu();
 		

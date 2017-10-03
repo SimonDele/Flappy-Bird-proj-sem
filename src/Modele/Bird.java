@@ -70,7 +70,7 @@ public class Bird {
 	//C'est la même chose (ou presque) que dans la méthode end de la classe jeu non....?
 	// Elle est d'ailleur jamais appelé
 	public boolean aToucheObstacle() {
-		return ((this.getPosY() < 0) || (this.getPosY() > Fenetre.DIMY - 2*this.getSize()));
+		return ((this.getPosY() < 0) || (this.getPosY() > Jeu.DIMY - 2*this.getSize()));
 	}
 	public void up() {
 		time = 0;

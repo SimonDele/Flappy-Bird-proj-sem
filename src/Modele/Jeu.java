@@ -8,13 +8,18 @@ import Vue.Fenetre;
 public class Jeu {
 	private Bird bird;
 	private ArrayList<Obstacle> obstacles;
+	public static int DIMY;
+	public static int DIMX;
 	
 	public Jeu() {
-		bird = new Bird(Fenetre.DIMY/2);
+		Jeu.DIMX = Main.DIMX;
+		Jeu.DIMY = Main.DIMY;
+		
+		bird = new Bird(Jeu.DIMY/2);
 		// creating list
 		obstacles = new ArrayList<Obstacle>();
 		// instanciating. Be careful : if multiple, ASCENDING X order !	
-		obstacles.add(new Obstacle(Main.rand.nextInt(Fenetre.DIMY),Fenetre.DIMX));
+		obstacles.add(new Obstacle(Main.rand.nextInt(Jeu.DIMY),Jeu.DIMX));
 	}
 	
 	public void update(boolean saut) {
@@ -28,12 +33,12 @@ public class Jeu {
 		}
 		if (destroy) {
 			obstacles.remove(0);
-			obstacles.add(new Obstacle(Main.rand.nextInt(Fenetre.DIMY),Fenetre.DIMX));
+			obstacles.add(new Obstacle(Main.rand.nextInt(Jeu.DIMY),Jeu.DIMX));
 		}
 	}
 	
 	public boolean end() {
-		return ((bird.getPosY() < bird.getSize()) || (bird.getPosY() > Fenetre.DIMY - bird.getSize())) ;
+		return ((bird.getPosY() < bird.getSize()) || (bird.getPosY() > Jeu.DIMY - bird.getSize())) ;
 	}
 
 	
