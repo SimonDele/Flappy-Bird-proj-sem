@@ -38,7 +38,8 @@ public class Main {
 		}
 
 		// boucle de jeu
-		while(!jeu.end()) {
+		while(true) {//!jeu.end()) {
+			
 			// update du modele
 			jeu.update(saut);
 			// update de l'affichage 

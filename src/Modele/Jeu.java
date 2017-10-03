@@ -20,6 +20,10 @@ public class Jeu {
 		obstacles = new ArrayList<Obstacle>();
 		// instanciating. Be careful : if multiple, ASCENDING X order !	
 		obstacles.add(new Obstacle(Main.rand.nextInt(Jeu.DIMY),Jeu.DIMX));
+		System.out.println(obstacles);
+	}
+	public ArrayList<Obstacle> getObstacles(){
+		return obstacles;
 	}
 	
 	public void update(boolean saut) {

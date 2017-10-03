@@ -29,10 +29,10 @@ public class Fenetre extends JFrame {
 	    this.setLocationRelativeTo(null);               
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-	    pjeu = new PJeu(DIMX, DIMY);
+	    pjeu = new PJeu(DIMX, DIMY, jeu);
 		this.setContentPane(pjeu);
 		this.setVisible(true);
-		go();
+		//go();
 			
 	}
 	

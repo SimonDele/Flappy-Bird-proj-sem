@@ -20,16 +20,23 @@ public class PJeu extends JPanel implements KeyListener{
 	private ArrayList<Obstacle> obstacles;
 	private static int score;
 	private static JLabel labScore;
-	public PJeu(int dimx, int dimy) {
+	private Jeu jeu;
+	
+	public PJeu(int dimx, int dimy, Jeu jeu) {
+		
+		this.jeu = jeu;
+		
 		
 		this.setSize(new Dimension(dimx,dimy));
 		
 		//Creation des composants
 		bird = new Bird(Fenetre.DIMY/2);
-		
+		obstacles = jeu.getObstacles();
+		/*
 		obstacles = new ArrayList<Obstacle>();
 		obstacles.add(new Obstacle((int) Main.rand.nextInt(Fenetre.DIMY - 2*Obstacle.INTERVAL) 
 				+ Obstacle.INTERVAL,Fenetre.DIMX));
+		*/
 		this.addKeyListener(this);
 		this.setFocusable(true);
 		
@@ -46,6 +53,7 @@ public class PJeu extends JPanel implements KeyListener{
 	
 	
 	public void paintComponent(Graphics g) {
+		   
 		Graphics2D g2d = (Graphics2D) g;
 		//Recouvrement de la fenetre avec la couleur de fond afin d'effacer ce qui est present
 		g2d.setColor(Color.black);
@@ -68,6 +76,7 @@ public class PJeu extends JPanel implements KeyListener{
 				g2d.fillRect(obstacles.get(i).getPosX(),0, Obstacle.LARGEUR,obstacles.get(i).getPosObstHaut());
 				g2d.fillRect(obstacles.get(i).getPosX(),obstacles.get(i).getPosObstBas(), Obstacle.LARGEUR,this.getHeight()-obstacles.get(i).getPosObstBas());		
 			}
+			/*
 			if (destroy) {
 				obstacles.remove(0);
 			}
@@ -75,7 +84,7 @@ public class PJeu extends JPanel implements KeyListener{
 					&& (Main.rand.nextFloat() < Obstacle.GENPROBA)) {
 				obstacles.add(new Obstacle((int) Main.rand.nextInt(Fenetre.DIMY - 2*Obstacle.INTERVAL)
 						+ Obstacle.INTERVAL,Fenetre.DIMX));
-			}
+			}*/
 		}else {
 			//T'as perdu 
 		}
