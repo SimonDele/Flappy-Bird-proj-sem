@@ -4,15 +4,19 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Main.Main;
-import Modele.*;
+import Modele.Bird;
+import Modele.Jeu;
+import Modele.Obstacle;
 
 public class PJeu extends JPanel implements KeyListener{
 	
@@ -21,13 +25,23 @@ public class PJeu extends JPanel implements KeyListener{
 	private static int score;
 	private static JLabel labScore;
 	private Jeu jeu;
+	private Image imBird;
 	
 	public PJeu(int dimx, int dimy, Jeu jeu) {
 		
 		this.jeu = jeu;
 		
-		
 		this.setSize(new Dimension(dimx,dimy));
+		
+		//Images
+		imBird = null;
+		/*try {
+			//imBird = ImageIO.read();
+		} catch (IOException e) {
+			System.out.println("Erreur lecture fichier");
+			e.printStackTrace();
+		}*/
+		System.out.println(this.getClass().getResource("ressources/whaledown.png"));
 		
 		//Creation des composants
 		bird = new Bird(Fenetre.DIMY/2);
@@ -65,8 +79,10 @@ public class PJeu extends JPanel implements KeyListener{
 		
 		boolean destroy = false;
 		if(!bird.aToucheObstacle()) {
-			g2d.setColor(Color.yellow);
-			g2d.fillOval(bird.getPosX(), bird.getPosY(), bird.getSize(), bird.getSize());
+			//g2d.setColor(Color.yellow);
+			g2d.drawImage(imBird, bird.getPosX(), bird.getPosY(),this);
+			
+			//g2d.fillOval(bird.getPosX(), bird.getPosY(), bird.getSize(), bird.getSize());
 		
 			// 2/Obstacles
 			g2d.setColor(Color.green);
