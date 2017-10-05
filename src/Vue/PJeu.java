@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -25,7 +26,7 @@ public class PJeu extends JPanel implements KeyListener{
 	private static int score;
 	private static JLabel labScore;
 	private Jeu jeu;
-	private Image imBird;
+	private BufferedImage imBird;
 	private Image background;
 	
 	public PJeu(int dimx, int dimy, Jeu jeu) {
@@ -35,9 +36,7 @@ public class PJeu extends JPanel implements KeyListener{
 		this.setSize(new Dimension(dimx,dimy));
 		
 		
-		
-		//System.out.println(this.getClass().getResource("ressources/whaledown.png"));
-		
+	
 		//Creation des composants
 		bird = new Bird(Fenetre.DIMY/2);
 		obstacles = jeu.getObstacles();
@@ -48,14 +47,17 @@ public class PJeu extends JPanel implements KeyListener{
 		*/
 		
 		//Images
-		imBird = null;
+		Image imBirdTemp = null;
 		try {
-			imBird = ImageIO.read(this.getClass().getResource("ressources/whaledown.png"));
-			imBird = imBird.getScaledInstance(bird.getSize(), bird.getSize(), Image.SCALE_DEFAULT);
+			imBirdTemp = ImageIO.read(this.getClass().getResource("ressources/whaledown.png"));
+			imBirdTemp = imBirdTemp.getScaledInstance(bird.getSize(), bird.getSize(), Image.SCALE_DEFAULT);
 		}catch (IOException e) {
 			System.out.println("Erreur lecture fichier");
 			e.printStackTrace();
 		}
+		imBird = new BufferedImage(imBirdTemp.getWidth(null),imBirdTemp.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		imBird.getGraphics().drawImage(imBirdTemp, 0, 0 , null);
+		imBird = createColorImage(imBird,0xFF00FF00);
 		try {
 			background = ImageIO.read(this.getClass().getResource("ressources/background.png"));
 			background = background.getScaledInstance(Fenetre.DIMX, Fenetre.DIMY, Image.SCALE_AREA_AVERAGING);
@@ -83,10 +85,6 @@ public class PJeu extends JPanel implements KeyListener{
 		   
 		Graphics2D g2d = (Graphics2D) g;
 		//Recouvrement de la fenetre avec la couleur de fond afin d'effacer ce qui est present
-		/*
-		g2d.setColor(Color.black);
-		g2d.fillRect(0, 0, this.getWidth(), this.getHeight());;
-		*/
 		g2d.drawImage(background, 0, 0, this);
 		//Replacement des composants
 		// 1/ Bird
@@ -138,4 +136,18 @@ public class PJeu extends JPanel implements KeyListener{
 		
 		
 	}
+	
+    private BufferedImage createColorImage(BufferedImage originalImage, int mask) {
+        BufferedImage colorImage = new BufferedImage(originalImage.getWidth(),
+                originalImage.getHeight(), originalImage.getType());
+
+        for (int x = 0; x < originalImage.getWidth(); x++) {
+            for (int y = 0; y < originalImage.getHeight(); y++) {
+                int pixel = originalImage.getRGB(x, y) & mask;
+                colorImage.setRGB(x, y, pixel);
+            }
+        }
+
+        return colorImage;
+    }
 }
