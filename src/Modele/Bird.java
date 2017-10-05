@@ -27,7 +27,7 @@ public class Bird {
 		time = 0;
 		posY = y;
 		posX = 10;
-		size = 50;
+		size = 75;
 		gravity = 0.7f;
 		jumpHeight = Obstacle.INTERVAL / 2;
 		v0 = (float) Math.sqrt(2*gravity*jumpHeight);

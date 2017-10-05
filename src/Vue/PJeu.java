@@ -26,6 +26,7 @@ public class PJeu extends JPanel implements KeyListener{
 	private static JLabel labScore;
 	private Jeu jeu;
 	private Image imBird;
+	private Image background;
 	
 	public PJeu(int dimx, int dimy, Jeu jeu) {
 		
@@ -33,15 +34,9 @@ public class PJeu extends JPanel implements KeyListener{
 		
 		this.setSize(new Dimension(dimx,dimy));
 		
-		//Images
-		imBird = null;
-		/*try {
-			//imBird = ImageIO.read();
-		} catch (IOException e) {
-			System.out.println("Erreur lecture fichier");
-			e.printStackTrace();
-		}*/
-		System.out.println(this.getClass().getResource("ressources/whaledown.png"));
+		
+		
+		//System.out.println(this.getClass().getResource("ressources/whaledown.png"));
 		
 		//Creation des composants
 		bird = new Bird(Fenetre.DIMY/2);
@@ -51,6 +46,24 @@ public class PJeu extends JPanel implements KeyListener{
 		obstacles.add(new Obstacle((int) Main.rand.nextInt(Fenetre.DIMY - 2*Obstacle.INTERVAL) 
 				+ Obstacle.INTERVAL,Fenetre.DIMX));
 		*/
+		
+		//Images
+		imBird = null;
+		try {
+			imBird = ImageIO.read(this.getClass().getResource("ressources/whaledown.png"));
+			imBird = imBird.getScaledInstance(bird.getSize(), bird.getSize(), Image.SCALE_DEFAULT);
+		}catch (IOException e) {
+			System.out.println("Erreur lecture fichier");
+			e.printStackTrace();
+		}
+		try {
+			background = ImageIO.read(this.getClass().getResource("ressources/background.png"));
+			background = background.getScaledInstance(Fenetre.DIMX, Fenetre.DIMY, Image.SCALE_AREA_AVERAGING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 		this.addKeyListener(this);
 		this.setFocusable(true);
 		
@@ -70,9 +83,11 @@ public class PJeu extends JPanel implements KeyListener{
 		   
 		Graphics2D g2d = (Graphics2D) g;
 		//Recouvrement de la fenetre avec la couleur de fond afin d'effacer ce qui est present
+		/*
 		g2d.setColor(Color.black);
 		g2d.fillRect(0, 0, this.getWidth(), this.getHeight());;
-		
+		*/
+		g2d.drawImage(background, 0, 0, this);
 		//Replacement des composants
 		// 1/ Bird
 		bird.update();
