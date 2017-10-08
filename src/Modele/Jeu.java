@@ -6,7 +6,7 @@ import Main.Main;
 import Vue.Fenetre;
 
 public class Jeu {
-	private Bird bird;
+	public Bird bird;
 	private ArrayList<Obstacle> obstacles;
 	public static int DIMY;
 	public static int DIMX;
@@ -15,11 +15,11 @@ public class Jeu {
 		Jeu.DIMX = Main.DIMX;
 		Jeu.DIMY = Main.DIMY;
 		
-		bird = new Bird(Jeu.DIMY/2);
+		this.bird = new Bird(Jeu.DIMY/2);
 		// creating list
-		obstacles = new ArrayList<Obstacle>();
+		this.obstacles = new ArrayList<Obstacle>();
 		// instanciating. Be careful : if multiple, ASCENDING X order !	
-		obstacles.add(new Obstacle(Main.rand.nextInt(Jeu.DIMY),Jeu.DIMX));
+		this.obstacles.add(new Obstacle(Main.rand.nextInt(Jeu.DIMY),Jeu.DIMX));
 		System.out.println(obstacles);
 	}
 	public ArrayList<Obstacle> getObstacles(){

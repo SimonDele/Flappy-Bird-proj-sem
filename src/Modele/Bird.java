@@ -58,6 +58,9 @@ public class Bird {
 		speed = -time*gravity + v0;
 		this.posY -= speed;
 		time++;	
+		if(this.posY>600) {
+			this.posY=0;
+		}
 	}
 	
 	//Meme chose qu'au dessus...

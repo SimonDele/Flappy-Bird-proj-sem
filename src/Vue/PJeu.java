@@ -38,7 +38,9 @@ public class PJeu extends JPanel implements KeyListener{
 		
 	
 		//Creation des composants
-		bird = new Bird(Fenetre.DIMY/2);
+		//bird = new Bird(Fenetre.DIMY/2);
+		bird = this.jeu.bird;
+		System.out.println(bird.getPosY());
 		obstacles = jeu.getObstacles();
 		/*
 		obstacles = new ArrayList<Obstacle>();
@@ -89,7 +91,7 @@ public class PJeu extends JPanel implements KeyListener{
 		//Replacement des composants
 		// 1/ Bird
 		bird.update();
-		
+		System.out.println(bird.getPosX() + "  "+bird+"   "+bird.getPosY());
 		boolean destroy = false;
 		if(!bird.aToucheObstacle()) {
 			//g2d.setColor(Color.yellow);
