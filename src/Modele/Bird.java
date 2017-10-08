@@ -24,7 +24,7 @@ public class Bird {
 	public Bird(int y, int deadSpeed) { // give obstSpeed as input
 		time = 0;
 		score = 0;
-		size = 90;
+		size = 80;
 		posY = y;
 		posX = 10 + size/2;
 		gravity = 0.5f;

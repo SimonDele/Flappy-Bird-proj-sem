@@ -20,7 +20,7 @@ public class Main {
 		// Game generation (initial state)
 		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY);
 		boolean saut = true;
-		Checker checker = new Checker();
+		
 		
 		// Window creation
 		Fenetre window = null;
@@ -30,7 +30,8 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
+		Checker checker = new Checker(window.getPjeu());
 		// Game loop
 		while(!jeu.end()) { // for now, while true
 			

@@ -20,7 +20,7 @@ import Modele.Jeu;
 import Modele.Obstacle;
 import Main.Main;
 
-public class PJeu extends JPanel implements KeyListener {
+public class PJeu extends JPanel  {
 	// Game's attributes
 	private Bird bird; 
 	private ArrayList<Obstacle> obstacles;
@@ -80,8 +80,7 @@ public class PJeu extends JPanel implements KeyListener {
 		labScore.setFont(f);
 		this.add(labScore);
 
-		// KeyListener (must strive to suppress this)
-		this.addKeyListener(this);
+		// Must do this for the keylistener
 		this.setFocusable(true);
 	}
 	
@@ -120,13 +119,14 @@ public class PJeu extends JPanel implements KeyListener {
         	bird.up();
         }
     }
+	/*
 	@Override
 	public void keyReleased(KeyEvent arg0) {	
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {		
 	}
-	
+	*/
 	/// Applying filter on sprite
     private BufferedImage createColorImage(BufferedImage originalImage, int mask) {
         BufferedImage colorImage = new BufferedImage(originalImage.getWidth(),
