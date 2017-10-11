@@ -1,7 +1,5 @@
 package Modele;
 
-import java.lang.Math;
-
 public class Bird {
 	// Position (! now it's the CENTER !)
 	private int posX; 

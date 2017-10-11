@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,9 +17,11 @@ import javax.swing.JPanel;
 import Modele.Bird;
 import Modele.Jeu;
 import Modele.Obstacle;
-import Main.Main;
 
 public class PJeu extends JPanel  {
+	//Panel properties
+	private int width;
+	private int height;
 	// Game's attributes
 	private Bird bird; 
 	private ArrayList<Obstacle> obstacles;
@@ -35,7 +36,11 @@ public class PJeu extends JPanel  {
 	// Constructor
 	public PJeu(int dimx, int dimy, Jeu jeu) {
 		this.setSize(new Dimension(dimx,dimy));	
-	
+		
+		width = this.getWidth();
+		height = this.getHeight();
+		//System.out.println(width + " " + height);
+		
 		// Game attributes init (once pointing towards, keeps pointing)
 		bird = jeu.getBird();
 		obstacles = jeu.getObstacles();
@@ -90,6 +95,12 @@ public class PJeu extends JPanel  {
 		Graphics2D g2d = (Graphics2D) g;
 		
 		// Erasing current display by pressing bg onto it
+		if(this.getWidth() != this.width || this.getHeight() != this.height) {
+			background = background.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_AREA_AVERAGING);
+			this.height = this.getHeight();
+			this.width = this.getWidth();
+		}
+		
 		g2d.drawImage(background, 0, 0, this);
 		
 		// Displaying the game :

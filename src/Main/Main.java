@@ -1,9 +1,9 @@
 package Main;
 import java.util.Random;
 
-import Modele.*;
-import Vue.*;
-import Controleur.*;
+import Controleur.Checker;
+import Modele.Jeu;
+import Vue.Fenetre;
 
 public class Main {
 	// statics : dimensions and random
