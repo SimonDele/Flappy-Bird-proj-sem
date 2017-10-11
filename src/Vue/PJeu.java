@@ -79,9 +79,7 @@ public class PJeu extends JPanel  {
 		Font f = new Font("Serif", Font.PLAIN, 36);
 		labScore.setFont(f);
 		this.add(labScore);
-
-		// Must do this for the keylistener
-		this.setFocusable(true);
+		
 	}
 	
 	// Methods :
@@ -113,20 +111,7 @@ public class PJeu extends JPanel  {
 		labScore.setText(String.valueOf(bird.getScore()));		
 	}
 	
-	/// Key eventing (must strive to get rid of)
-	public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == 32) { // Space pressing (for your futuristic clothes)
-        	bird.up();
-        }
-    }
-	/*
-	@Override
-	public void keyReleased(KeyEvent arg0) {	
-	}
-	@Override
-	public void keyTyped(KeyEvent arg0) {		
-	}
-	*/
+	
 	/// Applying filter on sprite
     private BufferedImage createColorImage(BufferedImage originalImage, int mask) {
         BufferedImage colorImage = new BufferedImage(originalImage.getWidth(),
