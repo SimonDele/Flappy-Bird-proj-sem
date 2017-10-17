@@ -3,6 +3,7 @@ import java.util.Random;
 
 import Modele.*;
 import Vue.*;
+import ia.Genetic;
 import Controleur.*;
 
 public class Main {
@@ -10,6 +11,7 @@ public class Main {
 	public static Random rand = new Random();
 	public static int DIMX;
 	public static int DIMY;
+	private static boolean isAI = true;
 	
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
@@ -17,9 +19,15 @@ public class Main {
 		DIMY = 600;
 		int delay = 15;
 		
+		int sizePop = 10;
 		// Game generation (initial state)
-		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY);
-		boolean saut = true;
+		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
+		
+		Genetic genetic = null;
+		if(isAI) {
+			genetic = new Genetic(jeu, sizePop);
+		}
+
 		
 		
 		// Window creation
@@ -31,7 +39,15 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		Checker checker = new Checker(window.getPjeu());
+		Checker checker = null;
+		if(!isAI) {
+			checker = new Checker(window.getPjeu());
+		}
+		boolean[] saut = new boolean[sizePop];
+		for(int i=0; i<sizePop; i++) {
+			saut[i] = true;
+		}
+		
 		// Game loop
 		while(!jeu.end()) { // for now, while true
 			
@@ -40,7 +56,12 @@ public class Main {
 			// Display updating 
 			(window.getPjeu()).repaint();
 			// Control ...?
-			saut = checker.getJump();
+			if(isAI) {
+				saut = genetic.getJump(); 
+			}else {
+				saut[0] = checker.getJump();
+			}
+			
 			
 			// Delaying (we're only humans, afterall)
 			try {

@@ -15,7 +15,7 @@ public class Bird {
 	private float jumpHeight; // how high we jump
 	
 	// Attributes on hitboxes & death
-	private int size; // bird sprite diameter
+	public static int SIZE; // bird sprite diameter
 	private boolean dead; // boolean on death; stops score incrementation
 	private int  deadSpeed; // speed of obstacles
 	private int score; // how far we've gone
@@ -24,9 +24,9 @@ public class Bird {
 	public Bird(int y, int deadSpeed) { // give obstSpeed as input
 		time = 0;
 		score = 0;
-		size = 80;
+		SIZE = 80;
 		posY = y;
-		posX = 10 + size/2;
+		posX = 10 + SIZE/2;
 		gravity = 0.5f;
 		jumpHeight = Obstacle.INTERVAL *0.5f; // we can play on this 0.5
 		v0 = (float) Math.sqrt(2*gravity*jumpHeight);
@@ -44,11 +44,8 @@ public class Bird {
 	public void setPosY(int posY) {
 		this.posY = posY;
 	}
-	public int getSize() {
-		return size;
-	}
-	public void setSize(int size) {
-		this.size = size;
+	public int getSIZE() {
+		return SIZE;
 	}
 	public float getSpeed() {
 		return speed;
@@ -74,15 +71,15 @@ public class Bird {
 	public void update(boolean saut) {
 		// you're either alive and kicking, or dead and kicked left
 		if (!dead) {
-			score++;
 			if (saut) {time=0;} 
 			speed = -time++*gravity + v0;
 			this.posY -= speed;
 		} else this.posX -= deadSpeed;
 	}
 	
-	/// this will become obsolete when we manage to use Checker !
-	public void up() {
-		time = 0;
+	public void hit(int score) {
+		dead = true;
+		this.score = score;
+		System.out.println(score); 
 	}
 }
