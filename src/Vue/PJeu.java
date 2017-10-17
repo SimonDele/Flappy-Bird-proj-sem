@@ -1,12 +1,11 @@
 package Vue;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,11 +17,10 @@ import javax.swing.JPanel;
 import Modele.Bird;
 import Modele.Jeu;
 import Modele.Obstacle;
-import Main.Main;
 
 public class PJeu extends JPanel  {
 	// Game's attributes
-	private Bird bird; 
+	private Bird[] birds;
 	private ArrayList<Obstacle> obstacles;
 	private float tolerance; // ~ also amounts to shift necessary for ignoring the tail
 	
@@ -37,19 +35,19 @@ public class PJeu extends JPanel  {
 		this.setSize(new Dimension(dimx,dimy));	
 	
 		// Game attributes init (once pointing towards, keeps pointing)
-		bird = jeu.getBird();
+		birds = jeu.getBirds();
 		obstacles = jeu.getObstacles();
 		tolerance = jeu.getTolerance();
-		
+
 		// Sprites:
 		/// bird Up and Down
 		Image imBirdTempDown = null;
 		Image imBirdTempUp = null;
 		try {
 			imBirdTempDown = ImageIO.read(this.getClass().getResource("ressources/whaleDown.png"));
-			imBirdTempDown = imBirdTempDown.getScaledInstance(bird.getSize(), bird.getSize(), Image.SCALE_DEFAULT);
+			imBirdTempDown = imBirdTempDown.getScaledInstance(Bird.SIZE, Bird.SIZE, Image.SCALE_DEFAULT);
 			imBirdTempUp = ImageIO.read(this.getClass().getResource("ressources/whaleUp.png"));
-			imBirdTempUp = imBirdTempUp.getScaledInstance(bird.getSize(), bird.getSize(), Image.SCALE_DEFAULT);
+			imBirdTempUp = imBirdTempUp.getScaledInstance(Bird.SIZE, Bird.SIZE, Image.SCALE_DEFAULT);
 		}catch (IOException e) {
 			System.out.println("Erreur lecture fichier bird");
 			e.printStackTrace();
@@ -74,14 +72,12 @@ public class PJeu extends JPanel  {
 		
 		/// Score
 		labScore = new JLabel();
-		labScore.setText(String.valueOf(bird.getScore()));
+		labScore.setText(String.valueOf(0));
 		labScore.setForeground(Color.red);
 		Font f = new Font("Serif", Font.PLAIN, 36);
 		labScore.setFont(f);
 		this.add(labScore);
-
-		// Must do this for the keylistener
-		this.setFocusable(true);
+		
 	}
 	
 	// Methods :
@@ -94,10 +90,14 @@ public class PJeu extends JPanel  {
 		
 		// Displaying the game :
 		/// Bird (up or down depending on speed)
-		if (bird.getSpeed() < 0) {
-			g2d.drawImage(imBirdDown, bird.getPosX()-(int)((1+tolerance)*bird.getSize()/2), bird.getPosY()-bird.getSize()/2,this);		
-		} else {
-			g2d.drawImage(imBirdUp, bird.getPosX()-(int)((1+tolerance)*bird.getSize()/2), bird.getPosY()-bird.getSize()/2,this);
+		Bird bird;
+		for (int i=0; i<birds.length;i++) {
+			bird = birds[i];
+			if (bird.getSpeed() < 0) {
+				g2d.drawImage(imBirdDown, bird.getPosX()-(int)((1+tolerance)*Bird.SIZE/2), bird.getPosY()-Bird.SIZE/2,this);		
+			} else {
+				g2d.drawImage(imBirdUp, bird.getPosX()-(int)((1+tolerance)*Bird.SIZE/2), bird.getPosY()-Bird.SIZE/2,this);
+			}
 		}
 
 		/// Obstacles
@@ -110,23 +110,11 @@ public class PJeu extends JPanel  {
 		}
 
 		/// Score
-		labScore.setText(String.valueOf(bird.getScore()));		
+		
+		labScore.setText(String.valueOf(Jeu.SCORE));		
 	}
 	
-	/// Key eventing (must strive to get rid of)
-	public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == 32) { // Space pressing (for your futuristic clothes)
-        	bird.up();
-        }
-    }
-	/*
-	@Override
-	public void keyReleased(KeyEvent arg0) {	
-	}
-	@Override
-	public void keyTyped(KeyEvent arg0) {		
-	}
-	*/
+	
 	/// Applying filter on sprite
     private BufferedImage createColorImage(BufferedImage originalImage, int mask) {
         BufferedImage colorImage = new BufferedImage(originalImage.getWidth(),

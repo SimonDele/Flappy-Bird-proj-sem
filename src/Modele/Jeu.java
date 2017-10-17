@@ -9,32 +9,34 @@ public class Jeu {
 	// Dimensions given by Window
 	public static int DIMY;
 	public static int DIMX;
+	public static int SCORE;
 	// The guys we're interested in
 	private ArrayList<Obstacle> obstacles;
-	private Bird bird;
+	private Bird[] birds;
 	private float tolerance; // percentage of bird we take out of hitbox
 	
 	// Constructor
-	public Jeu(int dimx, int dimy) {
+	public Jeu(int dimx, int dimy, int N) {
 		Jeu.DIMX = dimx;
 		Jeu.DIMY = dimy;
+		Jeu.SCORE = 0;
 		tolerance = 0.2f;
+		
+		birds = new Bird[N];
 		
 		// creating list
 		obstacles = new ArrayList<Obstacle>();
 		// instanciating. Be careful : if multiple, ASCENDING X order !	
 		obstacles.add(new Obstacle(Jeu.DIMY/2,Jeu.DIMX)); // better not start too hard ?
 		// creating the bird AFTER obstacles (need of INTERVAL & speed)
-		bird = new Bird(Jeu.DIMY/2, obstacles.get(0).getSpeed());
+		for(int i=0;i<N;i++) {
+			birds[i] = new Bird(Jeu.DIMY/2, obstacles.get(0).getSpeed());
+		}
+		
 	}
 	
 	// Getters and Setters
-	public Bird getBird() {
-		return bird;
-	}
-	public void setBird(Bird bird) {
-		this.bird = bird;
-	}
+
 	public ArrayList<Obstacle> getObstacles(){
 		return obstacles;
 	}
@@ -45,11 +47,22 @@ public class Jeu {
 		this.tolerance = tolerance;
 	}
 	
+	public Bird[] getBirds() {
+		return birds;
+	}
+
 	// Methods
 	/// Updating the game 
-	public void update(boolean saut) {
+	public void update(boolean[] saut) {
 		// Updating bird 
-		bird.update(saut);
+		for(int i=0; i<saut.length;i++) {
+			birds[i].update(saut[i]);
+			// Death test (won't define end() when multiple birds)
+			if (!birds[i].isDead()) {
+				hit(birds[i]);	
+			}
+		}
+		
 		
 		// Updating obstacles and potentially deleting (returns deleting boolean)
 		boolean destroy = false;
@@ -65,10 +78,9 @@ public class Jeu {
 			// in that case, obst generation.
 			obstacles.add(new Obstacle((int) Main.rand.nextInt(Jeu.DIMY - 2*Obstacle.INTERVAL)
 					+ Obstacle.INTERVAL,Jeu.DIMX));
-		}
+		}		
 		
-		// Death test (won't define end() when multiple birds)
-		hit();
+		Jeu.SCORE++;
 	}
 	
 	/// Ending the game - all birds died (are hit())
@@ -77,12 +89,12 @@ public class Jeu {
 	}
 	
 	/// Hitboxes - I hope I've made this clear.
-	public boolean hit() {
+	private boolean hit(Bird bird) {
 		boolean hit = false;
 		
 		// First, let's define the radius of the bird; 
 		// with some error constant (bird is slightly less than size):
-		int radius = (int) (bird.getSize()/2 *(1-tolerance));
+		int radius = (int) (Bird.SIZE/2 *(1-tolerance));
 		
 		// Let's prevent too many accesses to Classes 
 		int currentY = bird.getPosY();
@@ -123,7 +135,7 @@ public class Jeu {
 		}
 		
 		// Done ! Update bird status and inform Game.
-		if (hit) {bird.setDead(true);} // mustn't go back to true anyhow
+		if (hit) {bird.hit(Jeu.SCORE - Math.abs(obstacles.get(0).getPosY() - currentY));} // must
 		return hit;
 	}
 
