@@ -15,7 +15,7 @@ public class Obstacle {
 	private int posObstBas;
 	
 	// Game unfolding
-	private int speed; //Fixe
+	private static int speed; //Fixe
 	public static float GENPROBA;
 	public static int MINDIST; // minimal pixel distance between two obst
 	
@@ -45,12 +45,10 @@ public class Obstacle {
 	public int getPosX() {
 		return posX;
 	}
-	public int getSpeed() {
+	public static int getSpeed() {
 		return speed;
 	}
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
+
 	public int getPosY() {
 		return posY;
 	}

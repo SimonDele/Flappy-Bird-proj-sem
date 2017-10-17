@@ -11,7 +11,7 @@ public class Main {
 	public static Random rand = new Random();
 	public static int DIMX;
 	public static int DIMY;
-	private static boolean isAI = false;
+	private static boolean isAI = true;
 	
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
@@ -19,16 +19,15 @@ public class Main {
 		DIMY = 600;
 		int delay = 15;
 		
-		int N;
-		if(isAI) {
-			Genetic genetic = new Genetic();
-			N = genetic.getSizePop();
-		}else {
-			N = 1;
-		}
-		
+		int sizePop = 10;
 		// Game generation (initial state)
-		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, N);
+		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
+		
+		Genetic genetic = null;
+		if(isAI) {
+			genetic = new Genetic(jeu, sizePop);
+		}
+
 		
 		
 		// Window creation
@@ -44,8 +43,8 @@ public class Main {
 		if(!isAI) {
 			checker = new Checker(window.getPjeu());
 		}
-		boolean[] saut = new boolean[N];
-		for(int i=0; i<N; i++) {
+		boolean[] saut = new boolean[sizePop];
+		for(int i=0; i<sizePop; i++) {
 			saut[i] = true;
 		}
 		
@@ -58,7 +57,7 @@ public class Main {
 			(window.getPjeu()).repaint();
 			// Control ...?
 			if(isAI) {
-				//saut = genetic.getJump(); 
+				saut = genetic.getJump(); 
 			}else {
 				saut[0] = checker.getJump();
 			}
