@@ -13,14 +13,15 @@ public class Main {
 	public static Random rand = new Random();
 	public static int DIMX;
 	public static int DIMY;
-	private static boolean isAI = false;
-	
+	private static boolean isAI = true;
+	private static int delay;
+	private static int sizePop;
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
 		DIMX = 1000;
 		DIMY = 600;
-		int delay = 15;
-		int sizePop = 1;
+		delay = 15;
+		sizePop = 1;
 		// Game generation (initial state)
 		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
 		
@@ -50,30 +51,13 @@ public class Main {
 		}
 		
 		// Game loop
-		while(!jeu.end()) { // for now, while true
-			
-			// Model updating
-			jeu.update(saut);
-			// Display updating 
-			(window.getPjeu()).repaint();
-			// Control ...?
-			if(isAI) {
-				saut = genetic.getJump(); 
-			}else {
-				saut[0] = checker.getJump();
-			}
-			
-			
-			// Delaying (we're only humans, afterall)
-			try {
-				Thread.sleep(delay);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		if(isAI) {
+			loopAI(jeu,window,genetic,saut);
+		}else {
+			loopPlayer(jeu, saut, window, checker);
 		}
 	}
 	private static void loopPlayer(Jeu jeu, boolean[] saut, Fenetre window, Checker checker) {
-		int delay = 15;
 		// Game loop
 		while(!jeu.end()) { // for now, while true
 			
@@ -93,7 +77,27 @@ public class Main {
 			}
 		}		
 	}
-	private static void loopIA() {
+	private static void loopAI(Jeu jeu, Fenetre window, Genetic genetic, boolean[] saut) {
+		
+		// Game loop
+				while(!jeu.end()) { // for now, while true
+					
+					// Model updating
+					jeu.update(saut);
+					// Display updating 
+					(window.getPjeu()).repaint();
+					// Control ...?
+					saut = genetic.getJump(); 
+					
+					
+					
+					// Delaying (we're only humans, afterall)
+					try {
+						Thread.sleep(delay);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 		
 	}
 

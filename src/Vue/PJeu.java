@@ -80,7 +80,7 @@ public class PJeu extends JPanel  {
 		Font f = new Font("Serif", Font.PLAIN, 36);
 		labScore.setFont(f);
 		this.add(labScore);
-		
+		this.setFocusable(true);
 	}
 	
 	// Methods :
@@ -89,6 +89,7 @@ public class PJeu extends JPanel  {
 		Graphics2D g2d = (Graphics2D) g;
 		
 		// Erasing current display by pressing bg onto it
+		
 		if(this.getWidth() != this.width || this.getHeight() != this.height) {
 			background = background.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_AREA_AVERAGING);
 			this.height = this.getHeight();
