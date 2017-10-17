@@ -1,10 +1,11 @@
 package Controleur;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
-	
+import Main.Main;	
 public class Checker extends JPanel implements KeyListener {
 	// Thing we're checking :
 	private static boolean jump;
