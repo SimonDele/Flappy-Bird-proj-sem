@@ -16,7 +16,6 @@ public class Checker extends JPanel implements KeyListener {
 		jump = false;
 		pjeu.setFocusable(true);
 		pjeu.addKeyListener(this);
-		
 	}
 	
 	// Methods

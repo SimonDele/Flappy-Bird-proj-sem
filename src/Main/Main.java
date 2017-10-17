@@ -1,25 +1,26 @@
 package Main;
 import java.util.Random;
 
-import Modele.*;
-import Vue.*;
+import javax.swing.JFrame;
+
+import Controleur.Checker;
+import Modele.Jeu;
+import Vue.Fenetre;
 import ia.Genetic;
-import Controleur.*;
 
 public class Main {
 	// statics : dimensions and random
 	public static Random rand = new Random();
 	public static int DIMX;
 	public static int DIMY;
-	private static boolean isAI = true;
+	private static boolean isAI = false;
 	
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
 		DIMX = 1000;
 		DIMY = 600;
 		int delay = 15;
-		
-		int sizePop = 10;
+		int sizePop = 1;
 		// Game generation (initial state)
 		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
 		
@@ -43,15 +44,15 @@ public class Main {
 		if(!isAI) {
 			checker = new Checker(window.getPjeu());
 		}
-		boolean[] saut = new boolean[sizePop];
+		boolean[] saut = new boolean[sizePop]; // for each frame we will have an array of boolean saying which bird will jump
 		for(int i=0; i<sizePop; i++) {
-			saut[i] = true;
+			saut[i] = true; // initialisation at true so that they all start by jumping.
 		}
 		
 		// Game loop
 		while(!jeu.end()) { // for now, while true
 			
-			// Model upating
+			// Model updating
 			jeu.update(saut);
 			// Display updating 
 			(window.getPjeu()).repaint();
@@ -70,6 +71,30 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
+	}
+	private static void loopPlayer(Jeu jeu, boolean[] saut, Fenetre window, Checker checker) {
+		int delay = 15;
+		// Game loop
+		while(!jeu.end()) { // for now, while true
+			
+			// Model updating
+			jeu.update(saut);
+			// Display updating 
+			(window.getPjeu()).repaint();
+			// Control
+			saut[0] = checker.getJump();
+			
+			
+			// Delaying (we're only humans, afterall)
+			try {
+				Thread.sleep(delay);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}		
+	}
+	private static void loopIA() {
+		
 	}
 
 }
