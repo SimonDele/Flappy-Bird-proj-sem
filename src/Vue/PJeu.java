@@ -19,6 +19,8 @@ import Modele.Jeu;
 import Modele.Obstacle;
 
 public class PJeu extends JPanel  {
+	private int height;
+	private int width;
 	// Game's attributes
 	private Bird[] birds;
 	private ArrayList<Obstacle> obstacles;
@@ -33,7 +35,8 @@ public class PJeu extends JPanel  {
 	// Constructor
 	public PJeu(int dimx, int dimy, Jeu jeu) {
 		this.setSize(new Dimension(dimx,dimy));	
-	
+		width = getWidth();
+		height = getHeight();
 		// Game attributes init (once pointing towards, keeps pointing)
 		birds = jeu.getBirds();
 		obstacles = jeu.getObstacles();
@@ -86,6 +89,12 @@ public class PJeu extends JPanel  {
 		Graphics2D g2d = (Graphics2D) g;
 		
 		// Erasing current display by pressing bg onto it
+		if(this.getWidth() != this.width || this.getHeight() != this.height) {
+			background = background.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_AREA_AVERAGING);
+			this.height = this.getHeight();
+			this.width = this.getWidth();
+		}
+		
 		g2d.drawImage(background, 0, 0, this);
 		
 		// Displaying the game :
