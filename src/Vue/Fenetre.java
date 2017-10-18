@@ -1,9 +1,10 @@
 package Vue;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-import Controleur.LaunchAI;
 import Modele.Jeu;
 
 public class Fenetre extends JFrame {
@@ -29,8 +30,14 @@ public class Fenetre extends JFrame {
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	    pjeu = new PJeu(DIMX, DIMY, jeu);
-		this.setContentPane(pjeu);
+	    
+	    JPanel allContent = new JPanel();
+	    allContent.setLayout(new BorderLayout());
+	    allContent.add(pjeu, BorderLayout.CENTER);
+	    allContent.add(new DisplayInfoGenetic(), BorderLayout.EAST);
+		this.setContentPane(allContent);
 		this.setVisible(true);
+		
 			
 	}
 	public void displayJeu() {
