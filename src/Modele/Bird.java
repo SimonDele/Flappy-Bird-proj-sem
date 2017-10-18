@@ -65,6 +65,9 @@ public class Bird {
 	public void setScore(int score) {
 		this.score = score;
 	}
+	public float getJumpHeight() {
+		return jumpHeight;
+	}
 
 	// Methods
 	/// Updating bird position 

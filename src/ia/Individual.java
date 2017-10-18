@@ -16,7 +16,7 @@ public class Individual {
 		fitness = 0;
 		genes = new Boolean[nrow][ncol];
 		
-		float probaJump = 0.05f;
+		float probaJump = 0.03f;
 		for(int i=0;i<nrow;i++) {
 			for(int j=0; j<ncol; j++) {
 				genes[i][j]= (Main.rand.nextFloat() < probaJump);
@@ -29,6 +29,7 @@ public class Individual {
 		}*/
 		//this.printArray(genes, nrow, ncol);
 	}
+	@SuppressWarnings("unused")
 	private void printArray(Boolean[][] array, int dimX, int dimY) {
 		for (int i = 0; i < dimX; i++) {
 			for (int j = 0; j < dimY; j++) {

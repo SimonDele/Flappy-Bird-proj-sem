@@ -103,7 +103,12 @@ public class Jeu {
 		int obstYUp = obstacles.get(0).getPosObstHaut();
 		int obstYDown = obstacles.get(0).getPosObstBas();
 		
-		// First, the floor - there is NO upper limit !
+		// First, the ceiling - can't jump twice
+		if (currentY < -bird.getJumpHeight()) {
+			hit = true;
+			
+			// Then, floor 
+		} else 
 		if (currentY+radius > Jeu.DIMY) {
 			hit = true;
 			
