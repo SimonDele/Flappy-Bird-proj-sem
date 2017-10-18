@@ -2,9 +2,9 @@ package Main;
 import java.util.Random;
 
 import Controleur.Checker;
+import Controleur.LaunchAI;
 import Modele.Jeu;
 import Vue.Fenetre;
-import Vue.PJeu;
 import ia.Genetic;
 
 public class Main {
@@ -29,7 +29,6 @@ public class Main {
 			genetic = new Genetic(jeu, sizePop);
 		}
 
-		
 		
 		// Window creation
 		Fenetre window = null;
@@ -56,7 +55,7 @@ public class Main {
 			loopPlayer(jeu, saut, window, checker);
 		}
 	}
-	private static void loopPlayer(Jeu jeu, boolean[] saut, Fenetre window, Checker checker) {
+	public static void loopPlayer(Jeu jeu, boolean[] saut, Fenetre window, Checker checker) {
 		// Game loop
 		while(!jeu.end()) { // for now, while true
 			
@@ -76,7 +75,7 @@ public class Main {
 			}
 		}		
 	}
-	private static void loopAI(Jeu jeu, Fenetre window, Genetic genetic, boolean[] saut) {
+	public static void loopAI(Jeu jeu, Fenetre window, Genetic genetic, boolean[] saut) {
 		
 		// Game loop
 				while(true) { // for now, while true

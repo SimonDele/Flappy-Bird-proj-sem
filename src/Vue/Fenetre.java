@@ -3,6 +3,7 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+import Controleur.LaunchAI;
 import Modele.Jeu;
 
 public class Fenetre extends JFrame {
@@ -32,7 +33,9 @@ public class Fenetre extends JFrame {
 		this.setVisible(true);
 			
 	}
-	
+	public void displayJeu() {
+		this.setContentPane(pjeu);
+	}
 	// Getters and Setters
 	public PJeu getPjeu() {
 		return pjeu;

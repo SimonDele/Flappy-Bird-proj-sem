@@ -7,7 +7,7 @@ import Main.Main;
 
 import javax.swing.JPanel;
 	
-public class Checker extends JPanel implements KeyListener {
+public class Checker implements KeyListener {
 	// Thing we're checking :
 	private static boolean jump;
 	
