@@ -30,7 +30,16 @@ public class Genetic {
 		}
 		
 	}
-	
+	public boolean generationDead() {
+		boolean isDead = true;
+		int i = 0;
+		while(isDead && i < sizePop ) {
+			isDead = birds[i].isDead();
+			i++;
+		}
+		return isDead;
+			
+	}
 	public int getSizePop() {
 		return sizePop;
 	}	

@@ -1,11 +1,10 @@
 package Main;
 import java.util.Random;
 
-import javax.swing.JFrame;
-
 import Controleur.Checker;
 import Modele.Jeu;
 import Vue.Fenetre;
+import Vue.PJeu;
 import ia.Genetic;
 
 public class Main {
@@ -21,7 +20,7 @@ public class Main {
 		DIMX = 1000;
 		DIMY = 600;
 		delay = 15;
-		sizePop = 1;
+		sizePop = 10;
 		// Game generation (initial state)
 		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
 		
@@ -80,8 +79,14 @@ public class Main {
 	private static void loopAI(Jeu jeu, Fenetre window, Genetic genetic, boolean[] saut) {
 		
 		// Game loop
-				while(!jeu.end()) { // for now, while true
-					
+				while(true) { // for now, while true
+					if(genetic.generationDead()) {
+						jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
+						genetic = new Genetic(jeu, sizePop);
+						//window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu)); //Marche pas...
+						window.dispose();
+						window = new Fenetre(Main.DIMX,Main.DIMY,jeu);
+					}
 					// Model updating
 					jeu.update(saut);
 					// Display updating 
