@@ -2,9 +2,9 @@ package Main;
 import java.util.Random;
 
 import Controleur.Checker;
-import Controleur.LaunchAI;
 import Modele.Jeu;
 import Vue.Fenetre;
+import Vue.Menu;
 import ia.Genetic;
 
 public class Main {
@@ -12,7 +12,7 @@ public class Main {
 	public static Random rand = new Random();
 	public static int DIMX;
 	public static int DIMY;
-	private static boolean isAI = true;
+	public static boolean isAI = true;
 	private static int delay;
 	private static int sizePop;
 	// main method (the reason we're here at all)
@@ -20,8 +20,14 @@ public class Main {
 		DIMX = 1000;
 		DIMY = 600;
 		delay = 15;
-		sizePop = 10;
 		// Game generation (initial state)
+		Menu menu = new Menu(null);
+		
+		if(isAI) {
+			sizePop = 10;
+		}else {
+			sizePop = 1;
+		}
 		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
 		
 		Genetic genetic = null;
