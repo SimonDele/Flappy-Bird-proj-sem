@@ -12,9 +12,9 @@ public class Main {
 	public static Random rand = new Random();
 	public static int DIMX;
 	public static int DIMY;
-	public static boolean isAI = true;
+	public static boolean isAI;
 	private static int delay;
-	private static int sizePop;
+	public static int sizePop = 1;
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
 		DIMX = 1000;
@@ -23,11 +23,6 @@ public class Main {
 		// Game generation (initial state)
 		Menu menu = new Menu(null);
 		
-		if(isAI) {
-			sizePop = 10;
-		}else {
-			sizePop = 1;
-		}
 		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
 		
 		Genetic genetic = null;
