@@ -32,7 +32,7 @@ public class DisplayInfoGenetic extends JPanel{
 		
 		this.infoGenetic = infoGenetic;
 		
-		this.setSize(new Dimension(1000, 500));
+		//this.setSize(new Dimension(1000, 500));
 		this.setBackground(Color.black);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
@@ -47,8 +47,8 @@ public class DisplayInfoGenetic extends JPanel{
 		medianFit.setForeground(Color.white);
 		
 		chart = createChart();
+	
 		CP = new ChartPanel(chart);
-		
 		this.add(numGen);
 		this.add(maxFit);
 		this.add(medianFit);

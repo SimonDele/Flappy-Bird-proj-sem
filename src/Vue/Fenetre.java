@@ -25,7 +25,12 @@ public class Fenetre extends JFrame {
 		title = new String("Flappy Bird");
 		
 		// Window initialisation
-		this.setMinimumSize(new Dimension(DIMX,DIMY));
+		if(Main.isAI) {
+			this.setMinimumSize(new Dimension(DIMX+500,DIMY));	
+		}else {
+			this.setMinimumSize(new Dimension(DIMX,DIMY));
+		}
+		
 		this.setTitle(title);
 	    this.setLocationRelativeTo(null);               
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
