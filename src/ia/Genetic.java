@@ -11,12 +11,14 @@ public class Genetic {
 	private int sizePop;
 	private ArrayList<Individual> pop;
 	public static int GENERATION;
-	
+	public static InfoGenetic infoGenetic;
 	// Game's attributes
 	private Bird[] birds;
 	private ArrayList<Obstacle> obstacles;
 	
 	public Genetic(Jeu jeu, int sizePop) {
+		infoGenetic = new InfoGenetic(GENERATION);
+		
 		this.sizePop = sizePop;
 		
 		birds = jeu.getBirds();
@@ -39,6 +41,17 @@ public class Genetic {
 		}
 		return isDead;
 			
+	}
+	public void update(Jeu jeu) {
+		infoGenetic.update(GENERATION++, 20, 25);
+		birds = jeu.getBirds();
+		obstacles = jeu.getObstacles();
+		pop = new ArrayList<Individual>();
+		
+		for(int i=0; i<sizePop;i++) {
+			pop.add(new Individual(2*Jeu.DIMY/Obstacle.getSpeed(), Obstacle.MINDIST/Obstacle.getSpeed()+1));
+		}
+		
 	}
 	public int getSizePop() {
 		return sizePop;

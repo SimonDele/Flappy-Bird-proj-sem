@@ -82,7 +82,7 @@ public class Main {
 				while(true) { // for now, while true
 					if(genetic.generationDead()) {
 						jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
-						genetic = new Genetic(jeu, sizePop);
+						genetic.update(jeu);
 						//window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu)); //Marche pas...
 						window.dispose();
 						window = new Fenetre(Main.DIMX,Main.DIMY,jeu);

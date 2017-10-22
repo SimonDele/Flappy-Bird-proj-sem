@@ -6,7 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import Modele.Jeu;
-
+import ia.Genetic;
+import Main.Main;
 public class Fenetre extends JFrame {
 	// Window dimensions
 	public static int DIMX;
@@ -34,7 +35,10 @@ public class Fenetre extends JFrame {
 	    JPanel allContent = new JPanel();
 	    allContent.setLayout(new BorderLayout());
 	    allContent.add(pjeu, BorderLayout.CENTER);
-	    allContent.add(new DisplayInfoGenetic(), BorderLayout.EAST);
+	    if(Main.isAI) {
+		    allContent.add(new DisplayInfoGenetic(Genetic.infoGenetic), BorderLayout.EAST);    	
+	    }
+
 		this.setContentPane(allContent);
 		this.setVisible(true);
 		
