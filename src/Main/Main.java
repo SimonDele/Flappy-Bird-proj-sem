@@ -79,30 +79,30 @@ public class Main {
 	public static void loopAI(Jeu jeu, Fenetre window, Genetic genetic, boolean[] saut) {
 		
 		// Game loop
-				while(true) { // for now, while true
-					if(genetic.generationDead()) {
-						jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
-						genetic.update(jeu);
-						//window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu)); //Marche pas...
-						window.dispose();
-						window = new Fenetre(Main.DIMX,Main.DIMY,jeu);
-					}
-					// Model updating
-					jeu.update(saut);
-					// Display updating 
-					(window.getPjeu()).repaint();
-					// Control ...?
-					saut = genetic.getJump(); 
-					
-					
-					
-					// Delaying (we're only humans, afterall)
-					try {
-						Thread.sleep(delay);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
+		while(true) { // for now, while true
+			if(genetic.generationDead()) {
+				jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
+				genetic.update(jeu);
+				//window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu)); //Marche pas...
+				window.dispose();
+				window = new Fenetre(Main.DIMX,Main.DIMY,jeu);
+			}
+			// Model updating
+			jeu.update(saut);
+			// Display updating 
+			(window.getPjeu()).repaint();
+			// Control ...?
+			saut = genetic.getJump(); 
+			
+			
+			
+			// Delaying (we're only humans, afterall)
+			try {
+				Thread.sleep(delay);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		
 	}
 

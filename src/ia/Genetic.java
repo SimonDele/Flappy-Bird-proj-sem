@@ -43,11 +43,10 @@ public class Genetic {
 			
 	}
 	public void update(Jeu jeu) {
-		infoGenetic.update(GENERATION++, 20, 25);
+		infoGenetic.update(GENERATION++, birds);
 		birds = jeu.getBirds();
 		obstacles = jeu.getObstacles();
 		pop = new ArrayList<Individual>();
-		
 		for(int i=0; i<sizePop;i++) {
 			pop.add(new Individual(2*Jeu.DIMY/Obstacle.getSpeed(), Obstacle.MINDIST/Obstacle.getSpeed()+1));
 		}
