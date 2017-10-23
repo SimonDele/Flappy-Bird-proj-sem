@@ -30,6 +30,14 @@ public class PJeu extends JPanel  {
 	private static JLabel labScore;
 	private BufferedImage imBirdDown;
 	private BufferedImage imBirdUp;
+	private BufferedImage imRock;
+	private BufferedImage imIceberg;
+	private float rockRatio; // (total width of Rock)/(Rock width witin hitbox)
+	private int rockHeight; 
+	private float icebergRatio;
+	private int deltaRock; // translation for visual to match theoric
+	private int icebergHeight;
+	private int deltaIceberg;
 	private Image background;
 	
 	// Constructor
@@ -51,12 +59,13 @@ public class PJeu extends JPanel  {
 			imBirdTempDown = imBirdTempDown.getScaledInstance(Bird.SIZE, Bird.SIZE, Image.SCALE_DEFAULT);
 			imBirdTempUp = ImageIO.read(this.getClass().getResource("ressources/whaleUp.png"));
 			imBirdTempUp = imBirdTempUp.getScaledInstance(Bird.SIZE, Bird.SIZE, Image.SCALE_DEFAULT);
+			
 		}catch (IOException e) {
 			System.out.println("Erreur lecture fichier bird");
 			e.printStackTrace();
 		}
-		
-		int mask = 0xFFFFF000;
+				
+		int mask = 0xFFFFFF00;
 		imBirdDown = new BufferedImage(imBirdTempDown.getWidth(null),imBirdTempDown.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		imBirdDown.getGraphics().drawImage(imBirdTempDown, 0, 0 , null);
 		imBirdDown = createColorImage(imBirdDown,mask);
@@ -65,6 +74,31 @@ public class PJeu extends JPanel  {
 		imBirdUp.getGraphics().drawImage(imBirdTempUp, 0, 0 , null);
 		imBirdUp = createColorImage(imBirdUp,mask);
 		
+
+		/// rocks & icebergs
+		Image imRockTemp = null;
+		Image imIcebergTemp = null;
+		rockRatio = 2.6f;
+		System.out.println(rockRatio*Obstacle.LARGEUR);
+		rockHeight = (int)(0.75f*Fenetre.DIMY);
+		icebergRatio = 1.7f;
+		icebergHeight = (int)(0.75f*Fenetre.DIMY);
+		try {
+			imRockTemp = ImageIO.read(this.getClass().getResource("ressources/rock.png"));
+			imRockTemp = imRockTemp.getScaledInstance((int)(Obstacle.LARGEUR*rockRatio), rockHeight, Image.SCALE_DEFAULT);
+			imIcebergTemp = ImageIO.read(this.getClass().getResource("ressources/iceberg.png"));
+			imIcebergTemp = imIcebergTemp.getScaledInstance((int)(Obstacle.LARGEUR*icebergRatio), icebergHeight, Image.SCALE_DEFAULT);
+		}catch (IOException e) {
+			System.out.println("Erreur lecture fichier rock ou iceberg");
+			e.printStackTrace();
+		}
+		
+		imRock = new BufferedImage(imRockTemp.getWidth(null),imRockTemp.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		imRock.getGraphics().drawImage(imRockTemp, 0, 0 , null);
+		imIceberg = new BufferedImage(imIcebergTemp.getWidth(null),imIcebergTemp.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		imIceberg.getGraphics().drawImage(imIcebergTemp, 0, 0 , null);
+		deltaRock = (int)(1/20.5f*imRockTemp.getWidth(null));
+		deltaIceberg = (int)(1/10f*imIcebergTemp.getWidth(null));
 		/// Background
 		try {
 			background = ImageIO.read(this.getClass().getResource("ressources/background.png"));
@@ -114,9 +148,11 @@ public class PJeu extends JPanel  {
 		g2d.setColor(Color.green);
 		for(int i=0; i<obstacles.size();i++) {
 			// Lower part
-			g2d.fillRect(obstacles.get(i).getPosX(),obstacles.get(i).getPosObstBas(), Obstacle.LARGEUR,this.getHeight()-obstacles.get(i).getPosObstBas());		
+			//g2d.fillRect(obstacles.get(i).getPosX(),obstacles.get(i).getPosObstBas(), Obstacle.LARGEUR,this.getHeight()-obstacles.get(i).getPosObstBas());		
+			g2d.drawImage(imRock, obstacles.get(i).getPosX() - 2*deltaRock, obstacles.get(i).getPosObstBas() - deltaRock,this);		
 			// Upper part
-			g2d.fillRect(obstacles.get(i).getPosX(),0, Obstacle.LARGEUR,obstacles.get(i).getPosObstHaut());		
+			//g2d.fillRect(obstacles.get(i).getPosX(),0, Obstacle.LARGEUR,obstacles.get(i).getPosObstHaut());	
+			g2d.drawImage(imIceberg, obstacles.get(i).getPosX() - deltaIceberg, obstacles.get(i).getPosObstHaut() - icebergHeight,this);		
 		}
 
 		/// Score
@@ -129,10 +165,11 @@ public class PJeu extends JPanel  {
     private BufferedImage createColorImage(BufferedImage originalImage, int mask) {
         BufferedImage colorImage = new BufferedImage(originalImage.getWidth(),
                 originalImage.getHeight(), originalImage.getType());
-
+        
+        int pixel;
         for (int x = 0; x < originalImage.getWidth(); x++) {
             for (int y = 0; y < originalImage.getHeight(); y++) {
-                int pixel = originalImage.getRGB(x, y) & mask;
+            	pixel = originalImage.getRGB(x, y) & mask;
                 colorImage.setRGB(x, y, pixel);
             }
         }
@@ -140,3 +177,8 @@ public class PJeu extends JPanel  {
         return colorImage;
     }
 }
+
+// on a bossé dur pour ça
+//if ((originalImage.getRGB(x, y) >> 56) != 0) {
+//	pixel = 0xFFFFFFFF;
+//} else pixel = originalImage.getRGB(x, y);

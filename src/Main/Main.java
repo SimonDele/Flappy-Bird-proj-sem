@@ -20,7 +20,7 @@ public class Main {
 		DIMX = 1000;
 		DIMY = 600;
 		delay = 15;
-		sizePop = 10;
+		sizePop = 3000;
 		// Game generation (initial state)
 		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
 		
@@ -28,8 +28,6 @@ public class Main {
 		if(isAI) {
 			genetic = new Genetic(jeu, sizePop);
 		}
-
-		
 		
 		// Window creation
 		Fenetre window = null;
@@ -93,8 +91,6 @@ public class Main {
 					(window.getPjeu()).repaint();
 					// Control ...?
 					saut = genetic.getJump(); 
-					
-					
 					
 					// Delaying (we're only humans, afterall)
 					try {
