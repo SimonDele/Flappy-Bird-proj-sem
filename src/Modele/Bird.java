@@ -70,6 +70,9 @@ public class Bird {
 	}
 
 	// Methods
+	public void increaseScore(int addToScore) {
+		this.score += addToScore;
+	}
 	/// Updating bird position 
 	public void update(boolean saut) {
 		// you're either alive and kicking, or dead and kicked left
@@ -82,7 +85,7 @@ public class Bird {
 	
 	public void hit(int score) {
 		dead = true;
-		this.score = score;
+		this.score += score;
 		System.out.println(score); 
 	}
 }

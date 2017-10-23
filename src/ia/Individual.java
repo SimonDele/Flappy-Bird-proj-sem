@@ -21,13 +21,24 @@ public class Individual {
 			for(int j=0; j<ncol; j++) {
 				genes[i][j]= (Main.rand.nextFloat() < probaJump);
 			}
-		}/*
-		for(int i=0;i<nrow;i++) {
-			for(int j=0; j<ncol; j++) {
-				genes[i][j] = (i > nrow/2 - 5);
-			}
-		}*/
+		}
 		//this.printArray(genes, nrow, ncol);
+	}
+	public Individual(Boolean[][] genes, int nrow, int ncol) {
+		this.nrow = nrow;
+		this.ncol = ncol;
+		fitness = 0;
+		this.genes = genes;
+	}
+	
+	public Boolean[][] getGenes(){
+		return genes;
+	}
+	public int getNRow(){
+		return nrow;
+	}	
+	public int getNCol(){
+		return ncol;
 	}
 	@SuppressWarnings("unused")
 	private void printArray(Boolean[][] array, int dimX, int dimY) {

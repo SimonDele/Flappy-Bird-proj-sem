@@ -1,10 +1,12 @@
 package ia;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import Modele.Bird;
 import Modele.Jeu;
 import Modele.Obstacle;
+import Main.Main;
 
 public class Genetic {
 	// Genetic's attributes
@@ -44,6 +46,11 @@ public class Genetic {
 	}
 	public void update(Jeu jeu) {
 		infoGenetic.update(GENERATION++, birds);
+		int[] fitnesses = new int[birds.length];
+		for (int i = 0; i < birds.length; i++) {
+			fitnesses[i] = birds[i].getScore();
+		}
+		selection(fitnesses);
 		birds = jeu.getBirds();
 		obstacles = jeu.getObstacles();
 		pop = new ArrayList<Individual>();
@@ -65,12 +72,76 @@ public class Genetic {
 		return jumps;
 	}
 	
-	private ArrayList<Individual> selection(){
-		return null;
+	private ArrayList<Individual> selection(int[] fitnesses){
+		ArrayList<Individual> meltingPot = new ArrayList<Individual>();
+		int minfitness = fitnesses[0];
+		int maxfitness = fitnesses[0];
+		for (int i = 1; i < fitnesses.length; i++) {
+			if(minfitness > fitnesses[i]) {
+				minfitness = fitnesses[i];
+			}
+			if(maxfitness < fitnesses[i]) {
+				maxfitness = fitnesses[i];
+			}
+		}
+		if (minfitness < 0) {
+			for (int i = 0; i < fitnesses.length; i++) {
+				fitnesses[i]-=minfitness;
+			}
+			maxfitness -=minfitness;
+		}
+
+//		for (int i = 0; i < fitnesses.length; i++) {
+//			for(int j = 0; j < fitnesses[i]/maxfitness*100; j++) {
+//				meltingPot.add(pop.get(i));
+//			}
+//		}
+		for (int i = 0; i < fitnesses.length; i++) {
+			for(int j = 0; j < Math.pow(1+fitnesses[i]/(float)maxfitness,5); j++) {
+				meltingPot.add(pop.get(i));
+			}
+		}
+		ArrayList<Individual> newPop = new ArrayList<Individual>();
+		for(int i = 0; i < (int)(sizePop); i++) {
+			Individual parentA = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
+			Individual parentB = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
+			
+			newPop.add(crossover(parentA.getGenes(), parentB.getGenes(), parentA.getNRow(), parentA.getNCol()));
+		}
+		//Arrays.sort(fitnesses);
+//		for(int i = 0; i < sizePop - (int)(sizePop*0.9); i++) {
+//			int iMax = 0;
+//			int maxFitness = fitnesses[0];
+//			for(int j = 0; j < sizePop; j++) {
+//				if(maxFitness < fitnesses[i]) {
+//					maxFitness = fitnesses[i];
+//					iMax = j;
+//				}
+//			}
+//			
+//			newPop.add(pop.get(iMax));
+//			fitnesses[iMax] = minfitness;
+//		}
+
+		return newPop;
 	}
 	
-	private Individual crossover(Individual parentA, Individual parentB) {
-		return null;
+	private Individual crossover(Boolean[][] genesA, Boolean[][] genesB, int nrow, int ncol) {
+		Boolean[][] newGenes = new Boolean[nrow][ncol];
+		for(int i = 0; i < nrow;  i++) {
+			for(int j = 0; j < ncol ; j++) {
+				if(Main.rand.nextFloat() > 0.5f) {
+					newGenes[i][j] = genesA[i][j];
+				}else {
+					newGenes[i][j] = genesB[i][j];
+				}
+				if (Main.rand.nextFloat() < 0.1f) {
+					newGenes[i][j] = !newGenes[i][j];
+				}
+			}
+		}
+		
+		return new Individual(newGenes, nrow, ncol);
 	}
 	
 	/*

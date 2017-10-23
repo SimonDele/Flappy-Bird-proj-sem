@@ -98,7 +98,7 @@ public class Main {
 			
 			// Delaying (we're only humans, afterall)
 			try {
-				Thread.sleep(delay);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

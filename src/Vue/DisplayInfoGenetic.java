@@ -1,7 +1,6 @@
 package Vue;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.util.Iterator;
@@ -36,7 +35,7 @@ public class DisplayInfoGenetic extends JPanel{
 		this.setBackground(Color.black);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
-		numGen = new JLabel("Generation n°"+infoGenetic.getNumberGen());
+		numGen = new JLabel("Generation n"+infoGenetic.getNumberGen());
 		numGen.setForeground(Color.white);
 		numGen.setFont(new Font("Serif", Font.PLAIN, 32));
 		
@@ -68,7 +67,7 @@ public class DisplayInfoGenetic extends JPanel{
 		// Generate the graph
 		JFreeChart chart = ChartFactory.createXYLineChart(
 			"Median Fitness over Generations", // Title
-			"n° Generation", // x-axis Label
+			"n Generation", // x-axis Label
 			"median Fitness", // y-axis Label
 			dataset, // Dataset
 			PlotOrientation.VERTICAL, // Plot Orientation

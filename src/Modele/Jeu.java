@@ -69,7 +69,14 @@ public class Jeu {
 		for(int i=0; i<obstacles.size();i++) {
 			destroy = obstacles.get(i).update() || destroy; // if once true, always true
 		}
-		if (destroy) {obstacles.remove(0);}
+		if (destroy) {
+			obstacles.remove(0);
+			for(int i=0;i<birds.length;i++) {
+				if (!birds[i].isDead()) {
+					birds[i].increaseScore(DIMY);
+				}
+			}
+		}
 		
 		// Obstacle generation : if you've passed minimal distance (1st line),
 		//  have a GENPROBA proba of generating new one, per frame (2nd line)
@@ -140,7 +147,7 @@ public class Jeu {
 		}
 		
 		// Done ! Update bird status and inform Game.
-		if (hit) {bird.hit(Jeu.SCORE - Math.abs(obstacles.get(0).getPosY() - currentY));} // must
+		if (hit) {bird.hit(Jeu.SCORE - (int)(Math.abs(obstacles.get(0).getPosY() - currentY)/(float)Obstacle.getSpeed()));} // must
 		return hit;
 	}
 
