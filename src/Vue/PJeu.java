@@ -56,7 +56,7 @@ public class PJeu extends JPanel  {
 			e.printStackTrace();
 		}
 		
-		int mask = 0xFFFFF000;
+		int mask = 0x3FFFF000;
 
 		imBirdDown = new BufferedImage(imBirdTempDown.getWidth(null),imBirdTempDown.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		imBirdDown.getGraphics().drawImage(imBirdTempDown, 0, 0 , null);

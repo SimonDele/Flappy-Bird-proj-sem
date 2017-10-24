@@ -22,6 +22,7 @@ public class DisplayInfoGenetic extends JPanel{
 	
 	private JLabel numGen;
 	private JLabel maxFit;
+	private JLabel avgFit;
 	private JLabel medianFit;
 	private JFreeChart chart;
 	private ChartPanel CP;
@@ -44,6 +45,8 @@ public class DisplayInfoGenetic extends JPanel{
 		
 		medianFit = new JLabel("median fitness : "+infoGenetic.getMedianFit());
 		medianFit.setForeground(Color.white);
+		avgFit = new JLabel("avg fitness : "+infoGenetic.getAvgFit());
+		avgFit.setForeground(Color.white);
 		
 		chart = createChart();
 	
@@ -51,12 +54,13 @@ public class DisplayInfoGenetic extends JPanel{
 		this.add(numGen);
 		this.add(maxFit);
 		this.add(medianFit);
+		this.add(avgFit);
 		this.add(CP);
 	}
 
 	private JFreeChart createChart() {
 		XYSeries series = new XYSeries("XYGraph");
-		for (Iterator iterator = infoGenetic.getSerieFit().iterator(); iterator.hasNext();) {
+		for (Iterator iterator = infoGenetic.getSerieAvg().iterator(); iterator.hasNext();) {
 			Point point = (Point) iterator.next();
 			series.add(point.getX(),point.getY());
 		}
@@ -66,9 +70,9 @@ public class DisplayInfoGenetic extends JPanel{
 		dataset.addSeries(series);
 		// Generate the graph
 		JFreeChart chart = ChartFactory.createXYLineChart(
-			"Median Fitness over Generations", // Title
+			"Average Fitness over Generations", // Title
 			"n Generation", // x-axis Label
-			"median Fitness", // y-axis Label
+			"avg Fitness", // y-axis Label
 			dataset, // Dataset
 			PlotOrientation.VERTICAL, // Plot Orientation
 			true, // Show Legend
