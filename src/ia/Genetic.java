@@ -85,9 +85,9 @@ public class Genetic {
 		}
 		if (minfitness < 0) {
 			for (int i = 0; i < fitnesses.length; i++) {
-				fitnesses[i]-=minfitness;
+				fitnesses[i]-=minfitness -1;
 			}
-			maxfitness -=minfitness;
+			maxfitness -=minfitness -1;
 		}
 
 //		for (int i = 0; i < fitnesses.length; i++) {
@@ -96,7 +96,8 @@ public class Genetic {
 //			}
 //		}
 		for (int i = 0; i < fitnesses.length; i++) {
-			for(int j = 0; j < Math.pow(1+fitnesses[i]/(float)maxfitness,5); j++) {
+			System.out.println(fitnesses[i]);
+			for(int j = 0; j < Math.pow(1+fitnesses[i]/(float)maxfitness,7); j++) {
 				meltingPot.add(pop.get(i));
 			}
 		}
@@ -104,7 +105,6 @@ public class Genetic {
 		for(int i = 0; i < sizePop; i++) {
 			Individual parentA = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
 			Individual parentB = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
-			
 			newPop.add(crossover(parentA.getGenes(), parentB.getGenes(), parentA.getNRow(), parentA.getNCol()));
 		}
 		//Arrays.sort(fitnesses);
@@ -134,12 +134,24 @@ public class Genetic {
 				}else {
 					newGenes[i][j] = genesB[i][j];
 				}
-				if (Main.rand.nextFloat() < 0.0001f) {
+				if (Main.rand.nextFloat() < mutationProba()) {
 					newGenes[i][j] = !newGenes[i][j];
 				}
 			}
 		}
 		return new Individual(newGenes, nrow, ncol);
+	}
+	
+	private double mutationProba() { 
+		// parameters for building an exponential passing through two given points and above a threshold
+		double valueAtZero = 0.01;
+		double valueAtFifty = 0.0001;
+		double minValue = 0; // different form valAt0
+		
+		// just solving equations
+		double alpha = valueAtZero - minValue;
+		double beta = -(1/50f)*Math.log((valueAtFifty-minValue)/alpha);
+		return (alpha*Math.exp(-Genetic.GENERATION*beta)+minValue);
 	}
 	
 	/*

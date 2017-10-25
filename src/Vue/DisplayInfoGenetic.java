@@ -50,8 +50,6 @@ public class DisplayInfoGenetic extends JPanel{
 		maxFit = new JLabel("max fitness : "+infoGenetic.getMaxFit());
 		maxFit.setForeground(Color.white);
 		
-		medianFit = new JLabel("median fitness : "+infoGenetic.getMedianFit());
-		medianFit.setForeground(Color.white);
 		avgFit = new JLabel("avg fitness : "+infoGenetic.getAvgFit());
 		avgFit.setForeground(Color.white);
 		
@@ -76,7 +74,6 @@ public class DisplayInfoGenetic extends JPanel{
 		});
 		this.add(numGen);
 		this.add(maxFit);
-		this.add(medianFit);
 		this.add(avgFit);
 		this.add(CP);
 		this.add(delay);
@@ -122,7 +119,6 @@ public class DisplayInfoGenetic extends JPanel{
 		
 		numGen.setText("Generation "+infoGenetic.getNumberGen());
 		maxFit.setText("max fitness : "+infoGenetic.getMaxFit());
-		medianFit.setText("median fitness : "+infoGenetic.getMedianFit());	
 		avgFit.setText("avg fitness : "+infoGenetic.getAvgFit());
 	}
 }
