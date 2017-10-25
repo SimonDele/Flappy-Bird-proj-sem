@@ -100,10 +100,10 @@ public class Main {
 			jeu.update(saut);
 			// Display updating 
 			if(enableView) {
-				if(window.getPjeu() != null) {
-					(window.getPjeu()).repaint();	
+				if(window.getPjeu() == null) {
+					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu));
 				}
-			
+				(window.getPjeu()).repaint();	
 			}
 			// Control ...?
 			saut = genetic.getJump(); 
