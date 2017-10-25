@@ -119,11 +119,14 @@ public class PJeu extends JPanel  {
 
 		/// Obstacles
 		g2d.setColor(Color.green);
-		for(int i=0; i<obstacles.size();i++) {
-			// Lower part
-			g2d.fillRect(obstacles.get(i).getPosX(),obstacles.get(i).getPosObstBas(), Obstacle.LARGEUR,this.getHeight()-obstacles.get(i).getPosObstBas());		
-			// Upper part
-			g2d.fillRect(obstacles.get(i).getPosX(),0, Obstacle.LARGEUR,obstacles.get(i).getPosObstHaut());		
+		if(obstacles.size() > 0) {
+			for(int i=0; i<obstacles.size();i++) {
+				// Lower part
+				g2d.fillRect(obstacles.get(i).getPosX(),obstacles.get(i).getPosObstBas(), Obstacle.LARGEUR,this.getHeight()-obstacles.get(i).getPosObstBas());		
+				// Upper part
+				g2d.fillRect(obstacles.get(i).getPosX(),0, Obstacle.LARGEUR,obstacles.get(i).getPosObstHaut());		
+			}
+			
 		}
 
 		/// Score

@@ -1,4 +1,5 @@
 package Main;
+import java.awt.Dimension;
 import java.util.Random;
 
 import Controleur.Checker;
@@ -16,8 +17,10 @@ public class Main {
 	public static boolean isAI;
 	public static int delay;
 	public static int sizePop = 1;
+	public static boolean enableView;
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
+		enableView = true;
 		isAI = false;
 		DIMX = 1000;
 		DIMY = 600;
@@ -85,17 +88,25 @@ public class Main {
 			if(genetic.generationDead()) {
 				jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
 				genetic.update(jeu);
-				window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu));
-				//window.revalidate();
+				if(enableView) {
+					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu));
+				}else {
+					window.setPjeu(null);
+				}
+				window.getDisplayInfoGenetic().updateInfo(); 
+
 			}
 			// Model updating
 			jeu.update(saut);
 			// Display updating 
-			(window.getPjeu()).repaint();
+			if(enableView) {
+				if(window.getPjeu() != null) {
+					(window.getPjeu()).repaint();	
+				}
+			
+			}
 			// Control ...?
 			saut = genetic.getJump(); 
-			
-			
 			
 			// Delaying (we're only humans, afterall)
 			try {

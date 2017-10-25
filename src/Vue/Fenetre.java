@@ -62,14 +62,14 @@ public class Fenetre extends JFrame {
 		return displayInfoGenetic;
 	}
 	public void setPjeu(PJeu pjeu) {
-		this.remove(pjeu);
-		if(Main.isAI) {
-	    	//displayInfoGenetic = new DisplayInfoGenetic(Genetic.infoGenetic);
-	    	this.getDisplayInfoGenetic().updateInfo();  	
-	    }
-		
+		if(this.pjeu != null) {
+			this.remove(this.pjeu);	
+		}
 		this.pjeu = pjeu;
-		this.add(pjeu);
+		if(this.pjeu != null) {
+			this.add(pjeu);		
+		}
+
 		
 
 	}

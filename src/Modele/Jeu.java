@@ -80,7 +80,7 @@ public class Jeu {
 		
 		// Obstacle generation : if you've passed minimal distance (1st line),
 		//  have a GENPROBA proba of generating new one, per frame (2nd line)
-		if ((obstacles.get(obstacles.size()-1).getPosX() < (Jeu.DIMX - Obstacle.MINDIST)) 
+		if (obstacles.size() > 0 && (obstacles.get(obstacles.size()-1).getPosX() < (Jeu.DIMX - Obstacle.MINDIST)) 
 				&& (Main.rand.nextFloat() < Obstacle.GENPROBA)) {
 			// in that case, obst generation.
 			obstacles.add(new Obstacle((int) Main.rand.nextInt(Jeu.DIMY - 2*Obstacle.INTERVAL)
@@ -97,6 +97,9 @@ public class Jeu {
 	
 	/// Hitboxes - I hope I've made this clear.
 	private boolean hit(Bird bird) {
+		if(obstacles.size()<1) {//Means that there are no obstacles on the map
+			return false;
+		}
 		boolean hit = false;
 		
 		// First, let's define the radius of the bird; 

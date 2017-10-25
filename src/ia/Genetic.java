@@ -63,7 +63,10 @@ public class Genetic {
 		boolean[] jumps = new boolean[sizePop];
 		
 		for (int i = 0; i < sizePop; i++) {
-			jumps[i] = pop.get(i).decideJump(obstacles.get(0), birds[i]);
+			if(obstacles.size() > 0) {
+				jumps[i] = pop.get(i).decideJump(obstacles.get(0), birds[i]);			
+			}
+
 		}
 		return jumps;
 	}

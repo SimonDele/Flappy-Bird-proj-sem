@@ -59,12 +59,18 @@ public class DisplayInfoGenetic extends JPanel{
 	
 		CP = new ChartPanel(chart);
 		
-		modelDelay = new SpinnerNumberModel(10,0,30,1);
+		modelDelay = new SpinnerNumberModel(10,-1,30,1);
 		delay = new JSpinner(modelDelay);
 		delay.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				Main.delay= (int) modelDelay.getValue();
+				if((int) modelDelay.getValue() != -1) {
+					Main.enableView = true;
+					Main.delay= (int) modelDelay.getValue();
+				}else {
+					Main.enableView = false;
+				}
+				
 			}
 			
 		});
