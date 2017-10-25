@@ -9,7 +9,10 @@ import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.NumberFormatter;
 
 import Controleur.LaunchAI;
@@ -18,7 +21,8 @@ import Controleur.LaunchSoloMode;
 public class Menu extends JDialog{
 	JButton buttonLaunchAI;
 	JButton play;
-	JFormattedTextField inputSizePop;
+	private SpinnerNumberModel  modelSizePop;
+	private JSpinner spinnerSizePop;
 	
 	public Menu(JFrame parent) {
 		super(parent, "Menu", true);
@@ -30,17 +34,10 @@ public class Menu extends JDialog{
 		buttonLaunchAI = new JButton("Launch AI");
 		play = new JButton("Play alone");
 		
-		NumberFormat format = NumberFormat.getInstance();
-	    NumberFormatter formatter = new NumberFormatter(format);
-	    formatter.setValueClass(Integer.class);
-	    formatter.setMinimum(0);
-	    formatter.setMaximum(Integer.MAX_VALUE);
-	    formatter.setAllowsInvalid(false);
-	    formatter.setOverwriteMode(true);
-		inputSizePop = new JFormattedTextField(formatter);
-		inputSizePop.setMaximumSize(new Dimension(100,30));
+		modelSizePop = new SpinnerNumberModel(1000,1,100000,10);
+		spinnerSizePop = new JSpinner(modelSizePop);
 		//Add listeners
-		buttonLaunchAI.addActionListener(new LaunchAI(this, inputSizePop));
+		buttonLaunchAI.addActionListener(new LaunchAI(this, modelSizePop));
 		play.addActionListener(new LaunchSoloMode(this));
 
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.PAGE_AXIS));
@@ -48,7 +45,7 @@ public class Menu extends JDialog{
 		AI.setLayout(new BoxLayout(AI,BoxLayout.LINE_AXIS));
 		AI.setAlignmentX(LEFT_ALIGNMENT);
 		AI.add(buttonLaunchAI);
-		AI.add(inputSizePop);
+		AI.add(spinnerSizePop);
 		this.getContentPane().add(AI);
 		this.getContentPane().add(play);
 		this.setVisible(true);

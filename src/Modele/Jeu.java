@@ -89,11 +89,8 @@ public class Jeu {
 			// in that case, obst generation.
 			obstacles.add(new Obstacle((int) Main.rand.nextInt(Jeu.DIMY - 2*Obstacle.INTERVAL)
 					+ Obstacle.INTERVAL,Jeu.DIMX));
-<<<<<<< HEAD
+
 		}else if(obstacles.size()==0){
-=======
-		} else if (obstacles.size()==0) {
->>>>>>> b1928e36093f98ba762c17f698cbbe8a5a4f22c9
 			obstacles.add(new Obstacle((int) Main.rand.nextInt(Jeu.DIMY - 2*Obstacle.INTERVAL)
 					+ Obstacle.INTERVAL,Jeu.DIMX));
 		}
