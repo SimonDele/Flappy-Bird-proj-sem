@@ -110,8 +110,8 @@ public class Jeu {
 		int obstYUp = obstacles.get(0).getPosObstHaut();
 		int obstYDown = obstacles.get(0).getPosObstBas();
 		
-		// First, the ceiling - can't jump too high
-		if (currentY < -bird.getJumpHeight()*0.5f) {
+		// First, the ceiling - can't jump twice
+		if (currentY < -bird.getJumpHeight()) {
 			hit = true;
 			
 			// Then, floor 

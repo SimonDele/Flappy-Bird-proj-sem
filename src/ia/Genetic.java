@@ -28,9 +28,9 @@ public class Genetic {
 		
 		GENERATION = 0;
 		pop = new ArrayList<Individual>();
-		Individual staticCreator = new Individual(0,0);
+		
 		for(int i=0; i<sizePop;i++) {
-			pop.add(new Individual(2*Jeu.DIMY/Individual.MESHSIZE, Obstacle.MINDIST/Individual.MESHSIZE+1));
+			pop.add(new Individual(2*Jeu.DIMY/Obstacle.getSpeed(), Obstacle.MINDIST/Obstacle.getSpeed()+1));
 		}
 		
 	}
@@ -50,9 +50,13 @@ public class Genetic {
 		for (int i = 0; i < birds.length; i++) {
 			fitnesses[i] = birds[i].getScore();
 		}
-		pop = selection(fitnesses);
+		selection(fitnesses);
 		birds = jeu.getBirds();
 		obstacles = jeu.getObstacles();
+		pop = new ArrayList<Individual>();
+		for(int i=0; i<sizePop;i++) {
+			pop.add(new Individual(2*Jeu.DIMY/Obstacle.getSpeed(), Obstacle.MINDIST/Obstacle.getSpeed()+1));
+		}
 		
 	}
 	public int getSizePop() {
@@ -98,7 +102,7 @@ public class Genetic {
 			}
 		}
 		ArrayList<Individual> newPop = new ArrayList<Individual>();
-		for(int i = 0; i < sizePop; i++) {
+		for(int i = 0; i < (int)(sizePop); i++) {
 			Individual parentA = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
 			Individual parentB = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
 			
@@ -126,16 +130,17 @@ public class Genetic {
 		Boolean[][] newGenes = new Boolean[nrow][ncol];
 		for(int i = 0; i < nrow;  i++) {
 			for(int j = 0; j < ncol ; j++) {
-				if(Main.rand.nextFloat() < 0.5f) {
+				if(Main.rand.nextFloat() > 0.5f) {
 					newGenes[i][j] = genesA[i][j];
 				}else {
 					newGenes[i][j] = genesB[i][j];
 				}
-				if (Main.rand.nextFloat() < 0.0001f) {
+				if (Main.rand.nextFloat() < 0.1f) {
 					newGenes[i][j] = !newGenes[i][j];
 				}
 			}
 		}
+		
 		return new Individual(newGenes, nrow, ncol);
 	}
 	

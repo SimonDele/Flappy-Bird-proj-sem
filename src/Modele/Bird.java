@@ -86,5 +86,6 @@ public class Bird {
 	public void hit(int score) {
 		dead = true;
 		this.score += score;
+		System.out.println(score); 
 	}
 }
