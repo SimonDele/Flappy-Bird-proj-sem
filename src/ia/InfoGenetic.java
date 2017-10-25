@@ -7,7 +7,6 @@ import Modele.Bird;
 
 public class InfoGenetic {
 	private int numberGen;
-	private int medianFit;
 	private int avgFit;
 	private int maxFit;
 	private ArrayList<Point> serieFit;
@@ -20,9 +19,6 @@ public class InfoGenetic {
 	}
 	public int getNumberGen() {
 		return numberGen;
-	}
-	public int getMedianFit() {
-		return medianFit;
 	}
 	public int getAvgFit() {
 		return avgFit;
@@ -38,10 +34,8 @@ public class InfoGenetic {
 	}
 	public void update(int numberGen, Bird[] birds) {
 		this.maxFit = this.calcMaxFit(birds);
-		this.medianFit = this.calcMedianFit(birds);
 		this.avgFit = this.calcAverageFit(birds);
 		this.numberGen = numberGen;
-		serieFit.add(new Point(numberGen, medianFit));
 		serieAvg.add(new Point(numberGen, avgFit));
 
 	}
@@ -53,9 +47,6 @@ public class InfoGenetic {
 			}
 		}
 		return max;
-	}
-	private int calcMedianFit(Bird[] birds) {
-		return birds[(int)birds.length/2].getScore();
 	}
 	private int calcAverageFit(Bird[] birds) {
 		float meanScore = 0;

@@ -10,6 +10,7 @@ public class Jeu {
 	public static int DIMY;
 	public static int DIMX;
 	public static int SCORE;
+	public static int PASSED;
 	// The guys we're interested in
 	private ArrayList<Obstacle> obstacles;
 	private Bird[] birds;
@@ -20,6 +21,7 @@ public class Jeu {
 		Jeu.DIMX = dimx;
 		Jeu.DIMY = dimy;
 		Jeu.SCORE = 0;
+		Jeu.PASSED = 0;
 		tolerance = 0.2f;
 		
 		birds = new Bird[N];
@@ -30,7 +32,8 @@ public class Jeu {
 		obstacles.add(new Obstacle(Jeu.DIMY/2,Jeu.DIMX)); // better not start too hard ?
 		// creating the bird AFTER obstacles (need of INTERVAL & speed)
 		for(int i=0;i<N;i++) {
-			birds[i] = new Bird(Jeu.DIMY/2, obstacles.get(0).getSpeed());
+			obstacles.get(0);
+			birds[i] = new Bird(Jeu.DIMY/2, Obstacle.getSpeed());
 		}
 		
 	}
@@ -71,6 +74,7 @@ public class Jeu {
 		}
 		if (destroy) {
 			obstacles.remove(0);
+			Jeu.PASSED++;
 			for(int i=0;i<birds.length;i++) {
 				if (!birds[i].isDead()) {
 					birds[i].increaseScore(DIMY);
@@ -85,7 +89,10 @@ public class Jeu {
 			// in that case, obst generation.
 			obstacles.add(new Obstacle((int) Main.rand.nextInt(Jeu.DIMY - 2*Obstacle.INTERVAL)
 					+ Obstacle.INTERVAL,Jeu.DIMX));
-		}		
+		} else if (obstacles.size()==0) {
+			obstacles.add(new Obstacle((int) Main.rand.nextInt(Jeu.DIMY - 2*Obstacle.INTERVAL)
+					+ Obstacle.INTERVAL,Jeu.DIMX));
+		}
 		
 		Jeu.SCORE++;
 	}

@@ -23,7 +23,7 @@ public class Fenetre extends JFrame {
 		// Variables
 		Fenetre.DIMX = dimx;
 		Fenetre.DIMY = dimy;
-		title = new String("Flappy Bird");
+		title = new String("Flappy Whale :3");
 		
 		// Window initialisation
 		if(Main.isAI) {

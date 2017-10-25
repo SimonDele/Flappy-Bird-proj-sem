@@ -136,7 +136,7 @@ public class PJeu extends JPanel  {
 
 		/// Score
 		
-		labScore.setText(String.valueOf(Jeu.SCORE));		
+		labScore.setText(String.valueOf(Jeu.PASSED));		
 	}
 	
 	
