@@ -8,6 +8,10 @@ import java.util.Iterator;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -17,6 +21,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import ia.InfoGenetic;
+import Main.Main;
 
 public class DisplayInfoGenetic extends JPanel{
 	
@@ -27,16 +32,18 @@ public class DisplayInfoGenetic extends JPanel{
 	private JFreeChart chart;
 	private ChartPanel CP;
 	private InfoGenetic infoGenetic;
+	private SpinnerNumberModel  modelDelay;
+	private JSpinner delay;
+	private XYSeries series;
 	
 	public DisplayInfoGenetic(InfoGenetic infoGenetic) {
 		
 		this.infoGenetic = infoGenetic;
-		
-		//this.setSize(new Dimension(1000, 500));
+
 		this.setBackground(Color.black);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		
-		numGen = new JLabel("Generation n"+infoGenetic.getNumberGen());
+		numGen = new JLabel("Generation "+infoGenetic.getNumberGen());
 		numGen.setForeground(Color.white);
 		numGen.setFont(new Font("Serif", Font.PLAIN, 32));
 		
@@ -51,15 +58,28 @@ public class DisplayInfoGenetic extends JPanel{
 		chart = createChart();
 	
 		CP = new ChartPanel(chart);
+		
+		modelDelay = new SpinnerNumberModel(10,0,30,1);
+		delay = new JSpinner(modelDelay);
+		delay.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				Main.delay= (int) modelDelay.getValue();
+			}
+			
+		});
 		this.add(numGen);
 		this.add(maxFit);
 		this.add(medianFit);
 		this.add(avgFit);
 		this.add(CP);
+		this.add(delay);
 	}
 
 	private JFreeChart createChart() {
-		XYSeries series = new XYSeries("XYGraph");
+
+		
+		series = new XYSeries("XYGraph");
 		for (Iterator iterator = infoGenetic.getSerieAvg().iterator(); iterator.hasNext();) {
 			Point point = (Point) iterator.next();
 			series.add(point.getX(),point.getY());
@@ -80,5 +100,23 @@ public class DisplayInfoGenetic extends JPanel{
 			false // Configure chart to generate URLs?
 		);
 		return chart;
+	}
+	public void updateInfo() {
+		//Updating label
+		
+
+		//Replacement of components in the Panel
+		this.remove(delay);
+		this.remove(CP);
+		chart = createChart();
+		CP = new ChartPanel(chart);
+		this.add(CP);
+		this.add(delay);
+		this.revalidate();
+		
+		numGen.setText("Generation "+infoGenetic.getNumberGen());
+		maxFit.setText("max fitness : "+infoGenetic.getMaxFit());
+		medianFit.setText("median fitness : "+infoGenetic.getMedianFit());	
+		avgFit.setText("avg fitness : "+infoGenetic.getAvgFit());
 	}
 }

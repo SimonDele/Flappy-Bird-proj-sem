@@ -16,7 +16,8 @@ public class Fenetre extends JFrame {
 	// Window visuals
 	private String title;
 	private PJeu pjeu;
-
+	private DisplayInfoGenetic displayInfoGenetic;
+	
 	// Constructor
 	public Fenetre(int dimx, int dimy, Jeu jeu){
 		// Variables
@@ -41,7 +42,8 @@ public class Fenetre extends JFrame {
 	    allContent.setLayout(new BorderLayout());
 	    allContent.add(pjeu, BorderLayout.CENTER);
 	    if(Main.isAI) {
-		    allContent.add(new DisplayInfoGenetic(Genetic.infoGenetic), BorderLayout.EAST);    	
+	    	displayInfoGenetic = new DisplayInfoGenetic(Genetic.infoGenetic);
+		    allContent.add(displayInfoGenetic, BorderLayout.EAST);    	
 	    }
 
 		this.setContentPane(allContent);
@@ -56,8 +58,20 @@ public class Fenetre extends JFrame {
 	public PJeu getPjeu() {
 		return pjeu;
 	}
+	public DisplayInfoGenetic getDisplayInfoGenetic() {
+		return displayInfoGenetic;
+	}
 	public void setPjeu(PJeu pjeu) {
+		this.remove(pjeu);
+		if(Main.isAI) {
+	    	//displayInfoGenetic = new DisplayInfoGenetic(Genetic.infoGenetic);
+	    	this.getDisplayInfoGenetic().updateInfo();  	
+	    }
+		
 		this.pjeu = pjeu;
+		this.add(pjeu);
+		
+
 	}
 	
 }

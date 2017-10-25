@@ -5,6 +5,7 @@ import Controleur.Checker;
 import Modele.Jeu;
 import Vue.Fenetre;
 import Vue.Menu;
+import Vue.PJeu;
 import ia.Genetic;
 
 public class Main {
@@ -13,10 +14,11 @@ public class Main {
 	public static int DIMX;
 	public static int DIMY;
 	public static boolean isAI;
-	private static int delay;
+	public static int delay;
 	public static int sizePop = 1;
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
+		isAI = false;
 		DIMX = 1000;
 		DIMY = 600;
 		delay = 15;
@@ -83,9 +85,8 @@ public class Main {
 			if(genetic.generationDead()) {
 				jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
 				genetic.update(jeu);
-				//window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu)); //Marche pas...
-				window.dispose();
-				window = new Fenetre(Main.DIMX,Main.DIMY,jeu);
+				window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu));
+				//window.revalidate();
 			}
 			// Model updating
 			jeu.update(saut);
@@ -98,7 +99,7 @@ public class Main {
 			
 			// Delaying (we're only humans, afterall)
 			try {
-				Thread.sleep(4);
+				Thread.sleep(delay);
 				} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

@@ -85,6 +85,12 @@ public class PJeu extends JPanel  {
 	}
 	
 	// Methods :
+	/// Update instance jeu
+	public void updateJeu(Jeu jeu) {
+		birds = jeu.getBirds();
+		obstacles = jeu.getObstacles();
+		tolerance = jeu.getTolerance();
+	}
 	/// Displaying
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
