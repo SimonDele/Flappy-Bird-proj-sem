@@ -96,8 +96,7 @@ public class Genetic {
 //			}
 //		}
 		for (int i = 0; i < fitnesses.length; i++) {
-			System.out.println(fitnesses[i]);
-			for(int j = 0; j < Math.pow(1+fitnesses[i]/(float)maxfitness,7); j++) {
+			for(int j = 0; j < Math.pow(1+fitnesses[i]/(float)maxfitness,9); j++) {
 				meltingPot.add(pop.get(i));
 			}
 		}
