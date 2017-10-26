@@ -90,11 +90,6 @@ public class Genetic {
 			maxfitness -=minfitness -1;
 		}
 
-//		for (int i = 0; i < fitnesses.length; i++) {
-//			for(int j = 0; j < fitnesses[i]/maxfitness*100; j++) {
-//				meltingPot.add(pop.get(i));
-//			}
-//		}
 		for (int i = 0; i < fitnesses.length; i++) {
 			for(int j = 0; j < Math.pow(1+fitnesses[i]/(float)maxfitness,9); j++) {
 				meltingPot.add(pop.get(i));
@@ -106,20 +101,6 @@ public class Genetic {
 			Individual parentB = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
 			newPop.add(crossover(parentA.getGenes(), parentB.getGenes(), parentA.getNRow(), parentA.getNCol()));
 		}
-		//Arrays.sort(fitnesses);
-//		for(int i = 0; i < sizePop - (int)(sizePop*0.9); i++) {
-//			int iMax = 0;
-//			int maxFitness = fitnesses[0];
-//			for(int j = 0; j < sizePop; j++) {
-//				if(maxFitness < fitnesses[i]) {
-//					maxFitness = fitnesses[i];
-//					iMax = j;
-//				}
-//			}
-//			
-//			newPop.add(pop.get(iMax));
-//			fitnesses[iMax] = minfitness;
-//		}
 
 		return newPop;
 	}

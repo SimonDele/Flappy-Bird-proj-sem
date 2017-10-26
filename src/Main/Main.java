@@ -30,6 +30,7 @@ public class Main {
 		
 		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
 		
+		// Genetic algo initialisation
 		Genetic genetic = null;
 		if(isAI) {
 			genetic = new Genetic(jeu, sizePop);
