@@ -84,4 +84,16 @@ public class NeuralNet {
 	public static double reLU(double x) {
 		return Math.max(0, x);
 	}
+
+	public static void main(String[] args) {
+		Matrix m = Matrix.random(3,1);
+		int[] hidden = {4,5};
+		NeuralNet nn = new NeuralNet(3,2,hidden,-1,1);
+		try {
+			nn.propagation(m);			
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+		}
+		
+	}
 }
