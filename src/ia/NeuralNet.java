@@ -26,6 +26,22 @@ public class NeuralNet {
 		}
 	}
 	
+	public int getNbInput() {
+		return nbInput;
+	}
+	public int getNbOutput() {
+		return nbOutput;
+	}
+	public int[] getHidden() {
+		return hidden;
+	}
+	public Matrix[] getWeights() {
+		return weights;
+	}
+	public Matrix[] getBiases() {
+		return biases;
+	}
+
 	private void randomInitParameters() {
 		// WEIGHTS
 		// in column : the weights from the jth intput neuron
@@ -46,7 +62,6 @@ public class NeuralNet {
 	private Matrix randomMatrix(int nrow, int ncol) {
 		Matrix randMat = null;
 		randMat = Matrix.random(nrow, ncol);
-		randMat.print(1, 10);
 		randMat.timesEquals(maxWeight-minWeight);
 		randMat.plusEquals(new Matrix(nrow,ncol,minWeight));		
 		return randMat;
@@ -62,13 +77,11 @@ public class NeuralNet {
 				prevision = weights[i].times(prevision);
 				prevision.plusEquals(biases[i]);
 				activationFunction(prevision);
-				prevision.print(1, 10);
 			}
 		}
 		return prevision;
 	}
-	
-	
+		
 	public static void activationFunction(Matrix m) {
 		for (int i = 0; i < m.getRowDimension(); i++) {
 			for (int j = 0; j < m.getColumnDimension(); j++) {
@@ -83,17 +96,5 @@ public class NeuralNet {
 	
 	public static double reLU(double x) {
 		return Math.max(0, x);
-	}
-
-	public static void main(String[] args) {
-		Matrix m = Matrix.random(3,1);
-		int[] hidden = {4,5};
-		NeuralNet nn = new NeuralNet(3,2,hidden,-1,1);
-		try {
-			nn.propagation(m);			
-		} catch (IndexOutOfBoundsException e) {
-			e.printStackTrace();
-		}
-		
 	}
 }

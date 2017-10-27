@@ -2,31 +2,38 @@ package ia;
 
 import java.util.ArrayList;
 
+import Main.Main;
 import Modele.Bird;
 import Modele.Jeu;
 import Modele.Obstacle;
-import Main.Main;
 
-public class Genetic {
-	// Genetic's attributes
+public class GeneticNN {
+
 	private int sizePop;
-	private ArrayList<IndividualBool> pop;
+	private ArrayList<IndividualNN> pop;
 	public static int GENERATION;
 	public static InfoGenetic infoGenetic;
+	private float mutationProba;
 	// Game's attributes
 	private Bird[] birds;
 	private ArrayList<Obstacle> obstacles;
 	
-	public Genetic(Jeu jeu, int sizePop) {
+	public GeneticNN(Jeu jeu, int sizePop) {
 		infoGenetic = new InfoGenetic(GENERATION);
 		this.sizePop = sizePop;
 		birds = jeu.getBirds();
 		obstacles = jeu.getObstacles();
 		GENERATION = 0;
+		mutationProba = 0.2f;
 		
-		pop = new ArrayList<IndividualBool>();
+		pop = new ArrayList<IndividualNN>();
+		int[] hidden = {6};
 		for(int i=0; i<sizePop; i++) {
-			pop.add(new IndividualBool(2*Jeu.DIMY, Obstacle.MINDIST)); // the netting will be done later
+			try {
+				pop.add(new IndividualNN(3,1,hidden,-1,1)); // the netting will be done later
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -66,9 +73,9 @@ public class Genetic {
 		return jumps;
 	}
 	
-	private ArrayList<IndividualBool> selection(){
-		int power = 7;
-		ArrayList<IndividualBool> meltingPot = new ArrayList<IndividualBool>();
+	private ArrayList<IndividualNN> selection(){
+		int power = 5;
+		ArrayList<IndividualNN> meltingPot = new ArrayList<IndividualNN>();
 		int minfitness = pop.get(0).getFitness();
 		int maxfitness = pop.get(0).getFitness();
 		for (int i = 1; i < sizePop; i++) {
@@ -91,43 +98,44 @@ public class Genetic {
 				meltingPot.add(pop.get(i));
 			}
 		}
-		ArrayList<IndividualBool> newPop = new ArrayList<IndividualBool>();
+		ArrayList<IndividualNN> newPop = new ArrayList<IndividualNN>();
 		for(int i = 0; i < sizePop; i++) {
-			IndividualBool parentA = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
-			IndividualBool parentB = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
-			newPop.add(crossover(parentA.getGenes(), parentB.getGenes(), parentA.getNRow(), parentA.getNCol()));
+			IndividualNN parentA = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
+			IndividualNN parentB = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
+			newPop.add(crossover(parentA.getNN(), parentB.getNN()));
 		}
 
 		return newPop;
 	}
 	
-	private IndividualBool crossover(Boolean[][] genesA, Boolean[][] genesB, int nrow, int ncol) {
-		Boolean[][] newGenes = new Boolean[nrow][ncol];
-		for(int i = 0; i < nrow;  i++) {
-			for(int j = 0; j < ncol ; j++) {
-				if(Main.rand.nextFloat() < 0.5f) {
-					newGenes[i][j] = genesA[i][j];
-				}else {
-					newGenes[i][j] = genesB[i][j];
-				}
-				if (Main.rand.nextFloat() < mutationProba()) {
-					newGenes[i][j] = !newGenes[i][j];
+	private IndividualNN crossover(NeuralNet nn1, NeuralNet nn2) {
+		NeuralNet newNN = nn1;
+		for (int layer = 0; layer < newNN.getWeights().length; layer++) {
+			for (int i = 0; i < newNN.getWeights()[layer].getRowDimension(); i++) {
+				for (int j = 0; j < newNN.getWeights()[layer].getColumnDimension(); j++) {
+					if (Main.rand.nextFloat() < 0.5) {
+						newNN.getWeights()[layer].set(i,j,nn2.getWeights()[layer].get(i,j));
+					}
+					if (Main.rand.nextFloat() < mutationProba) {
+						newNN.getWeights()[layer].set(i,j,newNN.getWeights()[layer].get(i,j) 
+								+ Main.rand.nextGaussian()*mutationAmplitude());
+					}
 				}
 			}
 		}
-		return new IndividualBool(newGenes, nrow, ncol);
+		return new IndividualNN(newNN);
 	}
 	
-	private double mutationProba() { 
+	private double mutationAmplitude() { 
 		// parameters for building an exponential passing through two given points and above a threshold
-		double valueAtZero = 0.01;
-		double valueAtFifty = 0.0001;
+		double valueAtZero = 0.2;
+		double valueAtFifty = 0.1;
 		double minValue = 0; // different form valAt0
 		
 		// just solving equations
 		double alpha = valueAtZero - minValue;
 		double beta = -(1/50f)*Math.log((valueAtFifty-minValue)/alpha);
-		return (alpha*Math.exp(-Genetic.GENERATION*beta)+minValue);
+		return (alpha*Math.exp(-GeneticNN.GENERATION*beta)+minValue);
 	}
 	
 	/*
@@ -136,4 +144,5 @@ public class Genetic {
 	 * 
 	 */
 	
+
 }

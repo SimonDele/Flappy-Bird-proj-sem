@@ -1,3 +1,7 @@
 /InfoGenetic.class
 /NeuralNet.class
 /ADN.class
+/BoolArray.class
+/IndividualNN.class
+/IndividualBool.class
+/GeneticNN.class

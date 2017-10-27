@@ -1,5 +1,4 @@
 package Main;
-import java.awt.Dimension;
 import java.util.Random;
 
 import Controleur.Checker;
@@ -8,32 +7,40 @@ import Vue.Fenetre;
 import Vue.Menu;
 import Vue.PJeu;
 import ia.Genetic;
+import ia.GeneticNN;
 
 public class Main {
 	// statics : dimensions and random
 	public static Random rand = new Random();
 	public static int DIMX;
 	public static int DIMY;
-	public static boolean isAI;
+	public static boolean isAI; 
+	public static boolean isNN;
 	public static int delay;
 	public static int sizePop = 1;
 	public static boolean enableView;
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
 		enableView = true;
-		isAI = false;
+		isNN = true;
 		DIMX = 1000;
 		DIMY = 600;
 		delay = 15;
 		// Game generation (initial state)
+		@SuppressWarnings("unused")
 		Menu menu = new Menu(null);
 		
 		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
 		
 		// Genetic algo initialisation
 		Genetic genetic = null;
+		GeneticNN geneticNN = null;
 		if(isAI) {
-			genetic = new Genetic(jeu, sizePop);
+			if (isNN) {
+				geneticNN = new GeneticNN(jeu, sizePop);
+			} else {
+				genetic = new Genetic(jeu, sizePop);
+			}
 		}
 
 		
@@ -57,8 +64,12 @@ public class Main {
 		
 		// Game loop
 		if(isAI) {
-			loopAI(jeu,window,genetic,saut);
-		}else {
+			if (isNN) {
+				loopAI(jeu,window,geneticNN,saut);
+			} else {
+				loopAI(jeu,window,genetic,saut);
+			} 
+		} else {
 			loopPlayer(jeu, saut, window, checker);
 		}
 	}
@@ -108,6 +119,43 @@ public class Main {
 			}
 			// Control ...?
 			saut = genetic.getJump(); 
+			
+			// Delaying (we're only humans, afterall)
+			try {
+				Thread.sleep(delay);
+				} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	public static void loopAI(Jeu jeu, Fenetre window, GeneticNN geneticNN, boolean[] saut) {
+		
+		// Game loop
+		while(true) { // for now, while true
+			if(geneticNN.generationDead()) {
+				jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
+				geneticNN.update(jeu);
+				if(enableView) {
+					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu));
+				}else {
+					window.setPjeu(null);
+				}
+				window.getDisplayInfoGenetic().updateInfo(); 
+
+			}
+			// Model updating
+			jeu.update(saut);
+			// Display updating 
+			if(enableView) {
+				if(window.getPjeu() == null) {
+					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu));
+				}
+				(window.getPjeu()).repaint();	
+			}
+			// Control ...?
+			saut = geneticNN.getJump(); 
 			
 			// Delaying (we're only humans, afterall)
 			try {
