@@ -8,7 +8,7 @@ import Modele.Obstacle;
 public class IndividualNN extends Individual {
 	private NeuralNet nn;
 	
-	public IndividualNN(int nbInput, int nbOutput, int[] hidden, int minWeight, int maxWeight) {
+	public IndividualNN(int nbInput, int nbOutput, int[] hidden, double minWeight, double maxWeight) {
 		fitness = 0;
 		try {
 			nn = new NeuralNet(nbInput, nbOutput, hidden, minWeight, maxWeight);
@@ -27,12 +27,11 @@ public class IndividualNN extends Individual {
 		// only coded for nbInput = 3 ^-^
 		boolean decision = false;
 		double[][] input = new double[nn.getNbInput()][1]; // will be a vector type Matrix
-		if (nn.getNbInput() != 3) {
+		if (nn.getNbInput() != 2) {
 			throw new IllegalArgumentException();
 		} else {
-			input[0][0] = bird.getPosY()/(double)Jeu.DIMY;
-			input[1][0] = obstacle.getPosY()/(double)Jeu.DIMY;
-			input[2][0] = obstacle.getPosX()/(double)Jeu.DIMX;
+			input[0][0] = (bird.getPosY()-obstacle.getPosY())/(double)Jeu.DIMY + 0.5;
+			input[1][0] = obstacle.getPosX()/(double)Jeu.DIMX;
 			decision = nn.propagation(new Matrix(input)).get(0, 0) > 0.5;
 		}
 		return decision;

@@ -11,7 +11,7 @@ public class NeuralNet {
 	private double maxWeight;
 	private double minWeight;
 	
-	public NeuralNet(int nbInput, int nbOutput, int[] hidden, int minWeight, int maxWeight) throws IllegalArgumentException {
+	public NeuralNet(int nbInput, int nbOutput, int[] hidden, double minWeight, double maxWeight) throws IllegalArgumentException {
 		if (maxWeight<=minWeight) {
 			throw new IllegalArgumentException("Input error : maxWeight <= minWeight");
 		} else {
@@ -47,15 +47,13 @@ public class NeuralNet {
 		// in column : the weights from the jth intput neuron
 		// in line :   the weights for  the ith output neuron
 		weights[0] = randomMatrix(hidden[0], nbInput); // case input
-		for (int i = 1; i < hidden.length; i++) {
-			weights[i] = randomMatrix(hidden[i], hidden[i-1]); // within hidden 
-		}
-		weights[hidden.length] = randomMatrix(nbOutput, hidden[hidden.length-1]); // output case
 		// BIASES
-		// use hidden for all but the last (in this case, nbOutput)
-		for (int i = 0; i < hidden.length; i++) {
+		biases[0] = randomMatrix(hidden[0],1);
+		for (int i = 1; i < hidden.length; i++) {
+			weights[i] = randomMatrix(hidden[i], hidden[i-1]); // within hidden
 			biases[i] = randomMatrix(hidden[i],1);
 		}
+		weights[hidden.length] = randomMatrix(nbOutput, hidden[hidden.length-1]); // output case
 		biases[hidden.length] = randomMatrix(nbOutput, 1);
 	}
 	
@@ -96,5 +94,14 @@ public class NeuralNet {
 	
 	public static double reLU(double x) {
 		return Math.max(0, x);
+	}
+	
+	public void print() {
+		for (int i = 0; i < weights.length; i++) {
+			System.out.println("Weights " + i);
+			weights[i].print(1, 5);
+			System.out.println("Biases :");
+			biases[i].print(1, 5);
+		}
 	}
 }

@@ -22,7 +22,7 @@ public class Main {
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
 		enableView = true;
-		isNN = true;
+		isNN = false;
 		DIMX = 1000;
 		DIMY = 600;
 		delay = 15;
@@ -131,7 +131,7 @@ public class Main {
 	}
 	
 	public static void loopAI(Jeu jeu, Fenetre window, GeneticNN geneticNN, boolean[] saut) {
-		
+		int framesPerAction = 3;
 		// Game loop
 		while(true) { // for now, while true
 			if(geneticNN.generationDead()) {
@@ -155,7 +155,9 @@ public class Main {
 				(window.getPjeu()).repaint();	
 			}
 			// Control ...?
-			saut = geneticNN.getJump(); 
+			if (Jeu.SCORE % framesPerAction == 0) {
+				saut = geneticNN.getJump(); 
+			}
 			
 			// Delaying (we're only humans, afterall)
 			try {

@@ -5,9 +5,10 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Main.Main;
 import Modele.Jeu;
 import ia.Genetic;
-import Main.Main;
+import ia.GeneticNN;
 public class Fenetre extends JFrame {
 	// Window dimensions
 	public static int DIMX;
@@ -42,7 +43,12 @@ public class Fenetre extends JFrame {
 	    allContent.setLayout(new BorderLayout());
 	    allContent.add(pjeu, BorderLayout.CENTER);
 	    if(Main.isAI) {
-	    	displayInfoGenetic = new DisplayInfoGenetic(Genetic.infoGenetic);
+	    	if (Main.isNN) {
+		    	displayInfoGenetic = new DisplayInfoGenetic(GeneticNN.infoGenetic);
+
+			} else {
+				displayInfoGenetic = new DisplayInfoGenetic(Genetic.infoGenetic);
+			}
 		    allContent.add(displayInfoGenetic, BorderLayout.EAST);    	
 	    }
 
