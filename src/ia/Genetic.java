@@ -11,7 +11,6 @@ import Main.Main;
 public class Genetic {
 	// Genetic's attributes
 	private int sizePop;
-	private ArrayList<IndividualBool> pop;
 	private IndividualBool[] population;
 	public static int GENERATION;
 	public static InfoGenetic infoGenetic;
@@ -30,10 +29,8 @@ public class Genetic {
 		GENERATION = 0;
 		selectPower = 4;
 		rankSelectProba = 0.1;
-		pop = new ArrayList<IndividualBool>();
 		population = new IndividualBool[sizePop];
 		for(int i=0; i<sizePop; i++) {
-			pop.add(new IndividualBool(2*Jeu.DIMY, Obstacle.MINDIST)); // the netting will be done later
 			population[i] = new IndividualBool(2*Jeu.DIMY, Obstacle.MINDIST); 
 		}
 	}
@@ -51,10 +48,8 @@ public class Genetic {
 	public void update(Jeu jeu) {
 		infoGenetic.update(GENERATION++, birds);
 		for (int i = 0; i < sizePop; i++) {
-			pop.get(i).setFitness(birds[i].getScore());
 			population[i].setFitness(birds[i].getScore());
 		}
-		pop = functionalSelection();
 		population = rankSelection();
 		birds = jeu.getBirds();
 		obstacles = jeu.getObstacles();
@@ -69,7 +64,6 @@ public class Genetic {
 		
 		for (int i = 0; i < sizePop; i++) {
 			if(obstacles.size() > 0) {
-				jumps[i] = pop.get(i).decideJump(obstacles.get(0), birds[i]);	
 				jumps[i] = population[i].decideJump(obstacles.get(0), birds[i]);
 			}
 
@@ -79,32 +73,32 @@ public class Genetic {
 	
 	private ArrayList<IndividualBool> selection(){
 		ArrayList<Integer> meltingPot = new ArrayList<Integer>();
-		int minfitness = pop.get(0).getFitness();
-		int maxfitness = pop.get(0).getFitness();
+		int minfitness = population[0].getFitness();
+		int maxfitness = population[0].getFitness();
 		for (int i = 1; i < sizePop; i++) {
-			if(minfitness > pop.get(i).getFitness()) {
-				minfitness = pop.get(i).getFitness();
+			if(minfitness > population[i].getFitness()) {
+				minfitness = population[i].getFitness();
 			}
-			if(maxfitness < pop.get(i).getFitness()) {
-				maxfitness = pop.get(i).getFitness();
+			if(maxfitness < population[i].getFitness()) {
+				maxfitness = population[i].getFitness();
 			}
 		}
 		if (minfitness < 0) {
 			for (int i = 0; i < sizePop; i++) {
-				pop.get(i).setFitness(pop.get(i).getFitness()-minfitness+1);
+				population[i].setFitness(population[i].getFitness()-minfitness+1);
 			}
 			maxfitness -=minfitness -1;
 		}
 
 		for (int i = 0; i < sizePop; i++) {
-			for(int j = 0; j < Math.pow(1+pop.get(i).getFitness()/(float)maxfitness,selectPower); j++) {
+			for(int j = 0; j < Math.pow(1+population[i].getFitness()/(float)maxfitness,selectPower); j++) {
 				meltingPot.add(i);
 			}
 		}
 		ArrayList<IndividualBool> newPop = new ArrayList<IndividualBool>();
 		for(int i = 0; i < sizePop; i++) {
-			IndividualBool parentA = pop.get(meltingPot.get(Main.rand.nextInt(meltingPot.size())));
-			IndividualBool parentB = pop.get(meltingPot.get(Main.rand.nextInt(meltingPot.size())));
+			IndividualBool parentA = population[meltingPot.get(Main.rand.nextInt(meltingPot.size()))];
+			IndividualBool parentB = population[meltingPot.get(Main.rand.nextInt(meltingPot.size()))];
 			newPop.add(crossover2(parentA.getGenes(), parentB.getGenes(), parentA.getNRow(), parentA.getNCol()));
 		}
 
@@ -114,12 +108,12 @@ public class Genetic {
 	private ArrayList<IndividualBool> functionalSelection(){
 		double[] fitnesses = new double[sizePop];
 		double[] cumulateFitnesses = new double[sizePop];
-		double minfitness = pop.get(0).getFitness();
+		double minfitness = population[0].getFitness();
 		double sum = 0;
 		for (int i = 1; i < sizePop; i++) {
 			// apply desired function
-			fitnesses[i] = identity(pop.get(i).getFitness()); 
-			fitnesses[i] = polynomial(pop.get(i).getFitness(), selectPower);
+			fitnesses[i] = identity(population[i].getFitness()); 
+			fitnesses[i] = polynomial(population[i].getFitness(), selectPower);
 			if(minfitness > fitnesses[i]) {
 				minfitness = fitnesses[i];
 			}
@@ -152,8 +146,8 @@ public class Genetic {
 		ArrayList<IndividualBool> newPop = new ArrayList<IndividualBool>();
 		for(int i = 0; i < sizePop; i++) {
 			// now, grabbing parent corresponding to 
-			IndividualBool parentA = pop.get(cumulativeIndex(cumulateFitnesses, Main.rand.nextDouble()));
-			IndividualBool parentB = pop.get(cumulativeIndex(cumulateFitnesses, Main.rand.nextDouble()));
+			IndividualBool parentA = population[cumulativeIndex(cumulateFitnesses, Main.rand.nextDouble())];
+			IndividualBool parentB = population[cumulativeIndex(cumulateFitnesses, Main.rand.nextDouble())];
 			newPop.add(crossover(parentA.getGenes(), parentB.getGenes(), parentA.getNRow(), parentA.getNCol()));
 		}
 		
