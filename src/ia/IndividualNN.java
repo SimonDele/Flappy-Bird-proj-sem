@@ -24,7 +24,7 @@ public class IndividualNN extends Individual {
 	public NeuralNet getNN() {return nn;}
 	
 	public boolean decideJump(Obstacle obstacle, Bird bird) throws IllegalArgumentException {
-		// only coded for nbInput = 3 ^-^
+		// only coded for nbInput = 2 ^-^
 		boolean decision = false;
 		double[][] input = new double[nn.getNbInput()][1]; // will be a vector type Matrix
 		if (nn.getNbInput() != 2) {

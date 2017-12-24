@@ -22,12 +22,11 @@ public class GeneticNN {
 	private double selectPower;
 	private double rankSelectProba;
 	private double mutationAtZero;
+	private double keeper;
+	private double bestCross;
 	// Game's attributes
 	private Bird[] birds;
 	private ArrayList<Obstacle> obstacles;
-	private double keeper;
-	private double randomKeeper;
-	private double bestCross;
 	
 	public GeneticNN(Jeu jeu, int sizePop) {
 		infoGenetic = new InfoGenetic(GENERATION);
@@ -38,8 +37,8 @@ public class GeneticNN {
 		
 		/// Hyperparameters :
 		// Mutation
-		mutationAtZero = 0.01; // if it evolves over time (not now)
-		mutationProba = 0; 
+		mutationAtZero = 0.05; // Amplitude. "zero" bcs it can evolve over time (not now)
+		mutationProba = 0.1; 
 		// NN Weights
 		initMinWeight = -0.5;
 		initMaxWeight = 0.5;
@@ -48,7 +47,7 @@ public class GeneticNN {
 		rankSelectProba = 0.2;
 		selectPower = 5;
 		// For the "video selection" - not finished
-		keeper = 1;
+		keeper = 0.01;
 		bestCross = 0.2;
 		
 		population = new IndividualNN[sizePop];
@@ -270,10 +269,10 @@ public class GeneticNN {
 		// parameters for building an exponential passing through two given points and above a threshold
 
 		double valueAtFifty = 0.05;
-		double minValue = 0; // different form valAt0
+		double minValue = 0; // different form valAt0 : where you converge to
 		
 		// just solving equations
-		double alpha = mutationAtZero - minValue;
+//		double alpha = mutationAtZero - minValue;
 //		double beta = -(1/50f)*Math.log((valueAtFifty-minValue)/alpha);
 //		return (alpha*Math.exp(-GeneticNN.GENERATION*beta)+minValue);
 		return mutationAtZero;
