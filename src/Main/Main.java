@@ -1,5 +1,4 @@
 package Main;
-import java.awt.Dimension;
 import java.util.Random;
 
 import Controleur.Checker;
@@ -8,6 +7,7 @@ import Vue.Fenetre;
 import Vue.Menu;
 import Vue.PJeu;
 import ia.Genetic;
+import ia.QLearning;
 
 public class Main {
 	// statics : dimensions and random
@@ -55,9 +55,13 @@ public class Main {
 			saut[i] = true; // initialisation at true so that they all start by jumping.
 		}
 		
+		
+		QLearning qlearning = new QLearning(jeu);
+		
 		// Game loop
 		if(isAI) {
-			loopAI(jeu,window,genetic,saut);
+			//loopAI(jeu,window,genetic,saut);
+			loopQLearning(jeu, window , qlearning, saut);
 		}else {
 			loopPlayer(jeu, saut, window, checker);
 		}
@@ -112,11 +116,46 @@ public class Main {
 			// Delaying (we're only humans, afterall)
 			try {
 				Thread.sleep(delay);
-				} catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 		
+	}
+	
+	public static void loopQLearning(Jeu jeu,Fenetre window, QLearning qlearning, boolean saut[]) {
+		
+		boolean obstpassed = false;
+		
+		while(true) {
+			if(jeu.getBirds()[0].isDead()) {
+				qlearning.giveMalus();
+				jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
+				qlearning.setJeu(jeu);
+				window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu));
+			}else if(!obstpassed && jeu.getObstacles().get(0).getPosX()< jeu.getBirds()[0].getPosX()){
+				qlearning.giveBonus();
+				obstpassed = true;
+			}else if(jeu.getObstacles().get(0).getPosX()> jeu.getBirds()[0].getPosX()){
+				obstpassed = false;
+			}
+			
+			
+			jeu.update(saut);
+			
+			(window.getPjeu()).repaint();	
+			
+			saut = qlearning.getJump();
+			
+			
+			// Delaying (we're only humans, afterall)
+			try {
+				Thread.sleep(delay+10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+		}
 	}
 
 }
