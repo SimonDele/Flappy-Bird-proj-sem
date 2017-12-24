@@ -36,4 +36,8 @@ public class IndividualNN extends Individual {
 		}
 		return decision;
 	}
+	
+	public void mutate(double mutAmpl) {
+		nn = nn.add(NeuralNet.randomNNShape(nn, mutAmpl));
+	}
 }

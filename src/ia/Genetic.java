@@ -174,9 +174,7 @@ public class Genetic {
 	
 	private static int rankSelecter(int size, double proba) {
 		int index = 0;
-		while (!(Main.rand.nextDouble() < proba) && (index < size -1)) {
-			index++; // 
-		}
+		while (!(Main.rand.nextDouble() < proba) && (index++ < size -1));
 		return index;
 	}
 	
@@ -186,6 +184,7 @@ public class Genetic {
 		return i;
 	}
 	
+	// Functions for functional Selection
 	public double identity(double x) {
 		return x;
 	}

@@ -7,7 +7,6 @@ public class NeuralNet {
 	private int nbOutput; // idem, output vector
 	private int[] hidden; // number of neurones in each hidden layer
 	private Matrix[] weights; // Matrix[i] are a layer's weights
-	private Matrix[] biases; // list of biases vectors, matrix type for summing
 	private double maxWeight;
 	private double minWeight;
 	
@@ -19,13 +18,34 @@ public class NeuralNet {
 			this.nbOutput = nbOutput; 
 			this.hidden = hidden; 
 			weights = new Matrix[hidden.length+1]; 
-			biases = new Matrix[weights.length];
 			this.maxWeight = maxWeight;
 			this.minWeight = minWeight;
 			randomInitParameters();
 		}
 	}
 	
+	public NeuralNet(Matrix[] w) {
+		this.nbInput = w[0].getColumnDimension();
+		this.nbOutput = w[w.length-1].getRowDimension();
+		this.weights = w;
+	}
+	
+	public double getMaxWeight() {
+		return maxWeight;
+	}
+
+	public void setMaxWeight(double maxWeight) {
+		this.maxWeight = maxWeight;
+	}
+
+	public double getMinWeight() {
+		return minWeight;
+	}
+
+	public void setMinWeight(double minWeight) {
+		this.minWeight = minWeight;
+	}
+
 	public int getNbInput() {
 		return nbInput;
 	}
@@ -38,8 +58,9 @@ public class NeuralNet {
 	public Matrix[] getWeights() {
 		return weights;
 	}
-	public Matrix[] getBiases() {
-		return biases;
+	
+	public int getNbLayers() {
+		return 2+hidden.length;
 	}
 
 	private void randomInitParameters() {
@@ -48,16 +69,13 @@ public class NeuralNet {
 		// in line :   the weights for  the ith output neuron
 		weights[0] = randomMatrix(hidden[0], nbInput); // case input
 		// BIASES
-		biases[0] = randomMatrix(hidden[0],1);
 		for (int i = 1; i < hidden.length; i++) {
 			weights[i] = randomMatrix(hidden[i], hidden[i-1]); // within hidden
-			biases[i] = randomMatrix(hidden[i],1);
 		}
 		weights[hidden.length] = randomMatrix(nbOutput, hidden[hidden.length-1]); // output case
-		biases[hidden.length] = randomMatrix(nbOutput, 1);
 	}
 	
-	private Matrix randomMatrix(int nrow, int ncol) {
+	public Matrix randomMatrix(int nrow, int ncol) {
 		Matrix randMat = null;
 		randMat = Matrix.random(nrow, ncol);
 		randMat.timesEquals(maxWeight-minWeight);
@@ -73,7 +91,6 @@ public class NeuralNet {
 		} else {
 			for (int i = 0; i < weights.length; i++) {
 				prevision = weights[i].times(prevision);
-				prevision.plusEquals(biases[i]);
 				activationFunction(prevision);
 			}
 		}
@@ -100,8 +117,23 @@ public class NeuralNet {
 		for (int i = 0; i < weights.length; i++) {
 			System.out.println("Weights " + i);
 			weights[i].print(1, 5);
-			System.out.println("Biases :");
-			biases[i].print(1, 5);
 		}
+	}
+	
+	public NeuralNet add(NeuralNet nn) {
+		int nL = nn.getNbLayers();
+		Matrix[] w = new Matrix[nL];
+		for (int j = 0; j < nL; j++) {
+			w[j] = this.weights[j].plus(nn.getWeights()[j]);
+		}
+		return new NeuralNet(w);
+	}
+	
+	public static NeuralNet randomNNShape(NeuralNet nn, double mutAmpl) {
+		NeuralNet randNN = nn;
+		randNN.setMinWeight(-mutAmpl);
+		randNN.setMaxWeight(mutAmpl);
+		randNN.randomInitParameters();
+		return(randNN);
 	}
 }
