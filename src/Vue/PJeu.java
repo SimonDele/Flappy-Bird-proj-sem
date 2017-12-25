@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Modele.Bird;
-import Modele.Jeu;
+import Modele.Game;
 import Modele.Obstacle;
 
 public class PJeu extends JPanel  {
@@ -33,14 +33,14 @@ public class PJeu extends JPanel  {
 	private Image background;
 	
 	// Constructor
-	public PJeu(int dimx, int dimy, Jeu jeu) {
+	public PJeu(int dimx, int dimy, Game game) {
 		this.setSize(new Dimension(dimx,dimy));	
 		width = getWidth();
 		height = getHeight();
 		// Game attributes init (once pointing towards, keeps pointing)
-		birds = jeu.getBirds();
-		obstacles = jeu.getObstacles();
-		tolerance = jeu.getTolerance();
+		birds = game.getBirds();
+		obstacles = game.getObstacles();
+		tolerance = game.getTolerance();
 
 		// Sprites:
 		/// bird Up and Down
@@ -86,10 +86,10 @@ public class PJeu extends JPanel  {
 	
 	// Methods :
 	/// Update instance jeu
-	public void updateJeu(Jeu jeu) {
-		birds = jeu.getBirds();
-		obstacles = jeu.getObstacles();
-		tolerance = jeu.getTolerance();
+	public void updateJeu(Game game) {
+		birds = game.getBirds();
+		obstacles = game.getObstacles();
+		tolerance = game.getTolerance();
 	}
 	/// Displaying
 	public void paintComponent(Graphics g) {
@@ -136,7 +136,7 @@ public class PJeu extends JPanel  {
 
 		/// Score
 		
-		labScore.setText(String.valueOf(Jeu.PASSED));		
+		labScore.setText(String.valueOf(Game.PASSED));		
 	}
 	
 	

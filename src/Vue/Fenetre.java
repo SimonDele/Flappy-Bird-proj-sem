@@ -6,8 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import Main.Main;
-import Modele.Jeu;
-import ia.Genetic;
+import Modele.Game;
+import ia.GeneticBool;
 import ia.GeneticNN;
 public class Fenetre extends JFrame {
 	// Window dimensions
@@ -20,7 +20,7 @@ public class Fenetre extends JFrame {
 	private DisplayInfoGenetic displayInfoGenetic;
 	
 	// Constructor
-	public Fenetre(int dimx, int dimy, Jeu jeu){
+	public Fenetre(int dimx, int dimy, Game game){
 		// Variables
 		Fenetre.DIMX = dimx;
 		Fenetre.DIMY = dimy;
@@ -28,7 +28,7 @@ public class Fenetre extends JFrame {
 		
 		// Window initialisation
 		if(Main.isAI) {
-			this.setMinimumSize(new Dimension(DIMX+500,DIMY));	
+			this.setMinimumSize(new Dimension(DIMX+350,DIMY));	
 		}else {
 			this.setMinimumSize(new Dimension(DIMX,DIMY));
 		}
@@ -37,7 +37,7 @@ public class Fenetre extends JFrame {
 	    this.setLocationRelativeTo(null);               
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-	    pjeu = new PJeu(DIMX, DIMY, jeu);
+	    pjeu = new PJeu(DIMX, DIMY, game);
 	    
 	    JPanel allContent = new JPanel();
 	    allContent.setLayout(new BorderLayout());
@@ -47,7 +47,7 @@ public class Fenetre extends JFrame {
 		    	displayInfoGenetic = new DisplayInfoGenetic(GeneticNN.infoGenetic);
 
 			} else {
-				displayInfoGenetic = new DisplayInfoGenetic(Genetic.infoGenetic);
+				displayInfoGenetic = new DisplayInfoGenetic(GeneticBool.infoGenetic);
 			}
 		    allContent.add(displayInfoGenetic, BorderLayout.EAST);    	
 	    }

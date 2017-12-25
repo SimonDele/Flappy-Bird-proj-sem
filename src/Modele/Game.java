@@ -5,7 +5,7 @@ import java.lang.Math;
 
 import Main.Main;
 
-public class Jeu {
+public class Game {
 	// Dimensions given by Window
 	public static int DIMY;
 	public static int DIMX;
@@ -17,11 +17,11 @@ public class Jeu {
 	private float tolerance; // percentage of bird we take out of hitbox
 	
 	// Constructor
-	public Jeu(int dimx, int dimy, int N) {
-		Jeu.DIMX = dimx;
-		Jeu.DIMY = dimy;
-		Jeu.SCORE = 0;
-		Jeu.PASSED = 0;
+	public Game(int dimx, int dimy, int N) {
+		Game.DIMX = dimx;
+		Game.DIMY = dimy;
+		Game.SCORE = 0;
+		Game.PASSED = 0;
 		tolerance = 0.2f;
 		
 		birds = new Bird[N];
@@ -29,11 +29,11 @@ public class Jeu {
 		// creating list
 		obstacles = new ArrayList<Obstacle>();
 		// instanciating. Be careful : if multiple, ASCENDING X order !	
-		obstacles.add(new Obstacle(Jeu.DIMY/2,Jeu.DIMX)); // better not start too hard ?
+		obstacles.add(new Obstacle(Game.DIMY/2,Game.DIMX)); // better not start too hard ?
 		// creating the bird AFTER obstacles (need of INTERVAL & speed)
 		for(int i=0;i<N;i++) {
 			obstacles.get(0);
-			birds[i] = new Bird(Jeu.DIMY/2, Obstacle.getSpeed());
+			birds[i] = new Bird(Game.DIMY/2, Obstacle.getSpeed());
 		}
 		
 	}
@@ -74,7 +74,7 @@ public class Jeu {
 		}
 		if (destroy) {
 			obstacles.remove(0);
-			Jeu.PASSED++;
+			Game.PASSED++;
 			for(int i=0;i<birds.length;i++) {
 				if (!birds[i].isDead()) {
 					birds[i].increaseScore(DIMY);
@@ -84,18 +84,18 @@ public class Jeu {
 		
 		// Obstacle generation : if you've passed minimal distance (1st line),
 		//  have a GENPROBA proba of generating new one, per frame (2nd line)
-		if (obstacles.size() > 0 && (obstacles.get(obstacles.size()-1).getPosX() < (Jeu.DIMX - Obstacle.MINDIST)) 
+		if (obstacles.size() > 0 && (obstacles.get(obstacles.size()-1).getPosX() < (Game.DIMX - Obstacle.MINDIST)) 
 				&& (Main.rand.nextFloat() < Obstacle.GENPROBA)) {
 			// in that case, obst generation.
-			obstacles.add(new Obstacle((int) Main.rand.nextInt(Jeu.DIMY - 2*Obstacle.INTERVAL)
-					+ Obstacle.INTERVAL,Jeu.DIMX));
+			obstacles.add(new Obstacle((int) Main.rand.nextInt(Game.DIMY - 2*Obstacle.INTERVAL)
+					+ Obstacle.INTERVAL,Game.DIMX));
 
 		}else if(obstacles.size()==0){
-			obstacles.add(new Obstacle((int) Main.rand.nextInt(Jeu.DIMY - 2*Obstacle.INTERVAL)
-					+ Obstacle.INTERVAL,Jeu.DIMX));
+			obstacles.add(new Obstacle((int) Main.rand.nextInt(Game.DIMY - 2*Obstacle.INTERVAL)
+					+ Obstacle.INTERVAL,Game.DIMX));
 		}
 		
-		Jeu.SCORE++;
+		Game.SCORE++;
 	}
 	
 	/// Ending the game - all birds died (are hit())
@@ -127,7 +127,7 @@ public class Jeu {
 			
 			// Then, floor 
 		} else 
-		if (currentY+radius > Jeu.DIMY) {
+		if (currentY+radius > Game.DIMY) {
 			hit = true;
 			
 			// Now, there are 5 areas where we can hit the block:
@@ -147,18 +147,18 @@ public class Jeu {
 			hit = true;
 			
 			// 4: hitting the front edge from under or above 		
-		} else if ((Jeu.distance(currentX, currentY, obstX, obstYUp)<radius)
-				|| (Jeu.distance(currentX, currentY, obstX, obstYDown)<radius)) {
+		} else if ((Game.distance(currentX, currentY, obstX, obstYUp)<radius)
+				|| (Game.distance(currentX, currentY, obstX, obstYDown)<radius)) {
 			hit = true;
 			
 			// 5: hitting the rear end
-		} else if ((Jeu.distance(currentX, currentY, obstX + Obstacle.LARGEUR, obstYUp)  <radius)
-				|| (Jeu.distance(currentX, currentY, obstX + Obstacle.LARGEUR, obstYDown)<radius)) {
+		} else if ((Game.distance(currentX, currentY, obstX + Obstacle.LARGEUR, obstYUp)  <radius)
+				|| (Game.distance(currentX, currentY, obstX + Obstacle.LARGEUR, obstYDown)<radius)) {
 			hit = true;
 		}
 		
 		// Done ! Update bird status and inform Game.
-		if (hit) {bird.hit(Jeu.SCORE - (int)(Math.abs(obstacles.get(0).getPosY() - currentY)/(float)Obstacle.getSpeed()));} // must
+		if (hit) {bird.hit(Game.SCORE - (int)(Math.abs(obstacles.get(0).getPosY() - currentY)/(float)Obstacle.getSpeed()));} // must
 		return hit;
 	}
 

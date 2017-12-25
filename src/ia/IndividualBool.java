@@ -15,7 +15,7 @@ public class IndividualBool extends Individual {
 		IndividualBool.MESHSIZE = Obstacle.getSpeed()*4;
 		this.nrow = nrow/IndividualBool.MESHSIZE;
 		this.ncol = ncol/IndividualBool.MESHSIZE +1;
-		genes = new Boolean[this.nrow][this.ncol];
+		this.genes = new Boolean[this.nrow][this.ncol];
 		
 		float probaJump = 0.03f;
 		for(int i=0;i<this.nrow;i++) {
@@ -31,9 +31,20 @@ public class IndividualBool extends Individual {
 		this.ncol = ncol;
 	}
 	
-	public Boolean[][] getGenes(){return genes;}
-	public int getNRow(){return nrow;}	
-	public int getNCol(){return ncol;}
+	public IndividualBool(Boolean[][] genes) throws IllegalArgumentException {
+		this.genes = genes;
+		// check that dimension is not < 2
+		if ((genes.length != 0) && (genes[0].length != 0)) {
+			this.nrow = genes.length;
+			this.ncol = genes[0].length;
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
+	
+	public Boolean[][] getGenes(){return this.genes;}
+	public int getNRow(){return this.nrow;}	
+	public int getNCol(){return this.ncol;}
 
 
 	public boolean decideJump(Obstacle obstacle, Bird bird) {
@@ -45,5 +56,24 @@ public class IndividualBool extends Individual {
 			return genes[bird.getPosY()/IndividualBool.MESHSIZE + nrow/4][ncol-1];
 			
 		}
+	}
+
+	@Override
+	public void mutate(double mutAmpl, double mutProba) {
+		// This is only called for very specific selection methods
+		// TODO Implement this : mutate the array
+	}
+	
+	@Override
+	public String toString() {
+		String res = "IndividualBool :\n";
+		res += "Ncol = "+ ncol + "Nrow = "+ nrow + "\n";
+		for (int i = 0; i < nrow; i++) {
+			for (int j = 0; j < ncol; j++) {
+				res += this.genes[i][j] ? "1" : "0";
+			}
+			res += "\n";
+		}
+		return res;
 	}
 }

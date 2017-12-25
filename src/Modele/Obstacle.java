@@ -1,7 +1,4 @@
 package Modele;
-import javax.swing.JLabel;
-
-import Main.Main;
 
 public class Obstacle {
 	// Attributes for hitbox & display

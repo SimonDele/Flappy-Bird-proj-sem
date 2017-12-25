@@ -2,7 +2,7 @@ package ia;
 
 import Jama.Matrix;
 import Modele.Bird;
-import Modele.Jeu;
+import Modele.Game;
 import Modele.Obstacle;
 
 public class IndividualNN extends Individual {
@@ -30,14 +30,14 @@ public class IndividualNN extends Individual {
 		if (nn.getNbInput() != 2) {
 			throw new IllegalArgumentException();
 		} else {
-			input[0][0] = (bird.getPosY()-obstacle.getPosY())/(double)Jeu.DIMY + 0.5;
-			input[1][0] = obstacle.getPosX()/(double)Jeu.DIMX;
+			input[0][0] = (bird.getPosY()-obstacle.getPosY())/(double)Game.DIMY + 0.5;
+			input[1][0] = obstacle.getPosX()/(double)Game.DIMX;
 			decision = nn.propagation(new Matrix(input)).get(0, 0) > 0.5;
 		}
 		return decision;
 	}
 	
-	public void mutate(double mutAmpl) {
+	public void mutate(double mutAmpl, double mutProba) {
 		nn = nn.add(NeuralNet.randomNNShape(nn, mutAmpl));
 	}
 }

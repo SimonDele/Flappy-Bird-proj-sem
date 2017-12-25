@@ -2,11 +2,11 @@ package Main;
 import java.util.Random;
 
 import Controleur.Checker;
-import Modele.Jeu;
+import Modele.Game;
 import Vue.Fenetre;
 import Vue.Menu;
 import Vue.PJeu;
-import ia.Genetic;
+import ia.GeneticBool;
 import ia.GeneticNN;
 
 public class Main {
@@ -30,16 +30,16 @@ public class Main {
 		@SuppressWarnings("unused")
 		Menu menu = new Menu(null);
 		
-		Jeu jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
+		Game game = new Game(Main.DIMX, Main.DIMY, sizePop);
 		
 		// Genetic algo initialisation
-		Genetic genetic = null;
+		GeneticBool geneticBool = null;
 		GeneticNN geneticNN = null;
 		if(isAI) {
 			if (isNN) {
-				geneticNN = new GeneticNN(jeu, sizePop);
+				geneticNN = new GeneticNN(game, sizePop);
 			} else {
-				genetic = new Genetic(jeu, sizePop);
+				geneticBool = new GeneticBool(game, sizePop);
 			}
 		}
 
@@ -47,7 +47,7 @@ public class Main {
 		// Window creation
 		Fenetre window = null;
 		try {
-			window = new Fenetre(Main.DIMX, Main.DIMY,jeu);
+			window = new Fenetre(Main.DIMX, Main.DIMY,game);
 			window.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,25 +65,24 @@ public class Main {
 		// Game loop
 		if(isAI) {
 			if (isNN) {
-				loopAI(jeu,window,geneticNN,saut);
+				loopAI(game,window,geneticNN,saut);
 			} else {
-				loopAI(jeu,window,genetic,saut);
+				loopAI(game,window,geneticBool,saut);
 			} 
 		} else {
-			loopPlayer(jeu, saut, window, checker);
+			loopPlayer(game, saut, window, checker);
 		}
 	}
-	public static void loopPlayer(Jeu jeu, boolean[] saut, Fenetre window, Checker checker) {
+	public static void loopPlayer(Game game, boolean[] saut, Fenetre window, Checker checker) {
 		// Game loop
-		while(!jeu.end()) { // for now, while true
+		while(!game.end()) { // for now, while true
 			
 			// Model updating
-			jeu.update(saut);
+			game.update(saut);
 			// Display updating 
 			(window.getPjeu()).repaint();
 			// Control
 			saut[0] = checker.getJump();
-			
 			
 			// Delaying (we're only humans, afterall)
 			try {
@@ -93,32 +92,32 @@ public class Main {
 			}
 		}		
 	}
-	public static void loopAI(Jeu jeu, Fenetre window, Genetic genetic, boolean[] saut) {
+	public static void loopAI(Game game, Fenetre window, GeneticBool geneticBool, boolean[] saut) {
 		
 		// Game loop
 		while(true) { // for now, while true
-			if(genetic.generationDead()) {
-				jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
-				genetic.update(jeu);
+			if(geneticBool.generationDead()) {
+				game = new Game(Main.DIMX, Main.DIMY, sizePop);
+				geneticBool.update(game);
 				if(enableView) {
-					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu));
+					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
 				}else {
 					window.setPjeu(null);
 				}
 				window.getDisplayInfoGenetic().updateInfo(); 
-
 			}
+			
 			// Model updating
-			jeu.update(saut);
+			game.update(saut);
 			// Display updating 
 			if(enableView) {
 				if(window.getPjeu() == null) {
-					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu));
+					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
 				}
 				(window.getPjeu()).repaint();	
 			}
 			// Control ...?
-			saut = genetic.getJump(); 
+			saut = geneticBool.getJump(); 
 			
 			// Delaying (we're only humans, afterall)
 			try {
@@ -130,32 +129,32 @@ public class Main {
 		
 	}
 	
-	public static void loopAI(Jeu jeu, Fenetre window, GeneticNN geneticNN, boolean[] saut) {
+	public static void loopAI(Game game, Fenetre window, GeneticNN geneticNN, boolean[] saut) {
 		int framesPerAction = 3;
 		// Game loop
 		while(true) { // for now, while true
 			if(geneticNN.generationDead()) {
-				jeu = new Jeu(Main.DIMX, Main.DIMY, sizePop);
-				geneticNN.update(jeu);
+				game = new Game(Main.DIMX, Main.DIMY, sizePop);
+				geneticNN.update(game);
 				if(enableView) {
-					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu));
+					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
 				}else {
 					window.setPjeu(null);
 				}
 				window.getDisplayInfoGenetic().updateInfo(); 
-
 			}
+			
 			// Model updating
-			jeu.update(saut);
+			game.update(saut);
 			// Display updating 
 			if(enableView) {
 				if(window.getPjeu() == null) {
-					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,jeu));
+					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
 				}
 				(window.getPjeu()).repaint();	
 			}
 			// Control ...?
-			if (Jeu.SCORE % framesPerAction == 0) {
+			if (Game.SCORE % framesPerAction == 0) {
 				saut = geneticNN.getJump(); 
 			}
 			
