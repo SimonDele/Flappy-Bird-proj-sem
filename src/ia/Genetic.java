@@ -50,10 +50,10 @@ public class Genetic {
 		for (int i = 0; i < sizePop; i++) {
 			population[i].setFitness(birds[i].getScore());
 		}
-		population = rankSelection();
+
 		birds = jeu.getBirds();
 		obstacles = jeu.getObstacles();
-		
+		population = rankSelection();
 	}
 	public int getSizePop() {
 		return sizePop;
@@ -99,7 +99,7 @@ public class Genetic {
 		for(int i = 0; i < sizePop; i++) {
 			IndividualBool parentA = population[meltingPot.get(Main.rand.nextInt(meltingPot.size()))];
 			IndividualBool parentB = population[meltingPot.get(Main.rand.nextInt(meltingPot.size()))];
-			newPop.add(crossover2(parentA.getGenes(), parentB.getGenes(), parentA.getNRow(), parentA.getNCol()));
+			newPop.add(crossover(parentA.getGenes(), parentB.getGenes(), parentA.getNRow(), parentA.getNCol()));
 		}
 
 		return newPop;
@@ -195,21 +195,7 @@ public class Genetic {
 				}else {
 					newGenes[i][j] = genesB[i][j];
 				}
-				if (Main.rand.nextFloat() < mutationProba()) {
-					newGenes[i][j] = !newGenes[i][j];
-				}
-			}
-		}
-		return new IndividualBool(newGenes, nrow, ncol);
-	}
-	private IndividualBool crossover2(Boolean[][] genesA, Boolean[][] genesB, int nrow, int ncol) {
-		Boolean[][] newGenes = genesA;
-		for(int i = 0; i < nrow;  i++) {
-			for(int j = 0; j < ncol ; j++) {
-				if(Main.rand.nextFloat() < 0.5f) {
-					newGenes[i][j] = genesB[i][j];
-				}
-				if (Main.rand.nextFloat() < mutationProba()) {
+				if (Main.rand.nextFloat() < mutationProba(true)) {
 					newGenes[i][j] = !newGenes[i][j];
 				}
 			}
@@ -217,16 +203,21 @@ public class Genetic {
 		return new IndividualBool(newGenes, nrow, ncol);
 	}
 	
-	private double mutationProba() { 
+	private double mutationProba(boolean decrease) {
 		// parameters for building an exponential passing through two given points and above a threshold
 		double valueAtZero = 0.05;
-		double valueAtFifty = 0.0001;
-		double minValue = 0; // different form valAt0
+		if (decrease) {
+			double valueAtFifty = 0.0001;
+			double minValue = 0; // different form valAt0
+			
+			// just solving equations
+			double alpha = valueAtZero - minValue;
+			double beta = -(1/50f)*Math.log((valueAtFifty-minValue)/alpha);
+			return (alpha*Math.exp(-Genetic.GENERATION*beta)+minValue);
+		} else {
+			return valueAtZero;
+		}
 		
-		// just solving equations
-		double alpha = valueAtZero - minValue;
-		double beta = -(1/50f)*Math.log((valueAtFifty-minValue)/alpha);
-		return (alpha*Math.exp(-Genetic.GENERATION*beta)+minValue);
 	}
 	
 	/*
