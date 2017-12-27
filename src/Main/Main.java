@@ -22,7 +22,7 @@ public class Main {
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
 		enableView = true;
-		isNN = false;
+		isNN = true;
 		DIMX = 1000;
 		DIMY = 600;
 		delay = 15;

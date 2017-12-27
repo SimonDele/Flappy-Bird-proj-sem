@@ -18,10 +18,10 @@ public class GeneticBool extends Genetic {
 		
 		/// Hyperparameters :
 		// Mutation
-		mutationAtZero = 0.05;
+		mutationAtZero = 0.1;
 		// Selection
 		selectPower = 4;
-		rankSelectProba = 0.05;
+		rankSelectProba = 0.25;
 		
 		// Population intitialization
 		population = new IndividualBool[sizePop];

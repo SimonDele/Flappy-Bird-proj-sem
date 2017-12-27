@@ -25,8 +25,8 @@ public class GeneticNN extends Genetic {
 		mutationAtZero = 0.05; // Amplitude. "zero" bcs it can evolve over time (not now)
 		mutProba = 0.1;
 		// NN Weights
-		initMinWeight = -0.25;
-		initMaxWeight = 0.25;
+		initMinWeight = -0.75;
+		initMaxWeight = 0.75;
 		// Selection & Crossover
 		parentProba = 0.5;
 		rankSelectProba = 0.2;
