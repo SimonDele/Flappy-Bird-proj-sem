@@ -130,7 +130,7 @@ public class Main {
 	}
 	
 	public static void loopAI(Game game, Fenetre window, GeneticNN geneticNN, boolean[] saut) {
-		int framesPerAction = 3;
+		int framesPerAction = 2;
 		// Game loop
 		while(true) { // for now, while true
 			if(geneticNN.generationDead()) {

@@ -18,10 +18,10 @@ public class GeneticBool extends Genetic {
 		
 		/// Hyperparameters :
 		// Mutation
-		mutationAtZero = 0.1;
+		mutationAtZero = 0.05;
 		// Selection
 		selectPower = 4;
-		rankSelectProba = 0.25;
+		rankSelectProba = 0.1;
 		
 		// Population intitialization
 		population = new IndividualBool[sizePop];
@@ -39,13 +39,17 @@ public class GeneticBool extends Genetic {
 	protected Individual crossover(Individual parent1, Individual parent2) throws IllegalArgumentException {
 		Boolean[][] newGenes = null;
 		if ((parent1 instanceof IndividualBool) && (parent2 instanceof IndividualBool)) {
-			newGenes = ((IndividualBool)parent1).getGenes();
-			for(int i = 0; i < ((IndividualBool)parent1).getNRow();  i++) {
-				for(int j = 0; j < ((IndividualBool)parent1).getNCol() ; j++) {
+			int nrow = ((IndividualBool)parent1).getNRow();
+			int ncol = ((IndividualBool)parent1).getNCol();
+			newGenes = new Boolean[nrow][ncol];
+			for(int i = 0; i < nrow;  i++) {
+				for(int j = 0; j < ncol ; j++) {
 					if(Main.rand.nextFloat() < 0.5f) {
+						newGenes[i][j] = ((IndividualBool)parent1).getGenes()[i][j];
+					} else {
 						newGenes[i][j] = ((IndividualBool)parent2).getGenes()[i][j];
-					} 
-					if (Main.rand.nextFloat() < mutationDecrease(false)) {
+					}
+					if (Main.rand.nextFloat() < mutationDecrease(true)) {
 						newGenes[i][j] = !newGenes[i][j];
 					}
 				}

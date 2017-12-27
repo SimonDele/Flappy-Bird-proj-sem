@@ -17,10 +17,10 @@ public class NeuralNet {
 			this.nbInput = nbInput;
 			this.nbOutput = nbOutput; 
 			this.hidden = hidden; 
-			weights = new Matrix[hidden.length+1]; 
+			this.weights = new Matrix[hidden.length+1]; 
 			this.maxWeight = maxWeight;
 			this.minWeight = minWeight;
-			randomInitParameters();
+			randomInitWeights();
 		}
 	}
 	
@@ -30,6 +30,20 @@ public class NeuralNet {
 		this.weights = w;
 	}
 	
+	/**
+	 * This constructor copies the shape of the NN given as input (shape is the set {layers, minweight, maxweight}). RandomInit is called to initialize the weights matrices
+	 * @param nn the NeuralNet whose shape we want to copy
+	 */
+	public NeuralNet(NeuralNet nn) {
+		this.nbInput = nn.getNbInput();
+		this.nbOutput = nn.getNbOutput();
+		this.hidden = nn.getHidden();
+		this.minWeight = nn.getMinWeight();
+		this.maxWeight = nn.getMaxWeight();
+		this.weights = new Matrix[hidden.length+1];
+		randomInitWeights();
+	}
+
 	public double getMaxWeight() {
 		return maxWeight;
 	}
@@ -63,7 +77,7 @@ public class NeuralNet {
 		return 2+hidden.length;
 	}
 
-	private void randomInitParameters() {
+	private void randomInitWeights() {
 		// WEIGHTS
 		// in column : the weights from the jth intput neuron
 		// in line :   the weights for  the ith output neuron
@@ -133,7 +147,7 @@ public class NeuralNet {
 		NeuralNet randNN = nn;
 		randNN.setMinWeight(-mutAmpl);
 		randNN.setMaxWeight(mutAmpl);
-		randNN.randomInitParameters();
+		randNN.randomInitWeights();
 		return(randNN);
 	}
 }
