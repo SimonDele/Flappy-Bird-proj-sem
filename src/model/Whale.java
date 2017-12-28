@@ -1,8 +1,8 @@
-package Modele;
+package model;
 
 import java.lang.Math;
 
-public class Bird {
+public class Whale {
 	// Position (! now it's the CENTER !)
 	private int posX; 
 	private int posY; 
@@ -21,7 +21,7 @@ public class Bird {
 	private int score; // how far we've gone
 	
 	// Constructor
-	public Bird(int y, int deadSpeed) { // give obstSpeed as input
+	public Whale(int y, int deadSpeed) { // give obstSpeed as input
 		time = 0;
 		score = 0;
 		SIZE = 80;

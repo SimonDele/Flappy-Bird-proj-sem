@@ -3,7 +3,7 @@ package ia;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import Modele.Bird;
+import model.Whale;
 
 public class InfoGenetic {
 	private int numberGen;
@@ -32,14 +32,14 @@ public class InfoGenetic {
 	public ArrayList<Point> getSerieAvg(){
 		return serieAvg;
 	}
-	public void update(int numberGen, Bird[] birds) {
+	public void update(int numberGen, Whale[] birds) {
 		this.maxFit = this.calcMaxFit(birds);
 		this.avgFit = this.calcAverageFit(birds);
 		this.numberGen = numberGen;
 		serieAvg.add(new Point(numberGen, avgFit));
 
 	}
-	private int calcMaxFit(Bird[] birds) {
+	private int calcMaxFit(Whale[] birds) {
 		int max = 0;
 		for (int i = 0; i < birds.length; i++) {
 			if(max < birds[i].getScore()) {
@@ -48,7 +48,7 @@ public class InfoGenetic {
 		}
 		return max;
 	}
-	private int calcAverageFit(Bird[] birds) {
+	private int calcAverageFit(Whale[] birds) {
 		float meanScore = 0;
 		for (int i = 0; i < birds.length; i++) {
 			meanScore+=birds[i].getScore();

@@ -1,13 +1,15 @@
-package Main;
+package mainPkg;
 import java.util.Random;
 
-import Controleur.Checker;
-import Modele.Game;
-import Vue.Fenetre;
-import Vue.Menu;
-import Vue.PJeu;
-import ia.GeneticBool;
-import ia.GeneticNN;
+import controller.Checker;
+import ia.BoolArray;
+import ia.DNA;
+import ia.Genetic;
+import ia.NeuralNet;
+import model.Game;
+import view.Fenetre;
+import view.Menu;
+import view.PJeu;
 
 public class Main {
 	// statics : dimensions and random
@@ -22,29 +24,32 @@ public class Main {
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
 		enableView = true;
-		isNN = true;
+		isNN = false;
 		DIMX = 1000;
 		DIMY = 600;
 		delay = 15;
 		// Game generation (initial state)
 		@SuppressWarnings("unused")
 		Menu menu = new Menu(null);
-		
 		Game game = new Game(Main.DIMX, Main.DIMY, sizePop);
 		
-		// Genetic algo initialisation
-		GeneticBool geneticBool = null;
-		GeneticNN geneticNN = null;
+		// Genetic algo initialisation (with its DNA implementation)
+		Genetic genetic = null;
+		Class<? extends DNA> dnaUsed = null;
+		int framesPerAction = 0;
 		if(isAI) {
 			if (isNN) {
-				geneticNN = new GeneticNN(game, sizePop);
-			} else {
-				geneticBool = new GeneticBool(game, sizePop);
+				dnaUsed = NeuralNet.class;
+				framesPerAction = 2;
+			}
+			else {
+				dnaUsed = BoolArray.class;
+				framesPerAction = 1;
 			}
 		}
-
+		genetic = new Genetic(game, sizePop, dnaUsed, framesPerAction);
 		
-		// Window creation
+		// (View) Window creation
 		Fenetre window = null;
 		try {
 			window = new Fenetre(Main.DIMX, Main.DIMY,game);
@@ -53,6 +58,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
+		// (Controller) Checker creation
 		Checker checker = null;
 		if(!isAI) {
 			checker = new Checker(window.getPjeu());
@@ -64,15 +70,19 @@ public class Main {
 		
 		// Game loop
 		if(isAI) {
-			if (isNN) {
-				loopAI(game,window,geneticNN,saut);
-			} else {
-				loopAI(game,window,geneticBool,saut);
-			} 
+			loopAI(game,window,genetic,saut);
 		} else {
 			loopPlayer(game, saut, window, checker);
 		}
 	}
+	
+	/**
+	 * TODO 
+	 * @param game
+	 * @param saut
+	 * @param window
+	 * @param checker
+	 */
 	public static void loopPlayer(Game game, boolean[] saut, Fenetre window, Checker checker) {
 		// Game loop
 		while(!game.end()) { // for now, while true
@@ -92,80 +102,49 @@ public class Main {
 			}
 		}		
 	}
-	public static void loopAI(Game game, Fenetre window, GeneticBool geneticBool, boolean[] saut) {
-		
-		// Game loop
-		while(true) { // for now, while true
-			if(geneticBool.generationDead()) {
-				game = new Game(Main.DIMX, Main.DIMY, sizePop);
-				geneticBool.update(game);
-				if(enableView) {
-					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
-				}else {
-					window.setPjeu(null);
-				}
-				window.getDisplayInfoGenetic().updateInfo(); 
-			}
-			
-			// Model updating
-			game.update(saut);
-			// Display updating 
-			if(enableView) {
-				if(window.getPjeu() == null) {
-					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
-				}
-				(window.getPjeu()).repaint();	
-			}
-			// Control ...?
-			saut = geneticBool.getJump(); 
-			
-			// Delaying (we're only humans, afterall)
-			try {
-				Thread.sleep(delay);
-				} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		
-	}
 	
-	public static void loopAI(Game game, Fenetre window, GeneticNN geneticNN, boolean[] saut) {
-		int framesPerAction = 2;
+	/**
+	 * Game loop for the Genetic algorithm, no matter the DNA implementation
+	 * @param game the current game the AI has to play on
+	 * @param window the window on which to display the game and AI results
+	 * @param genetic the genetic algorithm with the DNA chosen
+	 * @param saut the array of jumps to change at each frame
+	 */
+	public static void loopAI(Game game, Fenetre window, Genetic genetic, boolean[] saut) {
 		// Game loop
+		int count = 0;
 		while(true) { // for now, while true
-			if(geneticNN.generationDead()) {
+			// Generation updating (if dead)
+			if(genetic.generationDead()) {
+				// game updating
 				game = new Game(Main.DIMX, Main.DIMY, sizePop);
-				geneticNN.update(game);
-				if(enableView) {
-					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
-				}else {
-					window.setPjeu(null);
-				}
+				genetic.update(game);
+				// window updating
+				if(enableView) window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
+				else 		   window.setPjeu(null);
 				window.getDisplayInfoGenetic().updateInfo(); 
 			}
-			
+
 			// Model updating
 			game.update(saut);
+			
 			// Display updating 
 			if(enableView) {
-				if(window.getPjeu() == null) {
-					window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
-				}
-				(window.getPjeu()).repaint();	
+				if(window.getPjeu() == null) window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
+				window.getPjeu().repaint();
 			}
-			// Control ...?
-			if (Game.SCORE % framesPerAction == 0) {
-				saut = geneticNN.getJump(); 
+			
+			// Control 
+			if (count++ % genetic.getFramesPerAction() == 0) {
+				saut = genetic.getJump();
 			}
 			
 			// Delaying (we're only humans, afterall)
 			try {
 				Thread.sleep(delay);
-				} catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		
 	}
-
 }

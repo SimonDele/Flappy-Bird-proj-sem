@@ -1,8 +1,12 @@
 package ia;
 
 import Jama.Matrix;
+import mainPkg.Main;
+import model.Game;
+import model.Obstacle;
+import model.Whale;
 
-public class NeuralNet {
+public class NeuralNet implements DNA {
 	private int nbInput; // number of elements in the input vector
 	private int nbOutput; // idem, output vector
 	private int[] hidden; // number of neurones in each hidden layer
@@ -10,9 +14,23 @@ public class NeuralNet {
 	private double maxWeight;
 	private double minWeight;
 	
+	/**
+	 * Default initializer based on experience of best results
+	 */
+	public NeuralNet() {
+		this.nbInput = 2;
+		this.nbOutput = 1; 
+		this.hidden = new int[]{6}; 
+		this.weights = new Matrix[hidden.length+1]; 
+		this.maxWeight = 0.75;
+		this.minWeight = -maxWeight;
+		randomInitWeights();
+	}
+	
 	public NeuralNet(int nbInput, int nbOutput, int[] hidden, double minWeight, double maxWeight) throws IllegalArgumentException {
-		if (maxWeight<=minWeight) {
-			throw new IllegalArgumentException("Input error : maxWeight <= minWeight");
+		if ((maxWeight<=minWeight)||(nbInput<=0)||(nbOutput<=0)||(hidden.length<=0)) {
+			System.out.println(nbInput + ", " + nbOutput + ", " + hidden + ", " + minWeight + ", " + maxWeight);
+			throw new IllegalArgumentException("Error in NN constructor, values above");
 		} else {
 			this.nbInput = nbInput;
 			this.nbOutput = nbOutput; 
@@ -149,5 +167,56 @@ public class NeuralNet {
 		randNN.setMaxWeight(mutAmpl);
 		randNN.randomInitWeights();
 		return(randNN);
+	}
+
+	@Override
+	public boolean decidejump(Obstacle obstacle, Whale whale) {
+		// only coded for nbInput = 2 !
+		boolean decision = false;
+		if (this.nbInput != 2) {
+			throw new IllegalArgumentException();
+		} else {
+			double[][] input = new double[this.nbInput][1]; // will be a vector type Matrix
+			input[0][0] = (whale.getPosY()-obstacle.getPosY())/(double)Game.DIMY + 0.5;
+			input[1][0] = obstacle.getPosX()/(double)Game.DIMX;
+			decision = this.propagation(new Matrix(input)).get(0, 0) > 0.5;
+		}
+		return decision;
+	}
+
+	@Override
+	public void mutate(double mutAmpl, double mutProba) {
+		// TODO Implement the NN's mutation : tweak some parameters under mutProba and of avg size mutAmpl
+	}
+
+	@Override
+	public DNA crossover(DNA otherNN, double mutAmpl, double mutProba) throws IllegalArgumentException {
+		NeuralNet newNN = null;
+		if (otherNN instanceof NeuralNet) {
+			newNN = new NeuralNet(this); // this constructor copies the shape
+			// Layers loop :
+			for (int layer = 0; layer < this.weights.length; layer++) {
+				// Weight matrices loops :
+				for (int i = 0; i < this.weights[layer].getRowDimension(); i++) {
+					for (int j = 0; j < this.weights[layer].getColumnDimension(); j++) {
+						// classical crossover : parent copying
+						if (Main.rand.nextFloat() < 0.5f) {
+							newNN.getWeights()[layer].set(i,j,this.weights[layer].get(i,j));
+						} else {
+							newNN.getWeights()[layer].set(i,j, ((NeuralNet)otherNN).getWeights()[layer].get(i,j));
+						} 
+						// mutation
+						if (Main.rand.nextFloat() < mutProba) {
+							newNN.getWeights()[layer].set(i,j,newNN.getWeights()[layer].get(i,j) 
+									+ (Main.rand.nextDouble() - 0.5)*2*mutAmpl);
+						}
+					}
+				}
+			}
+		} else {
+			System.out.println("Parents aren't IndividualNN !");
+			throw new IllegalArgumentException();
+		}
+		return newNN;
 	}
 }

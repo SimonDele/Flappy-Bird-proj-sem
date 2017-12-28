@@ -1,14 +1,13 @@
-package Vue;
+package view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import Main.Main;
-import Modele.Game;
-import ia.GeneticBool;
-import ia.GeneticNN;
+import ia.Genetic;
+import mainPkg.Main;
+import model.Game;
 public class Fenetre extends JFrame {
 	// Window dimensions
 	public static int DIMX;
@@ -43,12 +42,7 @@ public class Fenetre extends JFrame {
 	    allContent.setLayout(new BorderLayout());
 	    allContent.add(pjeu, BorderLayout.CENTER);
 	    if(Main.isAI) {
-	    	if (Main.isNN) {
-		    	displayInfoGenetic = new DisplayInfoGenetic(GeneticNN.infoGenetic);
-
-			} else {
-				displayInfoGenetic = new DisplayInfoGenetic(GeneticBool.infoGenetic);
-			}
+			displayInfoGenetic = new DisplayInfoGenetic(Genetic.infoGenetic);
 		    allContent.add(displayInfoGenetic, BorderLayout.EAST);    	
 	    }
 

@@ -1,11 +1,12 @@
-package Controleur;
+package controller;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import Main.Main;
 
 import javax.swing.JPanel;
+
+import mainPkg.Main;
 	
 public class Checker implements KeyListener {
 	// Thing we're checking :

@@ -1,4 +1,4 @@
-package Vue;
+package view;
 
 import java.awt.Dimension;
 import java.text.NumberFormat;
@@ -15,8 +15,8 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeListener;
 import javax.swing.text.NumberFormatter;
 
-import Controleur.LaunchAI;
-import Controleur.LaunchSoloMode;
+import controller.LaunchAI;
+import controller.LaunchSoloMode;
 
 public class Menu extends JDialog{
 	JButton buttonLaunchAI;

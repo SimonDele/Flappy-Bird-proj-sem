@@ -1,4 +1,4 @@
-package Modele;
+package model;
 
 public class Obstacle {
 	// Attributes for hitbox & display

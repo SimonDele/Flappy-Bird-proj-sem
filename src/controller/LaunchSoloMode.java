@@ -1,10 +1,10 @@
-package Controleur;
+package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import Main.Main;
-import Vue.Menu;
+import mainPkg.Main;
+import view.Menu;
 
 public class LaunchSoloMode implements ActionListener{
 	

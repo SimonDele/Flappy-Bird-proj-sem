@@ -1,29 +1,63 @@
 package ia;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 
-import Main.Main;
-import Modele.Bird;
-import Modele.Game;
-import Modele.Obstacle;
+import mainPkg.Main;
+import model.Game;
+import model.Obstacle;
+import model.Whale;
 
 /**
- * The mother abstract class to every approach for the Genetic algorithm. Its main field is the population which is an array of (abstract) {@link Individual Individuals}. From there we can generalize the Algorithm's behaviour no matter the ADN type chosen, based on the tasks an Individual will always be able to carry out (ie jump).
+ * The class managing any approach for the Genetic algorithm. Its main field is the population which is an array of {@link Individual Individuals}. TODO change : From there we can generalize the Algorithm's behaviour no matter the DNA type chosen, based on the tasks an Individual will always be able to carry out (ie jump).
  */
-public abstract class Genetic {
+public class Genetic {
 	// Population-related attributes
 	protected int sizePop;
 	protected Individual[] population;
 	public static int GENERATION;
 	public static InfoGenetic infoGenetic;
+	
 	// mutation-related variables
 	protected double mutationAtZero;
 	protected double mutProba;
-
+	protected boolean decrease;
+	
+	// Selection-related
+	int selectPower;
+	double rankSelectProba;
+	
 	// Game's attributes
-	protected Bird[] birds;
+	protected Whale[] whales;
 	protected ArrayList<Obstacle> obstacles;
+	
+	// Optimizer for apt DNA type
+	private int framesPerAction;
+
+	public Genetic(Game game, int sizePop, Class<? extends DNA> dnaImpl, int framesPerAction) {
+		// Initialization of the info, genetic and game's attributes
+		infoGenetic = new InfoGenetic(GENERATION);
+		this.sizePop = sizePop;
+		whales = game.getBirds();
+		obstacles = game.getObstacles();
+		GENERATION = 0;
+		this.framesPerAction = framesPerAction;
+		
+		/// Hyperparameters :
+		// Mutation
+		mutationAtZero = 0.06;
+		decrease = true;
+		// Selection
+		selectPower = 4;
+		rankSelectProba = 0.12;
+		
+		// Population intitialization
+		population = new Individual[sizePop];
+		for(int i=0; i<sizePop; i++) {
+			population[i] = new Individual(dnaImpl);
+		}
+	}
 	
 	/**
 	 * Checks whether the population died (each individual died).
@@ -33,7 +67,7 @@ public abstract class Genetic {
 		boolean isDead = true;
 		int i = 0;
 		while(isDead && i < sizePop ) {
-			isDead = birds[i].isDead();
+			isDead = whales[i].isDead();
 			i++;
 		}
 		return isDead;
@@ -45,16 +79,16 @@ public abstract class Genetic {
 	 */
 	public void update(Game game) {
 		// Update the info onscreen
-		infoGenetic.update(GENERATION++, birds);
+		infoGenetic.update(GENERATION++, whales);
 		// update the population's values of fitness
 		for (int i = 0; i < sizePop; i++) {
-			population[i].setFitness(birds[i].getScore());
+			population[i].setFitness(whales[i].getScore());
 		}
-		birds = game.getBirds();
+		whales = game.getBirds();
 		obstacles = game.getObstacles();
 		
 		// MOST IMPORTANT OF ALL, THE SELECTION. (in subclass)
-//		population = someSelection();
+		population = rankSelection(rankSelectProba);
 	}
 	
 	/**
@@ -71,17 +105,25 @@ public abstract class Genetic {
 		boolean[] jumps = new boolean[sizePop];
 		if(obstacles.size() > 0) {
 			for (int i = 0; i < sizePop; i++) {
-				jumps[i] = population[i].decideJump(obstacles.get(0), birds[i]);
+				jumps[i] = population[i].decideJump(obstacles.get(0), whales[i]);
 			}
 		}		
 		return jumps;
 	}
 	/**
+	 * Getter for the number of frames per Action chosen by the user for his DNA type
+	 * @return the number of frames per action associated with this run
+	 */
+	public int getFramesPerAction() {
+		return framesPerAction;
+	}
+	
+	/**
 	 * The amplitude of the mutation, which can decrease as an exponential over time (generations). Used within crossover
 	 * @return the ampiltude of the mutation, given the generation number
 	 */
-	protected double mutationDecrease(boolean descrease) { 
-		if (descrease) {
+	protected double mutationDecrease(boolean decrease) { 
+		if (decrease) {
 			// parameters for building an exponential passing through two given points and above a threshold
 			double valueAtFifty = 0.0001;
 			double minValue = 0; // different form valAt0 : where you converge to
@@ -89,28 +131,11 @@ public abstract class Genetic {
 			// just solving equations
 			double alpha = mutationAtZero - minValue;
 			double beta = -(1/50f)*Math.log((valueAtFifty-minValue)/alpha);
-			return (alpha*Math.exp(-GeneticNN.GENERATION*beta)+minValue);
+			return (alpha*Math.exp(-Genetic.GENERATION*beta)+minValue);
 		} else {
 			return mutationAtZero;
 		}
 	}	
-	
-	/**
-	 * The crossover method which crosses the genes of two parents to output an offspring, with some mutation. Abstract, for it depends on the ADN type.
-	 * @param parent1 the first parent to get an offspring out of
-	 * @param parent2 the second parent to get an offspring out of
-	 * @return the offspring as a combination of the parent's genes + mutations
-	 */
-	protected abstract Individual crossover(Individual parent1, Individual parent2) throws IllegalArgumentException;
-	/**
-	 * The mutation the individual can undergo, if it is not done directly within crossover (last case is more optimized but sometimes unapplicable). Abstract, for it depends on the ADN type.
-	 * @param indiv the original Individual which to mutate
-	 * @return the mutated individual
-	 */
-	protected Individual mutate(Individual indiv, double mutAmpl) {
-		indiv.mutate(mutAmpl, mutProba);
-		return indiv; // mutated
-	}
 	
 	// ALL DIFFERENT SELECTION METHODS
 	/**
@@ -145,7 +170,7 @@ public abstract class Genetic {
 		for(int i = 0; i < sizePop; i++) {
 			Individual parentA = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
 			Individual parentB = meltingPot.get(Main.rand.nextInt(meltingPot.size()));
-			newPop[i] = crossover(parentA, parentB);
+			newPop[i] = parentA.crossover(parentB, mutationDecrease(this.decrease), mutProba);
 		}
 
 		return newPop;
@@ -197,7 +222,7 @@ public abstract class Genetic {
 			// now, grabbing parent corresponding to 
 			Individual parentA = population[cumulativeIndex(cumulateFitnesses, Main.rand.nextDouble())];
 			Individual parentB = population[cumulativeIndex(cumulateFitnesses, Main.rand.nextDouble())];
-			newPop[i]=(crossover(parentA, parentB));
+			newPop[i] = parentA.crossover(parentB, mutationDecrease(this.decrease), mutProba);
 		}
 		return newPop;
 	}
@@ -226,7 +251,7 @@ public abstract class Genetic {
 			// now, grabbing parent corresponding to 
 			Individual parentA = population[rankSelecter(sizePop, rankSelectProba)];
 			Individual parentB = population[rankSelecter(sizePop, rankSelectProba)];
-			newPop[i] = crossover(parentA, parentB);
+			newPop[i] = parentA.crossover(parentB, mutationDecrease(this.decrease), mutProba);
 		}
 		return newPop;
 	}
@@ -242,7 +267,7 @@ public abstract class Genetic {
 				// now, grabbing parent corresponding to best ranks
 				Individual parentA = population[rankSelecter(sizePop, rankSelectProba)];
 				Individual parentB = population[rankSelecter(sizePop, rankSelectProba)];
-				newPop[i] = crossover(parentA, parentB);
+				newPop[i] = parentA.crossover(parentB, mutationDecrease(this.decrease), mutProba);
 			}
 		}
 		return newPop;
@@ -256,12 +281,12 @@ public abstract class Genetic {
 			if (i<sizePop*keeper) {
 				newPop[i] = population[i];
 			} else if (i < sizePop*(keeper + bestCross)) {
-				newPop[i] = crossover(newPop[0],newPop[1]);
+				newPop[i] = newPop[0].crossover(newPop[1], mutationDecrease(this.decrease), mutProba);
 			} else {
-				newPop[i] = crossover(newPop[Main.rand.nextInt((int)(sizePop*keeper))], 
-						  			  newPop[Main.rand.nextInt((int)(sizePop*keeper))]);
+				newPop[i] = newPop[Main.rand.nextInt((int)(sizePop*keeper))].crossover(
+							newPop[Main.rand.nextInt((int)(sizePop*keeper))], mutationDecrease(this.decrease), mutProba);
 			}
-			newPop[i].mutate(mutationDecrease(false), mutProba);	
+			newPop[i].mutate(mutationDecrease(this.decrease), mutProba);	
 		}
 		return newPop;
 	}

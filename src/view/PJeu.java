@@ -1,4 +1,4 @@
-package Vue;
+package view;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,15 +14,15 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Modele.Bird;
-import Modele.Game;
-import Modele.Obstacle;
+import model.Game;
+import model.Obstacle;
+import model.Whale;
 
 public class PJeu extends JPanel  {
 	private int height;
 	private int width;
 	// Game's attributes
-	private Bird[] birds;
+	private Whale[] whales;
 	private ArrayList<Obstacle> obstacles;
 	private float tolerance; // ~ also amounts to shift necessary for ignoring the tail
 	
@@ -38,7 +38,7 @@ public class PJeu extends JPanel  {
 		width = getWidth();
 		height = getHeight();
 		// Game attributes init (once pointing towards, keeps pointing)
-		birds = game.getBirds();
+		whales = game.getBirds();
 		obstacles = game.getObstacles();
 		tolerance = game.getTolerance();
 
@@ -48,9 +48,9 @@ public class PJeu extends JPanel  {
 		Image imBirdTempUp = null;
 		try {
 			imBirdTempDown = ImageIO.read(this.getClass().getResource("ressources/whaleDown.png"));
-			imBirdTempDown = imBirdTempDown.getScaledInstance(Bird.SIZE, Bird.SIZE, Image.SCALE_DEFAULT);
+			imBirdTempDown = imBirdTempDown.getScaledInstance(Whale.SIZE, Whale.SIZE, Image.SCALE_DEFAULT);
 			imBirdTempUp = ImageIO.read(this.getClass().getResource("ressources/whaleUp.png"));
-			imBirdTempUp = imBirdTempUp.getScaledInstance(Bird.SIZE, Bird.SIZE, Image.SCALE_DEFAULT);
+			imBirdTempUp = imBirdTempUp.getScaledInstance(Whale.SIZE, Whale.SIZE, Image.SCALE_DEFAULT);
 		}catch (IOException e) {
 			System.out.println("Erreur lecture fichier bird");
 			e.printStackTrace();
@@ -87,7 +87,7 @@ public class PJeu extends JPanel  {
 	// Methods :
 	/// Update instance jeu
 	public void updateJeu(Game game) {
-		birds = game.getBirds();
+		whales = game.getBirds();
 		obstacles = game.getObstacles();
 		tolerance = game.getTolerance();
 	}
@@ -107,13 +107,13 @@ public class PJeu extends JPanel  {
 		
 		// Displaying the game :
 		/// Bird (up or down depending on speed)
-		Bird bird;
-		for (int i=0; i<birds.length;i++) {
-			bird = birds[i];
-			if (bird.getSpeed() < 0) {
-				g2d.drawImage(imBirdDown, bird.getPosX()-(int)((1+tolerance)*Bird.SIZE/2), bird.getPosY()-Bird.SIZE/2,this);		
+		Whale whale;
+		for (int i=0; i<whales.length;i++) {
+			whale = whales[i];
+			if (whale.getSpeed() < 0) {
+				g2d.drawImage(imBirdDown, whale.getPosX()-(int)((1+tolerance)*Whale.SIZE/2), whale.getPosY()-Whale.SIZE/2,this);		
 			} else {
-				g2d.drawImage(imBirdUp, bird.getPosX()-(int)((1+tolerance)*Bird.SIZE/2), bird.getPosY()-Bird.SIZE/2,this);
+				g2d.drawImage(imBirdUp, whale.getPosX()-(int)((1+tolerance)*Whale.SIZE/2), whale.getPosY()-Whale.SIZE/2,this);
 			}
 		}
 

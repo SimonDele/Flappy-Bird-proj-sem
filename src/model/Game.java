@@ -1,9 +1,10 @@
-package Modele;
+package model;
 
 import java.util.ArrayList;
-import java.lang.Math;
 
-import Main.Main;
+import mainPkg.Main;
+
+import java.lang.Math;
 
 public class Game {
 	// Dimensions given by Window
@@ -13,7 +14,7 @@ public class Game {
 	public static int PASSED;
 	// The guys we're interested in
 	private ArrayList<Obstacle> obstacles;
-	private Bird[] birds;
+	private Whale[] whales;
 	private float tolerance; // percentage of bird we take out of hitbox
 	
 	// Constructor
@@ -24,7 +25,7 @@ public class Game {
 		Game.PASSED = 0;
 		tolerance = 0.2f;
 		
-		birds = new Bird[N];
+		whales = new Whale[N];
 		
 		// creating list
 		obstacles = new ArrayList<Obstacle>();
@@ -33,7 +34,7 @@ public class Game {
 		// creating the bird AFTER obstacles (need of INTERVAL & speed)
 		for(int i=0;i<N;i++) {
 			obstacles.get(0);
-			birds[i] = new Bird(Game.DIMY/2, Obstacle.getSpeed());
+			whales[i] = new Whale(Game.DIMY/2, Obstacle.getSpeed());
 		}
 		
 	}
@@ -50,8 +51,8 @@ public class Game {
 		this.tolerance = tolerance;
 	}
 	
-	public Bird[] getBirds() {
-		return birds;
+	public Whale[] getBirds() {
+		return whales;
 	}
 
 	// Methods
@@ -59,10 +60,10 @@ public class Game {
 	public void update(boolean[] saut) {
 		// Updating bird 
 		for(int i=0; i<saut.length;i++) {
-			birds[i].update(saut[i]);
+			whales[i].update(saut[i]);
 			// Death test (won't define end() when multiple birds)
-			if (!birds[i].isDead()) {
-				hit(birds[i]);	
+			if (!whales[i].isDead()) {
+				hit(whales[i]);	
 			}
 		}
 		
@@ -75,9 +76,9 @@ public class Game {
 		if (destroy) {
 			obstacles.remove(0);
 			Game.PASSED++;
-			for(int i=0;i<birds.length;i++) {
-				if (!birds[i].isDead()) {
-					birds[i].increaseScore(DIMY);
+			for(int i=0;i<whales.length;i++) {
+				if (!whales[i].isDead()) {
+					whales[i].increaseScore(DIMY);
 				}
 			}
 		}
@@ -104,7 +105,7 @@ public class Game {
 	}
 	
 	/// Hitboxes - I hope I've made this clear.
-	private boolean hit(Bird bird) {
+	private boolean hit(Whale whale) {
 		if(obstacles.size()<1) {//Means that there are no obstacles on the map
 			return false;
 		}
@@ -112,17 +113,17 @@ public class Game {
 		
 		// First, let's define the radius of the bird; 
 		// with some error constant (bird is slightly less than size):
-		int radius = (int) (Bird.SIZE/2 *(1-tolerance));
+		int radius = (int) (Whale.SIZE/2 *(1-tolerance));
 		
 		// Let's prevent too many accesses to Classes 
-		int currentY = bird.getPosY();
-		int currentX = bird.getPosX(); // even though it's always the same..? (opti ?)
+		int currentY = whale.getPosY();
+		int currentX = whale.getPosX(); // even though it's always the same..? (opti ?)
 		int obstX = obstacles.get(0).getPosX();
 		int obstYUp = obstacles.get(0).getPosObstHaut();
 		int obstYDown = obstacles.get(0).getPosObstBas();
 		
 		// First, the ceiling - can't jump too high
-		if (currentY < -bird.getJumpHeight()*0.5f) {
+		if (currentY < -whale.getJumpHeight()*0.5f) {
 			hit = true;
 			
 			// Then, floor 
@@ -158,7 +159,7 @@ public class Game {
 		}
 		
 		// Done ! Update bird status and inform Game.
-		if (hit) {bird.hit(Game.SCORE - (int)(Math.abs(obstacles.get(0).getPosY() - currentY)/(float)Obstacle.getSpeed()));} // must
+		if (hit) {whale.hit(Game.SCORE - (int)(Math.abs(obstacles.get(0).getPosY() - currentY)/(float)Obstacle.getSpeed()));} // must
 		return hit;
 	}
 
