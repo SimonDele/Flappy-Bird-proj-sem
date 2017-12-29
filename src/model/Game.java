@@ -57,7 +57,7 @@ public class Game {
 
 	// Methods
 	/// Updating the game 
-	public void update(boolean[] saut) {
+	public void update(boolean[] saut) { // one game frame
 		// Updating bird 
 		for(int i=0; i<saut.length;i++) {
 			whales[i].update(saut[i]);
@@ -78,7 +78,7 @@ public class Game {
 			Game.PASSED++;
 			for(int i=0;i<whales.length;i++) {
 				if (!whales[i].isDead()) {
-					whales[i].increaseScore(DIMY);
+//					whales[i].increaseScore(DIMY);
 				}
 			}
 		}
@@ -125,7 +125,6 @@ public class Game {
 		// First, the ceiling - can't jump too high
 		if (currentY < -whale.getJumpHeight()*0.5f) {
 			hit = true;
-			
 			// Then, floor 
 		} else 
 		if (currentY+radius > Game.DIMY) {
@@ -159,7 +158,7 @@ public class Game {
 		}
 		
 		// Done ! Update bird status and inform Game.
-		if (hit) {whale.hit(Game.SCORE - (int)(Math.abs(obstacles.get(0).getPosY() - currentY)/(float)Obstacle.getSpeed()));} // must
+		if (hit) whale.hit(Game.SCORE - (int)(Math.abs(obstacles.get(0).getPosY() - currentY)/(float)Obstacle.getSpeed()));
 		return hit;
 	}
 
