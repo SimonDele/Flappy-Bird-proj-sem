@@ -1,4 +1,4 @@
-package ia;
+package ia.dna;
 
 import model.Obstacle;
 import model.Whale;

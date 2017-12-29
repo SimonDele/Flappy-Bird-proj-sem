@@ -8,12 +8,10 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 
 import controller.LaunchAI;
 import controller.LaunchSoloMode;
-import ia.DNA;
+import ia.dna.DNA;
 
 public class Menu extends JDialog implements WindowListener{
 	JButton buttonLaunchAI;

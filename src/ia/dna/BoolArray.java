@@ -1,4 +1,4 @@
-package ia;
+package ia.dna;
 
 import mainPkg.Main;
 import model.Game;
@@ -13,7 +13,7 @@ public class BoolArray implements DNA {
 	
 	public BoolArray() {
 		int nrow = 2*Game.DIMY;
-		int ncol = Obstacle.MINDIST; 
+		int ncol = Obstacle.MINDIST;
 		BoolArray.MESHSIZE = Obstacle.getSpeed()*4;
 		this.nrow = nrow/BoolArray.MESHSIZE;
 		this.ncol = ncol/BoolArray.MESHSIZE +1;

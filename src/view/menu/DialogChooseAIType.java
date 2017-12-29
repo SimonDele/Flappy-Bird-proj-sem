@@ -18,7 +18,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import controller.TypeOfAI;
-import ia.DNA;
+import ia.dna.DNA;
 
 public class DialogChooseAIType extends JDialog implements WindowListener {
 	

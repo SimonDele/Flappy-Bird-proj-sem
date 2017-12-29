@@ -3,9 +3,8 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import ia.BoolArray;
-import ia.NeuralNet;
-import mainPkg.Main;
+import ia.dna.BoolArray;
+import ia.dna.NeuralNet;
 import view.menu.DialogChooseAIType;
 
 public class TypeOfAI implements ActionListener {

@@ -1,4 +1,4 @@
-package ia;
+package ia.dna;
 
 import Jama.Matrix;
 import mainPkg.Main;

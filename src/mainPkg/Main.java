@@ -1,11 +1,13 @@
 package mainPkg;
 import java.util.Random;
-
 import controller.Checker;
-import ia.BoolArray;
-import ia.DNA;
 import ia.Genetic;
-import ia.NeuralNet;
+import ia.dna.BoolArray;
+import ia.dna.DNA;
+import ia.dna.NeuralNet;
+import ia.sel.FunctionalSelection;
+import ia.sel.Selection;
+import ia.sel.rf.*;
 import model.Game;
 import view.game.Fenetre;
 import view.game.PJeu;
@@ -37,14 +39,18 @@ public class Main {
 		framesPerAction = menu.getFramesPerAction();
 		sizePop = menu.getSizePop();
 		
+
 		Game game = new Game(Main.DIMX, Main.DIMY, sizePop);
 		
-		// Genetic algo initialisation (with its DNA implementation)
+		// Genetic algo initialisation (with its DNA implementation and Selection)
+
+		Selection selector = new FunctionalSelection(new RePOL(2));
 		Genetic genetic = null;
 		if(isAI) {
-			genetic = new Genetic(game, sizePop, dnaUsed, framesPerAction);		
+			genetic = new Genetic(game, sizePop, dnaUsed, selector, framesPerAction);
 		}
-
+		
+		
 		// (View) Window creation
 		Fenetre window = null;
 		try {
@@ -66,14 +72,14 @@ public class Main {
 		
 		// Game loop
 		if(isAI) {
-			loopAI(game,window,genetic,saut);
+			loopGenetic(game,window,genetic,saut);
 		} else {
 			loopPlayer(game, saut, window, checker);
 		}
 	}
 	
 	/**
-	 * TODO 
+	 * Game loop for a human player. Repeats the sequence 'update game, display game, get inputs from controller' until the end of the game.
 	 * @param game
 	 * @param saut
 	 * @param window
@@ -100,13 +106,13 @@ public class Main {
 	}
 	
 	/**
-	 * Game loop for the Genetic algorithm, no matter the DNA implementation
+	 * Game loop for the Genetic algorithm, no matter the DNA implementation. Generates the next population when the old one died, else asks for input and gets the associated model and view reactions.
 	 * @param game the current game the AI has to play on
 	 * @param window the window on which to display the game and AI results
 	 * @param genetic the genetic algorithm with the DNA chosen
 	 * @param saut the array of jumps to change at each frame
 	 */
-	public static void loopAI(Game game, Fenetre window, Genetic genetic, boolean[] saut) {
+	public static void loopGenetic(Game game, Fenetre window, Genetic genetic, boolean[] saut) {
 		// Game loop
 		int count = 0;
 		while(true) { // for now, while true
@@ -132,7 +138,7 @@ public class Main {
 			
 			// Control 
 			if (count++ % genetic.getFramesPerAction() == 0) {
-				saut = genetic.getJump();
+				saut = genetic.getJumps();
 			}
 			
 			// Delaying (we're only humans, afterall)

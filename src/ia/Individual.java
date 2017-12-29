@@ -1,5 +1,6 @@
 package ia;
 
+import ia.dna.DNA;
 import model.Obstacle;
 import model.Whale;
 

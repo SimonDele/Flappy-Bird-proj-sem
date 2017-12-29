@@ -10,3 +10,9 @@
 /Genetic.class
 /Genetic$RealFunctions.class
 /DNA.class
+/Selection.class
+/BasicSelection.class
+/FunctionalSelection.class
+/FunctionalSelection$RealFunctions.class
+/FunctionalSelection$RealFunction.class
+/package-info.class
