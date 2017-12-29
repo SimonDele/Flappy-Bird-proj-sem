@@ -18,12 +18,13 @@ public class Whale {
 	public static int SIZE; // bird sprite diameter
 	private boolean dead; // boolean on death; stops score incrementation
 	private int  deadSpeed; // speed of obstacles
-	private int score; // how far we've gone
-	
+	private int score; // how far we've gone in number of obstacles
+	private int fitness; // is a function of score
 	// Constructor
 	public Whale(int y, int deadSpeed) { // give obstSpeed as input
 		time = 0;
 		score = 0;
+		fitness = 0;
 		SIZE = 80;
 		posY = y;
 		posX = 10 + SIZE/2;
@@ -65,13 +66,19 @@ public class Whale {
 	public void setScore(int score) {
 		this.score = score;
 	}
+	public int getFitness() {
+		return fitness;
+	}
+	public void setFitness(int fitness) {
+		this.fitness = fitness;
+	}
 	public float getJumpHeight() {
 		return jumpHeight;
 	}
 
 	// Methods
-	public void increaseScore(int addToScore) {
-		this.score += addToScore;
+	public void increaseFitness(int addToFitness) {
+		this.fitness += addToFitness;
 	}
 	/// Updating bird position 
 	public void update(boolean saut) {
@@ -83,8 +90,10 @@ public class Whale {
 		} else this.posX -= deadSpeed;
 	}
 	
-	public void hit(int score) {
+	public void hit(int score, int fitness) {
 		dead = true;
-		this.score += score;
+		this.score = score;
+		this.fitness += fitness;
+		//System.out.println("score " + score + " fitness " + fitness);
 	}
 }

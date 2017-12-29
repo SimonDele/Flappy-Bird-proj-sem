@@ -82,7 +82,7 @@ public class Genetic {
 		infoGenetic.update(GENERATION++, whales);
 		// update the population's values of fitness
 		for (int i = 0; i < sizePop; i++) {
-			population[i].setFitness(whales[i].getScore());
+			population[i].setFitness(whales[i].getFitness());
 		}
 		whales = game.getBirds();
 		obstacles = game.getObstacles();

@@ -78,7 +78,7 @@ public class Game {
 			Game.PASSED++;
 			for(int i=0;i<whales.length;i++) {
 				if (!whales[i].isDead()) {
-					whales[i].increaseScore(DIMY);
+					whales[i].increaseFitness(DIMY);
 				}
 			}
 		}
@@ -159,7 +159,7 @@ public class Game {
 		}
 		
 		// Done ! Update bird status and inform Game.
-		if (hit) {whale.hit(Game.SCORE - (int)(Math.abs(obstacles.get(0).getPosY() - currentY)/(float)Obstacle.getSpeed()));} // must
+		if (hit) {whale.hit(Game.PASSED,Game.SCORE - (int)(Math.abs(obstacles.get(0).getPosY() - currentY)/(float)Obstacle.getSpeed()));} // must
 		return hit;
 	}
 

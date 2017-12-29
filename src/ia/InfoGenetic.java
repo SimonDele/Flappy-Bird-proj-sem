@@ -32,27 +32,27 @@ public class InfoGenetic {
 	public ArrayList<Point> getSerieAvg(){
 		return serieAvg;
 	}
-	public void update(int numberGen, Whale[] birds) {
-		this.maxFit = this.calcMaxFit(birds);
-		this.avgFit = this.calcAverageFit(birds);
+	public void update(int numberGen, Whale[] whales) {
+		this.maxFit = this.calcMaxFit(whales);
+		this.avgFit = this.calcAverageFit(whales);
 		this.numberGen = numberGen;
 		serieAvg.add(new Point(numberGen, avgFit));
 
 	}
-	private int calcMaxFit(Whale[] birds) {
+	private int calcMaxFit(Whale[] whales) {
 		int max = 0;
-		for (int i = 0; i < birds.length; i++) {
-			if(max < birds[i].getScore()) {
-				max = birds[i].getScore();
+		for (int i = 0; i < whales.length; i++) {
+			if(max < whales[i].getScore()) {
+				max = whales[i].getScore();
 			}
 		}
 		return max;
 	}
-	private int calcAverageFit(Whale[] birds) {
+	private int calcAverageFit(Whale[] whales) {
 		float meanScore = 0;
-		for (int i = 0; i < birds.length; i++) {
-			meanScore+=birds[i].getScore();
+		for (int i = 0; i < whales.length; i++) {
+			meanScore+=whales[i].getScore();
 		}
-		return (int)(meanScore/(float)birds.length);
+		return (int)(meanScore/(float)whales.length);
 	}
 }
