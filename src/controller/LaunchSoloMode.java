@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import mainPkg.Main;
-import view.Menu;
+import view.menu.Menu;
 
 public class LaunchSoloMode implements ActionListener{
 	

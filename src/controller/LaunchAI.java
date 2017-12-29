@@ -3,24 +3,23 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFormattedTextField;
-import javax.swing.SpinnerNumberModel;
-
-import mainPkg.Main;
-import view.Menu;
+import view.menu.DialogChooseAIType;
+import view.menu.Menu;
 public class LaunchAI implements ActionListener {
 	private Menu menu;
-	private SpinnerNumberModel sizePop;
+	//private SpinnerNumberModel sizePop;
 	
-	public LaunchAI(Menu menu, SpinnerNumberModel inputSizePop) {
+	public LaunchAI(Menu menu) {
 		this.menu = menu;
-		sizePop = inputSizePop;
+		//sizePop = inputSizePop;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-			Main.isAI = true;
-			Main.sizePop =(int)(sizePop.getNumber());
+			menu.setIsAI(true);
+			DialogChooseAIType chooseAIType = new DialogChooseAIType(null, "Choose Type of AI", true, menu );
+			chooseAIType.setVisible(true);
+			//Main.sizePop =(int)(sizePop.getNumber());
 			menu.dispose();			
 	}		
 }

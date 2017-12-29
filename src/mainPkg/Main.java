@@ -7,9 +7,9 @@ import ia.DNA;
 import ia.Genetic;
 import ia.NeuralNet;
 import model.Game;
-import view.Fenetre;
-import view.Menu;
-import view.PJeu;
+import view.game.Fenetre;
+import view.game.PJeu;
+import view.menu.Menu;
 
 public class Main {
 	// statics : dimensions and random
@@ -17,38 +17,34 @@ public class Main {
 	public static int DIMX;
 	public static int DIMY;
 	public static boolean isAI; 
-	public static boolean isNN;
 	public static int delay;
 	public static int sizePop = 1;
 	public static boolean enableView;
+	public static Class<? extends DNA> dnaUsed;
+	public static int framesPerAction;
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
 		enableView = true;
-		isNN = false;
 		DIMX = 1000;
 		DIMY = 600;
 		delay = 15;
+		
 		// Game generation (initial state)
-		@SuppressWarnings("unused")
 		Menu menu = new Menu(null);
+		// Get all user inputs
+		isAI = menu.isAI();
+		dnaUsed = menu.getDnaUsed();
+		framesPerAction = menu.getFramesPerAction();
+		sizePop = menu.getSizePop();
+		
 		Game game = new Game(Main.DIMX, Main.DIMY, sizePop);
 		
 		// Genetic algo initialisation (with its DNA implementation)
 		Genetic genetic = null;
-		Class<? extends DNA> dnaUsed = null;
-		int framesPerAction = 0;
 		if(isAI) {
-			if (isNN) {
-				dnaUsed = NeuralNet.class;
-				framesPerAction = 2;
-			}
-			else {
-				dnaUsed = BoolArray.class;
-				framesPerAction = 1;
-			}
+			genetic = new Genetic(game, sizePop, dnaUsed, framesPerAction);		
 		}
-		genetic = new Genetic(game, sizePop, dnaUsed, framesPerAction);
-		
+
 		// (View) Window creation
 		Fenetre window = null;
 		try {

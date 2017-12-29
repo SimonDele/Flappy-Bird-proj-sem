@@ -1,4 +1,4 @@
-package view;
+package view.game;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -127,7 +127,7 @@ public class PJeu extends JPanel  {
 					// Upper part
 					g2d.fillRect(obstacles.get(i).getPosX(),0, Obstacle.LARGEUR,obstacles.get(i).getPosObstHaut());							
 				}catch(IndexOutOfBoundsException e) {
-					System.out.println("Erreur incomprise");
+					//System.out.println("Erreur incomprise");
 				}
 
 			}
