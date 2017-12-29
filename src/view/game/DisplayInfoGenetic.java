@@ -34,7 +34,8 @@ public class DisplayInfoGenetic extends JPanel{
 	private InfoGenetic infoGenetic;
 	private SpinnerNumberModel  modelDelay;
 	private JSpinner delay;
-	private XYSeries series;
+	private XYSeries seriesAvg;
+	private XYSeries seriesMax;
 	
 	public DisplayInfoGenetic(InfoGenetic infoGenetic) {
 		
@@ -82,20 +83,28 @@ public class DisplayInfoGenetic extends JPanel{
 	private JFreeChart createChart() {
 
 		
-		series = new XYSeries("XYGraph");
+		seriesAvg = new XYSeries("Avg score");
+		seriesMax = new XYSeries("Max score");
+		
 		for (Iterator iterator = infoGenetic.getSerieAvg().iterator(); iterator.hasNext();) {
 			Point point = (Point) iterator.next();
-			series.add(point.getX(),point.getY());
+			seriesAvg.add(point.getX(),point.getY());
+		}
+		
+		for (Iterator iterator = infoGenetic.getSerieMaxFit().iterator(); iterator.hasNext();) {
+			Point point = (Point) iterator.next();
+			seriesMax.add(point.getX(), point.getY());
 		}
 
 		// Add the series to your data set
 		XYSeriesCollection dataset = new XYSeriesCollection();
-		dataset.addSeries(series);
+		dataset.addSeries(seriesAvg);
+		dataset.addSeries(seriesMax);
 		// Generate the graph
 		JFreeChart chart = ChartFactory.createXYLineChart(
-			"Average Fitness over Generations", // Title
+			"Score over Generations", // Title
 			"n Generation", // x-axis Label
-			"avg Fitness", // y-axis Label
+			"Number of obstacles", // y-axis Label
 			dataset, // Dataset
 			PlotOrientation.VERTICAL, // Plot Orientation
 			true, // Show Legend

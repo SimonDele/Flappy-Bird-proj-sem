@@ -9,12 +9,12 @@ public class InfoGenetic {
 	private int numberGen;
 	private int avgFit;
 	private int maxFit;
-	private ArrayList<Point> serieFit;
+	private ArrayList<Point> serieMaxFit;
 	private ArrayList<Point> serieAvg;
 	
 	public InfoGenetic(int numberGen) {
 		this.numberGen = numberGen;
-		serieFit = new ArrayList<Point>();
+		serieMaxFit = new ArrayList<Point>();
 		serieAvg = new ArrayList<Point>();
 	}
 	public int getNumberGen() {
@@ -26,8 +26,8 @@ public class InfoGenetic {
 	public int getMaxFit() {
 		return maxFit;
 	}
-	public ArrayList<Point> getSerieFit(){
-		return serieFit;
+	public ArrayList<Point> getSerieMaxFit(){
+		return serieMaxFit;
 	}
 	public ArrayList<Point> getSerieAvg(){
 		return serieAvg;
@@ -37,7 +37,7 @@ public class InfoGenetic {
 		this.avgFit = this.calcAverageFit(whales);
 		this.numberGen = numberGen;
 		serieAvg.add(new Point(numberGen, avgFit));
-
+		serieMaxFit.add(new Point(numberGen, maxFit));
 	}
 	private int calcMaxFit(Whale[] whales) {
 		int max = 0;
