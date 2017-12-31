@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import ia.Genetic;
 import mainPkg.Main;
 import model.Game;
-public class Fenetre extends JFrame {
+public class Frame extends JFrame {
 	// Window dimensions
 	public static int DIMX;
 	public static int DIMY;
@@ -19,10 +19,10 @@ public class Fenetre extends JFrame {
 	private DisplayInfoGenetic displayInfoGenetic;
 	
 	// Constructor
-	public Fenetre(int dimx, int dimy, Game game){
+	public Frame(int dimx, int dimy, Game game){
 		// Variables
-		Fenetre.DIMX = dimx;
-		Fenetre.DIMY = dimy;
+		Frame.DIMX = dimx;
+		Frame.DIMY = dimy;
 		title = new String("Flappy Whale :3");
 		
 		// Window initialisation

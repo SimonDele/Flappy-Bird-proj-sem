@@ -1,13 +1,21 @@
 package view.menu;
 
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JLabel;
 
 import controller.LaunchAI;
 import controller.LaunchSoloMode;
@@ -20,7 +28,7 @@ public class Menu extends JDialog implements WindowListener{
 	private Boolean isAI;
 	private Class<? extends DNA> dnaUsed;
 	private int framesPerAction;
-	private int sizePop;
+	private int sizePop = 1;
 	
 	public Menu(JFrame parent) {
 		super(parent, "Menu", true);
@@ -28,28 +36,44 @@ public class Menu extends JDialog implements WindowListener{
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.addWindowListener(this);
-		
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		
+		
+		
+		//Background 
+		try {
+			BufferedImage background = ImageIO.read(this.getClass().getResource("ressources/background.png"));
+			Image bd = background.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_AREA_AVERAGING);
+			Graphics2D g2d = (Graphics2D) background.getGraphics();
+			g2d.drawImage(bd, 0, 0, this);
+			JLabel labBack = new JLabel(new ImageIcon(bd));
+			this.setContentPane(labBack);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Font f = new Font("Serif", Font.PLAIN, 24);
+
 		//Create buttons
 		buttonLaunchAI = new JButton("Launch AI");
+		buttonLaunchAI.setFont(f);
+		
 		play = new JButton("Play alone");
+		play.setFont(f);
 		
 		//Add listeners
 		buttonLaunchAI.addActionListener(new LaunchAI(this));
 		play.addActionListener(new LaunchSoloMode(this));
-
+		
+		
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(),BoxLayout.LINE_AXIS));
-		JPanel AI = new JPanel();
-		AI.setLayout(new BoxLayout(AI,BoxLayout.LINE_AXIS));
-		AI.setAlignmentX(LEFT_ALIGNMENT);
-		AI.add(buttonLaunchAI);
-
-		this.getContentPane().add(AI);
+		this.getContentPane().add(Box.createGlue());
+		this.getContentPane().add(buttonLaunchAI);
+		this.getContentPane().add(Box.createGlue());
 		this.getContentPane().add(play);
+		this.getContentPane().add(Box.createGlue());
 		this.setVisible(true);
-		
-	
-		
+		this.repaint();
 	}
 
 	public int getFramesPerAction() {

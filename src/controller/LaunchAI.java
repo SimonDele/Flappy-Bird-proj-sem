@@ -17,7 +17,7 @@ public class LaunchAI implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 			menu.setIsAI(true);
-			DialogChooseAIType chooseAIType = new DialogChooseAIType(null, "Choose Type of AI", true, menu );
+			DialogChooseAIType chooseAIType = new DialogChooseAIType(menu, "Choose Type of AI", true, menu );
 			chooseAIType.setVisible(true);
 			//Main.sizePop =(int)(sizePop.getNumber());
 			menu.dispose();			

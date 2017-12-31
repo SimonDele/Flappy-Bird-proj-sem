@@ -9,7 +9,7 @@ import ia.sel.FunctionalSelection;
 import ia.sel.Selection;
 import ia.sel.rf.*;
 import model.Game;
-import view.game.Fenetre;
+import view.game.Frame;
 import view.game.PJeu;
 import view.menu.Menu;
 
@@ -52,9 +52,9 @@ public class Main {
 		
 		
 		// (View) Window creation
-		Fenetre window = null;
+		Frame window = null;
 		try {
-			window = new Fenetre(Main.DIMX, Main.DIMY,game);
+			window = new Frame(Main.DIMX, Main.DIMY,game);
 			window.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,7 +85,7 @@ public class Main {
 	 * @param window
 	 * @param checker
 	 */
-	public static void loopPlayer(Game game, boolean[] saut, Fenetre window, Checker checker) {
+	public static void loopPlayer(Game game, boolean[] saut, Frame window, Checker checker) {
 		// Game loop
 		while(!game.end()) { // for now, while true
 			
@@ -112,7 +112,7 @@ public class Main {
 	 * @param genetic the genetic algorithm with the DNA chosen
 	 * @param saut the array of jumps to change at each frame
 	 */
-	public static void loopGenetic(Game game, Fenetre window, Genetic genetic, boolean[] saut) {
+	public static void loopGenetic(Game game, Frame window, Genetic genetic, boolean[] saut) {
 		// Game loop
 		int count = 0;
 		while(true) { // for now, while true

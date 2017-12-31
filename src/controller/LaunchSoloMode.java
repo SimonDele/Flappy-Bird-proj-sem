@@ -16,7 +16,7 @@ public class LaunchSoloMode implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Main.isAI = false;
+		menu.setIsAI(false);
 		menu.dispose();
 	}		
 	

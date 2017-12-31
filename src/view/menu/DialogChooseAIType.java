@@ -39,17 +39,16 @@ public class DialogChooseAIType extends JDialog implements WindowListener {
 	private JSpinner spinnerSizePop;
 	
 	private Class<? extends DNA> dnaUsed;
-	private int framesPerAction;
-	private int sizePop;
 	
 	private Menu menu;
 	
-	public DialogChooseAIType(JFrame parent, String title, boolean modal, Menu menu){
+	public DialogChooseAIType(JDialog parent, String title, boolean modal, Menu menu){
 		super(parent, title, modal);
 		
 		this.menu = menu;
 		this.setResizable(false);
 		this.addWindowListener(this);
+		this.setLocationRelativeTo(parent);
 		
 		// RadioButton
 		gameMesh = new JRadioButton("Game Mesh");
@@ -119,10 +118,6 @@ public class DialogChooseAIType extends JDialog implements WindowListener {
 
 	public void setDnaUsed(Class<? extends DNA> dnaUsed) {
 		menu.setDnaUsed(dnaUsed);
-	}
-
-	public int getFramesPerAction() {
-		return framesPerAction;
 	}
 
 	public void setFramesPerAction(int framesPerAction) {

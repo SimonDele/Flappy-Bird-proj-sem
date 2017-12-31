@@ -78,9 +78,9 @@ public class PJeu extends JPanel  {
 		Image imRockTemp = null;
 		Image imIcebergTemp = null;
 		rockRatio = 2.6f;
-		rockHeight = (int)(0.75f*Fenetre.DIMY);
+		rockHeight = (int)(0.75f*Frame.DIMY);
 		icebergRatio = 1.7f;
-		icebergHeight = (int)(0.75f*Fenetre.DIMY);
+		icebergHeight = (int)(0.75f*Frame.DIMY);
 		try {
 			imRockTemp = ImageIO.read(this.getClass().getResource("ressources/rock.png"));
 			imRockTemp = imRockTemp.getScaledInstance((int)(Obstacle.LARGEUR*rockRatio), rockHeight, Image.SCALE_DEFAULT);
@@ -100,7 +100,7 @@ public class PJeu extends JPanel  {
 		/// Background
 		try {
 			background = ImageIO.read(this.getClass().getResource("ressources/background.png"));
-			background = background.getScaledInstance(Fenetre.DIMX, Fenetre.DIMY, Image.SCALE_AREA_AVERAGING);
+			background = background.getScaledInstance(Frame.DIMX, Frame.DIMY, Image.SCALE_AREA_AVERAGING);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
