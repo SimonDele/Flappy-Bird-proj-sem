@@ -4,7 +4,7 @@ package ia.sel.rf;
  */
 public class ReLU implements RealFunction {
 	@Override
-	public int applyTo(int x) {
+	public double applyTo(double x) {
 		return Math.max(0, x);
 	}
 }

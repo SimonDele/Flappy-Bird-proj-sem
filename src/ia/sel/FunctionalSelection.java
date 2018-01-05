@@ -33,9 +33,15 @@ public class FunctionalSelection implements Selection {
 		double[] fitnesses = new double[sizePop];
 		double[] cumulateFitnesses = new double[sizePop];
 		double sum = 0;
+		int maxfitness = population[0].getFitness();
 		for (int i = 1; i < sizePop; i++) {
-			// apply desired function
-			fitnesses[i] = f.applyTo(population[i].getFitness());
+			if(maxfitness < population[i].getFitness())
+				maxfitness = population[i].getFitness();
+		}
+		
+		for (int i = 0; i < sizePop; i++) {
+			// Apply function to reduced 
+			fitnesses[i] =  f.applyTo(population[i].getFitness()/(double)maxfitness);
 			sum += fitnesses[i];
 		}
 		// Generate cumuateFitnesses
@@ -43,7 +49,6 @@ public class FunctionalSelection implements Selection {
 		for (int i = 1; i < sizePop; i++) {
 			fitnesses[i] /= sum;
 			cumulateFitnesses[i] = fitnesses[i] + cumulateFitnesses[i-1];
-			System.out.println(cumulateFitnesses[i]-cumulateFitnesses[i-1]);
 		}
 		// now we have an array of sizePop increasing values in ]0,1]
 

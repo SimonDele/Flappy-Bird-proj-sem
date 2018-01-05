@@ -51,9 +51,9 @@ public class Genetic {
 		
 		/// Hyperparameters :
 		// Mutation
-		this.mutationAtZero = 0.0;
+		this.mutationAtZero = 0.05;
 		this.mutProba = 0.1;
-		this.decrease = !true;
+		this.decrease = true;
 		// Selection
 		this.selector = selector;
 		
@@ -84,7 +84,7 @@ public class Genetic {
 	 */
 	public void update(Game game) {
 		// Update the info onscreen
-		infoGenetic.update(GENERATION++, whales);
+		infoGenetic.update(++GENERATION, whales);
 		// update the population's values of fitness
 		for (int i = 0; i < sizePop; i++) {
 			population[i].setFitness(whales[i].getFitness());

@@ -4,26 +4,27 @@ package ia.sel.rf;
  */
 public class Exp implements RealFunction {
 	/**
-	 * Desperate attempt to slow down the exponential
+	 * Steepens the exponential
 	 */
-	private double slower;
+	private double steeper;
 	
 	/**
-	 * Constructor that ignores the slower parameter
+	 * Constructor that sets an empirically good value to 'steeper' for N=1000
 	 */
 	public Exp() {
-		this.slower = 1;
+		this.steeper = 7;
 	}
 	/**
-	 * Constructor that sets the slower attribute value of this class.
-	 * @param slower the value to set the slower attribute to
+	 * Constructor that sets the steeper attribute value of this class.
+	 * @param steeper the value to set the steeper attribute to
 	 */
-	public Exp(double slower) {
-		this.slower = slower;
+	public Exp(double steeper) {
+		this.steeper = steeper;
 	}
 	
 	@Override
-	public int applyTo(int x) {
-		return (int) Math.min(Math.exp(slower*x),Integer.MAX_VALUE); // careful not to hit the int ceiling
+	public double applyTo(double x) {
+		
+		return Math.exp(steeper*(x-1)); // careful not to hit the int ceiling
 	}
 }

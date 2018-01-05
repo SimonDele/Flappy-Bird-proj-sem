@@ -17,7 +17,7 @@ public class RePOL implements RealFunction {
 	}
 	
 	@Override
-	public int applyTo(int x) {
-		return (int) Math.min(Math.pow(Math.max(0, x), pow),Integer.MAX_VALUE); // careful not to hit the int ceiling
+	public double applyTo(double x) {
+		return Math.pow(Math.max(0, x), pow); // careful not to hit the int ceiling
 	}
 }

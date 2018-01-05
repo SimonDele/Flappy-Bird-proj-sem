@@ -1,12 +1,10 @@
 package mainPkg;
 import java.util.Random;
+
 import controller.Checker;
 import ia.Genetic;
-import ia.dna.BoolArray;
-import ia.dna.DNA;
-import ia.dna.NeuralNet;
-import ia.sel.FunctionalSelection;
-import ia.sel.Selection;
+import ia.dna.*;
+import ia.sel.*;
 import ia.sel.rf.*;
 import model.Game;
 import view.game.Frame;
@@ -44,7 +42,7 @@ public class Main {
 		
 		// Genetic algo initialisation (with its DNA implementation and Selection)
 
-		Selection selector = new FunctionalSelection(new RePOL(2));
+		Selection selector = new FunctionalSelection(new Exp(8));
 		Genetic genetic = null;
 		if(isAI) {
 			genetic = new Genetic(game, sizePop, dnaUsed, selector, framesPerAction);

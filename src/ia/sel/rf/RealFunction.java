@@ -9,5 +9,5 @@ public interface RealFunction {
 	 * @param x the input
 	 * @return the output of the function, for this input
 	 */
-	public int applyTo(int x);
+	public double applyTo(double x);
 }
