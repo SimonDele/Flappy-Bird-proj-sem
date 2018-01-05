@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.util.Iterator;
 
 import javax.swing.BoxLayout;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -36,6 +37,9 @@ public class DisplayInfoGenetic extends JPanel{
 	private JSpinner delay;
 	private XYSeries seriesAvg;
 	private XYSeries seriesMax;
+	private JPanel checkboxes;
+	private JCheckBox displayMax;
+	private JCheckBox displayAvg;
 	
 	public DisplayInfoGenetic(InfoGenetic infoGenetic) {
 		
@@ -43,6 +47,16 @@ public class DisplayInfoGenetic extends JPanel{
 
 		this.setBackground(Color.black);
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		
+		checkboxes = new JPanel();
+		checkboxes.setLayout(new BoxLayout(checkboxes,BoxLayout.LINE_AXIS));
+		checkboxes.setAlignmentX(LEFT_ALIGNMENT);
+		displayMax = new JCheckBox("Display Max Score");
+		displayMax.setSelected(true);
+		displayAvg  = new JCheckBox("Display Average Score");
+		displayAvg.setSelected(true);
+		checkboxes.add(displayAvg);
+		checkboxes.add(displayMax);
 		
 		numGen = new JLabel("Generation "+infoGenetic.getNumberGen());
 		numGen.setForeground(Color.white);
@@ -73,9 +87,13 @@ public class DisplayInfoGenetic extends JPanel{
 			}
 			
 		});
+		
+
+		
 		this.add(numGen);
 		this.add(maxFit);
 		this.add(avgFit);
+		this.add(checkboxes);
 		this.add(CP);
 		this.add(delay);
 	}
@@ -85,16 +103,20 @@ public class DisplayInfoGenetic extends JPanel{
 		
 		seriesAvg = new XYSeries("Avg score");
 		seriesMax = new XYSeries("Max score");
-		
-		for (Iterator iterator = infoGenetic.getSerieAvg().iterator(); iterator.hasNext();) {
-			Point point = (Point) iterator.next();
-			seriesAvg.add(point.getX(),point.getY());
+		if(this.displayAvg.isSelected()) {
+			for (Iterator iterator = infoGenetic.getSerieAvg().iterator(); iterator.hasNext();) {
+				Point point = (Point) iterator.next();
+				seriesAvg.add(point.getX(),point.getY());
+			}			
 		}
-		
-		for (Iterator iterator = infoGenetic.getSerieMaxFit().iterator(); iterator.hasNext();) {
-			Point point = (Point) iterator.next();
-			seriesMax.add(point.getX(), point.getY());
+
+		if(this.displayMax.isSelected()) {
+			for (Iterator iterator = infoGenetic.getSerieMaxFit().iterator(); iterator.hasNext();) {
+				Point point = (Point) iterator.next();
+				seriesMax.add(point.getX(), point.getY());
+			}			
 		}
+
 
 		// Add the series to your data set
 		XYSeriesCollection dataset = new XYSeriesCollection();
