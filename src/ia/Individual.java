@@ -4,18 +4,32 @@ import ia.dna.DNA;
 import model.Obstacle;
 import model.Whale;
 
+/**
+ * An Individual, in the sense of the Genetic Algorithm - hence a tuple (fitness, DNA). Implements Comparable to be sorted fitnesswise; else heavily relies on its DNA.
+ */
 public class Individual implements Comparable<Individual> {
 	/**
 	 * The individual's score in his environment
 	 */
 	protected int fitness;
+	/**
+	 * The individual's DNA, responsible for its behaviour.
+	 */
 	protected DNA dna;
 	
+	/**
+	 * Sets the fitness to 0 and the dna to the given value
+	 * @param dna for the field of the same name
+	 */
 	public Individual(DNA dna) {
 		this.fitness = 0;
 		this.dna = dna;
 	}
 	
+	/**
+	 * Uses the generic constructor of the Class passed in argument to initialize its DNA. For gen 0
+	 * @param dnaImpl the Class to be used as DNA
+	 */
 	public Individual(Class<? extends DNA> dnaImpl) {
 		this.fitness = 0;
 		try {
@@ -37,9 +51,10 @@ public class Individual implements Comparable<Individual> {
 		return dna.decidejump(obstacle, whale);
 	}
 	/**
-	 * Usually mutation are nested in crossover; but some Selection methods might require some function to mutate afterwards (e.g. "keepers")
+	 * Never used in practice, usually mutation are nested in crossover; but some Selection methods might require some function to mutate afterwards (e.g. "keepers")
 	 * @param mutAmpl the amplitude of the mutation, when it makes sense
 	 * @param mutProba the probability of the mutation, when it makes sense
+	 * @deprecated
 	 */
 	public void mutate(double mutAmpl, double mutProba) {
 		dna.mutate(mutAmpl, mutProba);

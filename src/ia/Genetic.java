@@ -8,28 +8,61 @@ import model.Obstacle;
 import model.Whale;
 
 /**
- * The class managing any approach for the Genetic algorithm. Its main field is the population which is an array of {@link Individual Individuals}. TODO change : From there we can generalize the Algorithm's behaviour no matter the DNA type chosen, based on the tasks an Individual will always be able to carry out (ie jump).
+ * The class managing any approach for the Genetic algorithm. Its main field is the population which is an array of {@link Individual Individuals}. It can run no matter the DNA implementation chosen for the Individuals.
  */
 public class Genetic {
 	// Population-related attributes
+	/**
+	 * Number of individuals in the population
+	 */
 	private int sizePop;
+	/**
+	 * Array of Individuals modelling the population
+	 */
 	private Individual[] population;
+	/**
+	 * Number of the current generation
+	 */
 	public static int GENERATION;
+	/**
+	 * Class to provide visual information on the welfare of the generations
+	 */
 	public static InfoGenetic infoGenetic;
 	
 	// mutation-related variables
+	/**
+	 * Mutation Amplitude value at generation 0
+	 */
 	private double mutationAtZero;
+	/**
+	 * The probability of a mutation occuring
+	 */
 	private double mutProba;
+	/**
+	 * Whether the mutation amplitude should decrease over time (generations) or not
+	 */
 	private boolean decrease;
 	
-	// Selection-related
+	/**
+	 * The selection method chosen by the user to be used by the genetic Algorithm
+	 */
 	private Selection selector;
 	
 	// Game's attributes
+	/**
+	 * Instance of the game's whales (pointer), to prevent too much data flow
+	 */
 	private Whale[] whales;
+	/**
+	 * Instance of the game's obstacles (pointer), to prevent too much data flow
+	 */
 	private ArrayList<Obstacle> obstacles;
 	
 	// Optimizer for apt DNA type
+	/**
+	 * Number of frames per action allowed to the Individuals. In the end, never used in practice : too difficult for AIs
+	 * @deprecated
+	 */
 	private int framesPerAction;
 
 	/**
@@ -40,7 +73,7 @@ public class Genetic {
 	 * @param selector the selection method to use to select the next generation
 	 * @param framesPerAction the number of frames per action allowed to the AI chosen by the user
 	 */
-	public Genetic(Game game, int sizePop, Class<? extends DNA> dnaImpl, Selection selector, int framesPerAction) {
+	public Genetic(Game game, int sizePop, Class<? extends DNA> dnaImpl, Selection selector, double mutationAtZero, boolean decrease, int framesPerAction) {
 		// Initialization of the info, genetic and game's attributes
 		Genetic.infoGenetic = new InfoGenetic(GENERATION);
 		Genetic.GENERATION = 0;
@@ -48,12 +81,11 @@ public class Genetic {
 		this.whales = game.getBirds();
 		this.obstacles = game.getObstacles();
 		this.framesPerAction = framesPerAction;
-		
 		/// Hyperparameters :
 		// Mutation
-		this.mutationAtZero = 0.05;
-		this.mutProba = 0.1;
-		this.decrease = true;
+		this.mutationAtZero = mutationAtZero;
+		this.mutProba = 0.2;
+		this.decrease = decrease;
 		// Selection
 		this.selector = selector;
 		

@@ -6,12 +6,34 @@ import model.Game;
 import model.Obstacle;
 import model.Whale;
 
+/**
+ * DNA Implementation for the Neural Network. Also contains generic propagation (feedforward algorithm) and some constructors. DOES NOT cover biaises
+ * @author louis
+ */
 public class NeuralNet implements DNA {
-	private int nbInput; // number of elements in the input vector
-	private int nbOutput; // idem, output vector
-	private int[] hidden; // number of neurones in each hidden layer
-	private Matrix[] weights; // Matrix[i] are a layer's weights
+	/**
+	 * Number of elements in the input vector
+	 */
+	private int nbInput;
+	/**
+	 * Number of elements in the output vector
+	 */
+	private int nbOutput; 
+	/**
+	 * Number of neurones in each hidden layer
+	 */
+	private int[] hidden; 
+	/**
+	 * Array of all the weight matrices. Matrix[i] are a layer's weights
+	 */
+	private Matrix[] weights;
+	/**
+	 * Maximum value for a weight
+	 */
 	private double maxWeight;
+	/**
+	 * Minimum value for a weight
+	 */
 	private double minWeight;
 	
 	/**
@@ -20,13 +42,22 @@ public class NeuralNet implements DNA {
 	public NeuralNet() {
 		this.nbInput = 2;
 		this.nbOutput = 1; 
-		this.hidden = new int[]{6}; 
+		this.hidden = new int[]{3}; 
 		this.weights = new Matrix[hidden.length+1]; 
 		this.maxWeight = 0.75;
 		this.minWeight = -maxWeight;
 		randomInitWeights();
 	}
 	
+	/**
+	 * Initializer for every field in this class. The weihts initialization is done in method randomInitWeights
+	 * @param nbInput to initialize the field of the same name
+	 * @param nbOutput to initialize the field of the same name
+	 * @param hidden to initialize the field of the same name 
+	 * @param minWeight to initialize the field of the same name
+	 * @param maxWeight to initialize the field of the same name
+	 * @throws IllegalArgumentException in case minw >= maxw, or the number of input/output/hidden is 0
+	 */
 	public NeuralNet(int nbInput, int nbOutput, int[] hidden, double minWeight, double maxWeight) throws IllegalArgumentException {
 		if ((maxWeight<=minWeight)||(nbInput<=0)||(nbOutput<=0)||(hidden.length<=0)) {
 			System.out.println(nbInput + ", " + nbOutput + ", " + hidden + ", " + minWeight + ", " + maxWeight);
@@ -42,6 +73,10 @@ public class NeuralNet implements DNA {
 		}
 	}
 	
+	/**
+	 * Initializes a neuralnet based on an array of Matrices. Hence the mimnw and maxw values are pointless
+	 * @param w the array of matrices to use as weights
+	 */
 	public NeuralNet(Matrix[] w) {
 		this.nbInput = w[0].getColumnDimension();
 		this.nbOutput = w[w.length-1].getRowDimension();
@@ -95,6 +130,9 @@ public class NeuralNet implements DNA {
 		return 2+hidden.length;
 	}
 
+	/**
+	 * Initializes the array of weights matrices based on the min and max weights, using randomMatrix method
+	 */
 	private void randomInitWeights() {
 		// WEIGHTS
 		// in column : the weights from the jth intput neuron
@@ -107,6 +145,12 @@ public class NeuralNet implements DNA {
 		weights[hidden.length] = randomMatrix(nbOutput, hidden[hidden.length-1]); // output case
 	}
 	
+	/**
+	 * Initializes a single Matrix using the Jama.Matrix.random method
+	 * @param nrow te number of rows of the matrix
+	 * @param ncol the number of columns of the matrix
+	 * @return the randomly generated matrix
+	 */
 	public Matrix randomMatrix(int nrow, int ncol) {
 		Matrix randMat = null;
 		randMat = Matrix.random(nrow, ncol);
@@ -115,6 +159,12 @@ public class NeuralNet implements DNA {
 		return randMat;
 	}
 	
+	/**
+	 * Propagation (feedforward) algorithm. Applies the equations (z=wa+b) and (a= activation(z)) for every layer (here b=0 : not taken into account)
+	 * @param input the input vector to apply the algorithm on
+	 * @return the output vector of this network based on the input
+	 * @throws IndexOutOfBoundsException if the input is incorrect
+	 */
 	public Matrix propagation(Matrix input) throws IndexOutOfBoundsException {
 		Matrix prevision = input;
 		if (!((input.getRowDimension()==nbInput) && (input.getColumnDimension()==1))) {
@@ -128,7 +178,11 @@ public class NeuralNet implements DNA {
 		}
 		return prevision;
 	}
-		
+	
+	/**
+	 * Applies the activation function elementwise on the matrix, using the matrix' setters (hence void). This will probabbly only be used on vectors, ie. (n,1) matrices.
+	 * @param m the matrix to apply the actiation function on. 
+	 */
 	public static void activationFunction(Matrix m) {
 		for (int i = 0; i < m.getRowDimension(); i++) {
 			for (int j = 0; j < m.getColumnDimension(); j++) {
@@ -137,14 +191,27 @@ public class NeuralNet implements DNA {
 		}
 	}
 	
+	/**
+	 * One possible actiavtion function : the generic sigmoid
+	 * @param x the input to apply the function on
+	 * @return the output, hence sigma(x)
+	 */
 	public static double sig(double x) {
 		return 1/(1+Math.exp(-x));
 	}
 	
+	/**
+	 * One possible actiavtion function : the Rectified Linear Unit
+	 * @param x the input to apply the function on
+	 * @return the output, hence max(0,x)
+	 */
 	public static double reLU(double x) {
 		return Math.max(0, x);
 	}
 	
+	/**
+	 * Debugging function to print all the neuralnet's weights
+	 */
 	public void print() {
 		for (int i = 0; i < weights.length; i++) {
 			System.out.println("Weights " + i);
@@ -152,6 +219,12 @@ public class NeuralNet implements DNA {
 		}
 	}
 	
+	/**
+	 * Addition of a neuralnet's weights with another (for mutations). Never used in practice
+	 * @param nn the neural net to add the weights to
+	 * @return the new neural net
+	 * @deprecated
+	 */
 	public NeuralNet add(NeuralNet nn) {
 		int nL = nn.getNbLayers();
 		Matrix[] w = new Matrix[nL];
@@ -161,6 +234,13 @@ public class NeuralNet implements DNA {
 		return new NeuralNet(w);
 	}
 	
+	/**
+	 * Never used in practice. Method to generate a neuralnet based on another's architecture
+	 * @param nn the neuralnet to copy architecture
+	 * @param mutAmpl the amplitude of mutations, to generate weights
+	 * @return the new neuralnet
+	 * @deprecated
+	 */
 	public static NeuralNet randomNNShape(NeuralNet nn, double mutAmpl) {
 		NeuralNet randNN = nn;
 		randNN.setMinWeight(-mutAmpl);
@@ -190,7 +270,7 @@ public class NeuralNet implements DNA {
 	}
 
 	@Override
-	public DNA crossover(DNA otherNN, double mutAmpl, double mutProba) throws IllegalArgumentException {
+	public DNA crossover(DNA otherNN, double mutAmpl, double mutProba) {
 		NeuralNet newNN = null;
 		if (otherNN instanceof NeuralNet) {
 			newNN = new NeuralNet(this); // this constructor copies the shape

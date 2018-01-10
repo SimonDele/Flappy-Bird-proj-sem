@@ -18,6 +18,9 @@ import model.Game;
 import model.Obstacle;
 import model.Whale;
 
+/**
+ * @author simon
+ */
 public class PJeu extends JPanel  {
 	private int height;
 	private int width;
@@ -83,9 +86,9 @@ public class PJeu extends JPanel  {
 		icebergHeight = (int)(0.75f*Frame.DIMY);
 		try {
 			imRockTemp = ImageIO.read(this.getClass().getResource("ressources/rock.png"));
-			imRockTemp = imRockTemp.getScaledInstance((int)(Obstacle.LARGEUR*rockRatio), rockHeight, Image.SCALE_DEFAULT);
+			imRockTemp = imRockTemp.getScaledInstance((int)(Obstacle.WIDTH*rockRatio), rockHeight, Image.SCALE_DEFAULT);
 			imIcebergTemp = ImageIO.read(this.getClass().getResource("ressources/iceberg.png"));
-			imIcebergTemp = imIcebergTemp.getScaledInstance((int)(Obstacle.LARGEUR*icebergRatio), icebergHeight, Image.SCALE_DEFAULT);
+			imIcebergTemp = imIcebergTemp.getScaledInstance((int)(Obstacle.WIDTH*icebergRatio), icebergHeight, Image.SCALE_DEFAULT);
 		}catch (IOException e) {
 			System.out.println("Erreur lecture fichier rock ou iceberg");
 			e.printStackTrace();

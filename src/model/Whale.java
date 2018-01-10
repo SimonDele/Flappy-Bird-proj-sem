@@ -2,25 +2,69 @@ package model;
 
 import java.lang.Math;
 
+/**
+ * The modelisation of a game's whale. Its main purpose is to fall down and be brought back up.
+ */
 public class Whale {
 	// Position (! now it's the CENTER !)
+	/**
+	 * X position of the center of the whale
+	 */
 	private int posX; 
+	/**
+	 * Y position of the center of the whale
+	 */
 	private int posY; 
 	
 	// Falling attributes
-	private float gravity; // acceleration : how fast
-	private int time; // for equation
-	private float speed; // self-explanatory
-	private float v0; // original speed - you don't want to touch this
-	private float jumpHeight; // how high we jump
+	/**
+	 * Acceleration of the whale in pixels per frame² - how fast it falls
+	 */
+	private float gravity;
+	/**
+	 * Whale's sense of time in its trajectory, or the abscissa of the line that tells what the value of its speed should be 
+	 */
+	private int time;
+	/**
+	 * The current Y speed of the whale
+	 */
+	private float speed;
+	/**
+	 * The Y speed of the whale at t=0; calculated with a bit of calculus
+	 */
+	private float v0;
+	/**
+	 * Height of the jump in pixels, which will determine the v0
+	 */
+	private float jumpHeight;
 	
 	// Attributes on hitboxes & death
-	public static int SIZE; // bird sprite diameter
-	private boolean dead; // boolean on death; stops score incrementation
-	private int  deadSpeed; // speed of obstacles
-	private int score; // how far we've gone in number of obstacles
-	private int fitness; // is a function of score
+	/**
+	 * The diameter of the whale's sprite
+	 */
+	public static int SIZE;
+	/**
+	 * Boolean for whether the whale died; stops score incrementation
+	 */
+	private boolean dead; 
+	/**
+	 * X speed when dead - obstacle speed
+	 */
+	private int  deadSpeed;
+	/**
+	 * How far we've gone in number of obstacles
+	 */
+	private int score; 
+	/**
+	 * A function of the distance crossed by the whale slightly different than score and used by the Genetic algo
+	 */
+	private int fitness;
 	// Constructor
+	/**
+	 * Initializes everything based on our experience (for the gravity and heights, etc..). Sets y value and deadSpeed.
+	 * @param y the original y value
+	 * @param deadSpeed the x speed when dead
+	 */
 	public Whale(int y, int deadSpeed) { // give obstSpeed as input
 		time = 0;
 		score = 0;
@@ -76,20 +120,32 @@ public class Whale {
 		return jumpHeight;
 	}
 
-	// Methods
+	/**
+	 * Increases the fitness value
+	 * @param addToFitness the value to be added
+	 */
 	public void increaseFitness(int addToFitness) {
 		this.fitness += addToFitness;
 	}
 	/// Updating bird position 
-	public void update(boolean saut) {
+	/**
+	 * Updates whale position based on whether it wants to jump, the current time (hence speed), and whether it's dead
+	 * @param jump whether to jump
+	 */
+	public void update(boolean jump) {
 		// you're either alive and kicking, or dead and kicked left
 		if (!dead) {
-			if (saut) {time=0;} 
+			if (jump) {time=0;} 
 			speed = -time++*gravity + v0;
 			this.posY -= speed;
 		} else this.posX -= deadSpeed;
 	}
 	
+	/**
+	 * When the whale hit something bad. Dies on the spot and sets its score & fitness
+	 * @param score the score to be set
+	 * @param fitness the final fitness to add to the current
+	 */
 	public void hit(int score, int fitness) {
 		dead = true;
 		this.score = score;

@@ -7,7 +7,7 @@ import mainPkg.Main;
 /**
  * Enhanced version of the very simple {@linkplain BasicSelection BasicSelection}. 
  * The melting-pot is replaced by the probabilistic cumulative array cumulateFitnesses.
- * The probability can now be chosen as a real function, defined in the class. (real functions should be positive, increasing convex ones)
+ * The probability can now be chosen as a real function, defined in the class. (real functions should be positive, increasing convex ones, passing by (1,1) if possible)
  */
 public class FunctionalSelection implements Selection {
 	private RealFunction f;

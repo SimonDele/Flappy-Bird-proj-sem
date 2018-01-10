@@ -15,9 +15,10 @@ public interface DNA {
 	 */
 	public boolean decidejump(Obstacle obstacle, Whale whale);
 	/**
-	 * Tweaks the DNA implementation as a mutation in the crossover process. Usually nested in crossover; some specific Selection methods might require this.
+	 * Tweaks the DNA implementation as a mutation. Never used in practice : usually nested in crossover; some specific Selection methods might require this.
 	 * @param mutAmpl the amplitude of the mutations to apply
 	 * @param mutProba the probability for a mutation to happen
+	 * @deprecated
 	 */
 	public void mutate(double mutAmpl, double mutProba);
 	/**

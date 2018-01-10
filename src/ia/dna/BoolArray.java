@@ -5,12 +5,30 @@ import model.Game;
 import model.Obstacle;
 import model.Whale;
 
+/**
+ * DNA Implementation using a boolean array to decide whether to jump.
+ */
 public class BoolArray implements DNA {
+	/**
+	 * The boolean array with relative positions to decide whether to jump
+	 */
 	private Boolean[][] array;
+	/**
+	 * Number of rows in the array
+	 */
 	private int nrow;
+	/**
+	 * Number of columns in the array
+	 */
 	private int ncol;
+	/**
+	 * size of the mesh (number of pixels in the vicinity on which to use the same generic behaviour decided by just one case of the array)
+	 */
 	public static int MESHSIZE;
 	
+	/**
+	 * Constructor with empirically efficient values. Calls initArray.
+	 */
 	public BoolArray() {
 		int nrow = 2*Game.DIMY;
 		int ncol = Obstacle.MINDIST;
@@ -20,8 +38,14 @@ public class BoolArray implements DNA {
 		this.array = new Boolean[this.nrow][this.ncol];
 		double probaJump = 0.03;
 		initArray(probaJump);
+		System.out.println(this.nrow + " " + this.ncol);
 	}
 	
+	/**
+	 * Initializes the values based on a chosen number of rows and columns. Calls initArray
+	 * @param nrow the chosen number of rows
+	 * @param ncol the chosen number of columns
+	 */
 	public BoolArray(int nrow, int ncol) {
 		BoolArray.MESHSIZE = Obstacle.getSpeed()*4;
 		this.nrow = nrow/BoolArray.MESHSIZE;
@@ -35,7 +59,7 @@ public class BoolArray implements DNA {
 	
 	/**
 	 * Private method called only by constructors to initialize the array at first generation
-	 * @param probaJump
+	 * @param probaJump the probability to have a 'true' in the array
 	 */
 	private void initArray(double probaJump) {
 		for(int i=0;i<this.nrow;i++) {
@@ -45,12 +69,24 @@ public class BoolArray implements DNA {
 		}
 	}
 	
+	/**
+	 * Constructor using a boolean array and its shape to build the BoolArray object. Now the shorter version (Boolean[] only) is used 
+	 * @param genes the array of boolean for the decideJump function
+	 * @param nrow the number of rows of the array
+	 * @param ncol the number of columns of the array
+	 * @deprecated
+	 */
 	public BoolArray(Boolean[][] genes, int nrow, int ncol) {
 		this.array = genes;
 		this.nrow = nrow;
 		this.ncol = ncol;
 	}
 	
+	/**
+	 * Constructor using a boolean array to initialize a BoolArray object.
+	 * @param genes the array of booleans to use as genes for this new BoolArray
+	 * @throws IllegalArgumentException in case a dimension is 0
+	 */
 	public BoolArray(Boolean[][] genes) throws IllegalArgumentException {
 		this.array = genes;
 		// check that dimension is not < 2
@@ -105,6 +141,9 @@ public class BoolArray implements DNA {
 		return new BoolArray(newArray);
 	}
 	
+	/**
+	 * Debugging method to display all the elements of the array
+	 */
 	public String toString() {
 		String res = "BoolArray :\n";
 		res += "Ncol = "+ ncol + "Nrow = "+ nrow + "\n";

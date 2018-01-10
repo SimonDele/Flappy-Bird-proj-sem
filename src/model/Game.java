@@ -6,6 +6,9 @@ import mainPkg.Main;
 
 import java.lang.Math;
 
+/**
+ * Handles whale-obstacle movement and their interactions.
+ */
 public class Game {
 	// Dimensions given by Window
 	public static int DIMY;
@@ -15,9 +18,15 @@ public class Game {
 	// The guys we're interested in
 	private ArrayList<Obstacle> obstacles;
 	private Whale[] whales;
-	private float tolerance; // percentage of bird we take out of hitbox
+	private float tolerance; // percentage of whale we take out of hitbox
 	
 	// Constructor
+	/**
+	 * Builds the game based on the requested dimx, dimy and population size
+	 * @param dimx the number of x pixels
+	 * @param dimy the number of y pixels
+	 * @param N the number of whales
+	 */
 	public Game(int dimx, int dimy, int N) {
 		Game.DIMX = dimx;
 		Game.DIMY = dimy;
@@ -57,6 +66,10 @@ public class Game {
 
 	// Methods
 	/// Updating the game 
+	/**
+	 * Updates a game frame - everyone advances an obstacle may be destroyed; the hitboxes are checked and their effects applied. 
+	 * @param saut
+	 */
 	public void update(boolean[] saut) { // one game frame
 		// Updating bird 
 		for(int i=0; i<saut.length;i++) {
@@ -100,11 +113,20 @@ public class Game {
 	}
 	
 	/// Ending the game - all birds died (are hit())
+	/**
+	 * Not implemented (only usefull for player which is not the goal) - ending of the game
+	 * @return whether the game ends
+	 */
 	public boolean end() { 
 		return false;
 	}
 	
 	/// Hitboxes - I hope I've made this clear.
+	/**
+	 * Whether a whale has hit the obstacle. checks all positions for it to seem natural to the human eye
+	 * @param whale the whale to check the position
+	 * @return whether the whale hit the obstacle
+	 */
 	private boolean hit(Whale whale) {
 		if(obstacles.size()<1) {//Means that there are no obstacles on the map
 			return false;
@@ -125,6 +147,7 @@ public class Game {
 		// First, the ceiling - can't jump too high
 		if (currentY < -whale.getJumpHeight()*0.5f) {
 			hit = true;
+			
 			// Then, floor 
 		} else 
 		if (currentY+radius > Game.DIMY) {
@@ -142,7 +165,7 @@ public class Game {
 			hit = true;	
 			
 			// 3: inbetween both parts of the obstacle 
-		} else if (((currentX - obstX > 0) && (currentX-obstX-Obstacle.LARGEUR < 0))
+		} else if (((currentX - obstX > 0) && (currentX-obstX-Obstacle.WIDTH < 0))
 				&& ((currentY - radius < obstYUp)||(currentY + radius > obstYDown))) {
 			hit = true;
 			
@@ -152,8 +175,8 @@ public class Game {
 			hit = true;
 			
 			// 5: hitting the rear end
-		} else if ((Game.distance(currentX, currentY, obstX + Obstacle.LARGEUR, obstYUp)  <radius)
-				|| (Game.distance(currentX, currentY, obstX + Obstacle.LARGEUR, obstYDown)<radius)) {
+		} else if ((Game.distance(currentX, currentY, obstX + Obstacle.WIDTH, obstYUp)  <radius)
+				|| (Game.distance(currentX, currentY, obstX + Obstacle.WIDTH, obstYDown)<radius)) {
 			hit = true;
 		}
 		
@@ -164,6 +187,14 @@ public class Game {
 
 	
 	/// Defining distance for Hitboxes
+	/**
+	 * Simple norm2 distance definition for hitoxes
+	 * @param posX1
+	 * @param posY1
+	 * @param posX2
+	 * @param posY2
+	 * @return the distance in pixels
+	 */
 	public static float distance(int posX1, int posY1, int posX2, int posY2) {
 		return ((float)Math.sqrt((posX1-posX2)*(posX1-posX2)+(posY1-posY2)*(posY1-posY2)));
 	}

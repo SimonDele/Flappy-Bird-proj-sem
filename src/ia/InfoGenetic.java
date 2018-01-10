@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 import model.Whale;
 
+/**
+ * Provides visual information about the generations when the Genetic Alorithm is running
+ * @author simon
+ */
 public class InfoGenetic {
 	private int numberGen;
 	private int avgFit;

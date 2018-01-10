@@ -12,6 +12,17 @@ import mainPkg.Main;
 public class RankSelection implements Selection {
 	protected double rankSelectProba;
 	
+	/**
+	 * Constructor giving an empirically good value (0.05) to the attribute.
+	 */
+	public RankSelection() {
+		this.rankSelectProba = 0.05;
+	}
+	
+	/**
+	 * Simply gives to the attribute the value of the parameter.
+	 * @param rankSelectProba the parameter to set the attribute value to.
+	 */
 	public RankSelection(double rankSelectProba) {
 		this.rankSelectProba = rankSelectProba;
 	}
@@ -40,5 +51,5 @@ public class RankSelection implements Selection {
 		int index = 0;
 		while (!(Main.rand.nextDouble() < proba) && (index++ < size -2));
 		return index;
-	}
+	}	
 }

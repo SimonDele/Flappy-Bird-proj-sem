@@ -11,18 +11,54 @@ import view.game.Frame;
 import view.game.PJeu;
 import view.menu.Menu;
 
+/**
+ * Class that holds the main method, which uses the loopAI and loopPlayer static methods. Its attributes are defined in the class for clarity, but are all static.
+ * 
+ */
 public class Main {
 	// statics : dimensions and random
+	/**
+	 * Random generator used throughout the code
+	 */
 	public static Random rand = new Random();
+	/**
+	 * Game's X dimension
+	 */
 	public static int DIMX;
+	/**
+	 * Game's Y dimension
+	 */
 	public static int DIMY;
+	/**
+	 * Whether the user has chosen to launch the AI
+	 */
 	public static boolean isAI; 
+	/**
+	 * Delay used at each turn to make it humanly playable and understandable
+	 */
 	public static int delay;
+	/**
+	 * Number of individuals in the population
+	 */
 	public static int sizePop = 1;
+	/**
+	 * Whether to display the whales flying or not. Disabled to focus computing power on the algorithm
+	 */
 	public static boolean enableView;
+	/**
+	 * The Class to be used as DNA Implementation for the Individuals
+	 */
 	public static Class<? extends DNA> dnaUsed;
+	/**
+	 * Number of frames per action to allow to this particular AI launch. Not used in practice (too difficult when not 1)
+	 * @deprecated
+	 */
 	public static int framesPerAction;
 	// main method (the reason we're here at all)
+	/**
+	 * Main method. Calls the miscellanuous display methods for the way the game should be launched, then calls the loop methods.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		enableView = true;
 		DIMX = 1000;
@@ -41,11 +77,12 @@ public class Main {
 		Game game = new Game(Main.DIMX, Main.DIMY, sizePop);
 		
 		// Genetic algo initialisation (with its DNA implementation and Selection)
-
-		Selection selector = new FunctionalSelection(new Exp(8));
+		double mutationAtZero = 0.05;
+		boolean decrease = true;
+		Selection selector = new RankSelection(0.05);
 		Genetic genetic = null;
 		if(isAI) {
-			genetic = new Genetic(game, sizePop, dnaUsed, selector, framesPerAction);
+			genetic = new Genetic(game, sizePop, dnaUsed, selector, mutationAtZero, decrease, framesPerAction);
 		}
 		
 		
@@ -78,21 +115,21 @@ public class Main {
 	
 	/**
 	 * Game loop for a human player. Repeats the sequence 'update game, display game, get inputs from controller' until the end of the game.
-	 * @param game
-	 * @param saut
-	 * @param window
-	 * @param checker
+	 * @param game the game the player will play
+	 * @param jump used in the generic loop model; array (here size 1) of boolean for whether to jump
+	 * @param window the window on which to display the results for the human to be able to play
+	 * @param checker the listener on the spacebar for the player's order to jump
 	 */
-	public static void loopPlayer(Game game, boolean[] saut, Frame window, Checker checker) {
+	public static void loopPlayer(Game game, boolean[] jump, Frame window, Checker checker) {
 		// Game loop
 		while(!game.end()) { // for now, while true
 			
 			// Model updating
-			game.update(saut);
+			game.update(jump);
 			// Display updating 
 			(window.getPjeu()).repaint();
 			// Control
-			saut[0] = checker.getJump();
+			jump[0] = checker.getJump();
 			
 			// Delaying (we're only humans, afterall)
 			try {
@@ -108,9 +145,9 @@ public class Main {
 	 * @param game the current game the AI has to play on
 	 * @param window the window on which to display the game and AI results
 	 * @param genetic the genetic algorithm with the DNA chosen
-	 * @param saut the array of jumps to change at each frame
+	 * @param jump the array of jumps to change at each frame
 	 */
-	public static void loopGenetic(Game game, Frame window, Genetic genetic, boolean[] saut) {
+	public static void loopGenetic(Game game, Frame window, Genetic genetic, boolean[] jump) {
 		// Game loop
 		int count = 0;
 		while(true) { // for now, while true
@@ -126,7 +163,7 @@ public class Main {
 			}
 
 			// Model updating
-			game.update(saut);
+			game.update(jump);
 			
 			// Display updating 
 			if(enableView) {
@@ -136,7 +173,7 @@ public class Main {
 			
 			// Control 
 			if (count++ % genetic.getFramesPerAction() == 0) {
-				saut = genetic.getJumps();
+				jump = genetic.getJumps();
 			}
 			
 			// Delaying (we're only humans, afterall)
