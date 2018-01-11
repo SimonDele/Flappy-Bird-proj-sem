@@ -3,10 +3,13 @@ import java.util.Random;
 
 import controller.Checker;
 import ia.Genetic;
-import ia.dna.*;
-import ia.sel.*;
-import ia.sel.rf.*;
+import ia.sel.FunctionalSelection;
+import ia.sel.Selection;
+import ia.sel.rf.Exp;
 import model.Game;
+import qlearning.QBoolArray;
+import qlearning.QDNA;
+import qlearning.QLearning;
 import view.game.Frame;
 import view.game.PJeu;
 import view.menu.Menu;
@@ -20,7 +23,8 @@ public class Main {
 	public static int delay;
 	public static int sizePop = 1;
 	public static boolean enableView;
-	public static Class<? extends DNA> dnaUsed;
+	//public static Class<? extends DNA> dnaUsed;
+	public static Class<? extends QDNA> dnaUsed;
 	public static int framesPerAction;
 	// main method (the reason we're here at all)
 	public static void main(String[] args) {
@@ -33,7 +37,8 @@ public class Main {
 		Menu menu = new Menu(null);
 		// Get all user inputs
 		isAI = menu.isAI();
-		dnaUsed = menu.getDnaUsed();
+		//dnaUsed = menu.getDnaUsed();
+		dnaUsed = QBoolArray.class;
 		framesPerAction = menu.getFramesPerAction();
 		sizePop = menu.getSizePop();
 		
@@ -43,9 +48,11 @@ public class Main {
 		// Genetic algo initialisation (with its DNA implementation and Selection)
 
 		Selection selector = new FunctionalSelection(new Exp(8));
-		Genetic genetic = null;
+		//Genetic genetic = null;
+		QLearning qlearning = null;
 		if(isAI) {
-			genetic = new Genetic(game, sizePop, dnaUsed, selector, framesPerAction);
+			//genetic = new Genetic(game, sizePop, dnaUsed, selector, framesPerAction);
+			qlearning = new QLearning(game,dnaUsed);
 		}
 		
 		
@@ -70,7 +77,8 @@ public class Main {
 		
 		// Game loop
 		if(isAI) {
-			loopGenetic(game,window,genetic,saut);
+			//loopGenetic(game,window,genetic,saut);
+			loopQLearning(game,window,qlearning,saut);
 		} else {
 			loopPlayer(game, saut, window, checker);
 		}
@@ -138,6 +146,90 @@ public class Main {
 			if (count++ % genetic.getFramesPerAction() == 0) {
 				saut = genetic.getJumps();
 			}
+			
+			// Delaying (we're only humans, afterall)
+			try {
+				Thread.sleep(delay);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static void loopQLearning(Game game, Frame window, QLearning qlearning, boolean[] saut) {
+		// Game loop
+		int count = 0;
+		boolean obstPassed = false; //tell when the whale has passed an obstacle
+		boolean[] whalesPassed = new boolean[sizePop]; // tell which whale has succeeded passed the last obstacle in order to apply bonus or malus
+		for (int i = 0; i < sizePop; i++) {
+			whalesPassed[i] = false;
+		}
+		
+
+		
+		while(true) { // for now, while true
+			// Generation updating (if dead)
+			if(qlearning.generationDead()) {
+				//init variables
+				for (int i = 0; i < sizePop; i++) {
+					whalesPassed[i] = false;
+				}
+				// game updating
+				game = new Game(Main.DIMX, Main.DIMY, sizePop);
+				qlearning.newGame(game);
+				// window updating
+				if(enableView) window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
+				else 		   window.setPjeu(null);
+				window.getDisplayInfoGenetic().updateInfo(); 
+			}
+			int iBirdNotDead=0;
+			while(game.getBirds()[iBirdNotDead].isDead()) {
+				iBirdNotDead++;
+			}
+			if(!obstPassed && game.getObstacles().get(0).getPosX() < game.getBirds()[iBirdNotDead].getPosX()) {
+				obstPassed = true;
+				
+				for(int i=0; i<sizePop; i++) {
+					if(!game.getBirds()[i].isDead()) {
+						whalesPassed[i] = true;
+					}
+				}
+				
+				qlearning.applyReward(whalesPassed);
+			}
+			
+			
+			if(obstPassed && game.getObstacles().get(0).getPosX() > game.getBirds()[iBirdNotDead].getPosX()) {
+				obstPassed = false;
+			}
+//
+//			for(int i=0; i<sizePop;i++) {
+//				if( !obstPassed[i] && game.getObstacles().get(0).getPosX() < game.getBirds()[i].getPosX()) {
+//					obstPassed[i] = true;
+//					if(!game.getBirds()[i].isDead()) {
+//						whalesPassed[i] = true;
+//					}
+//				}
+//				if(obstPassed[i] && game.getObstacles().get(0).getPosX() > game.getBirds()[i].getPosX()) {
+//					obstPassed[i] = false;
+//				}		
+//			}
+			
+			// Model updating
+			game.update(saut);
+			
+			// Display updating 
+			if(enableView) {
+				if(window.getPjeu() == null) window.setPjeu(new PJeu(Main.DIMX,Main.DIMY,game));
+				window.getPjeu().repaint();
+			}
+			saut = qlearning.getJumps();
+			// Control 
+//			if (count++ % genetic.getFramesPerAction() == 0) {
+//				saut = genetic.getJumps();
+//			}
+			
+			qlearning.newFrame();
 			
 			// Delaying (we're only humans, afterall)
 			try {

@@ -5,9 +5,9 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import ia.Genetic;
 import mainPkg.Main;
 import model.Game;
+import qlearning.QLearning;
 public class Frame extends JFrame {
 	// Window dimensions
 	public static int DIMX;
@@ -42,7 +42,7 @@ public class Frame extends JFrame {
 	    allContent.setLayout(new BorderLayout());
 	    allContent.add(pjeu, BorderLayout.CENTER);
 	    if(Main.isAI) {
-			displayInfoGenetic = new DisplayInfoGenetic(Genetic.infoGenetic);
+			displayInfoGenetic = new DisplayInfoGenetic(QLearning.infoGenetic);
 		    allContent.add(displayInfoGenetic, BorderLayout.EAST);    	
 	    }
 
