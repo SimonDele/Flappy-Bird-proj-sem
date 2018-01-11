@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import mainPkg.Main;
 import model.Game;
 import model.Obstacle;
 import model.Whale;
@@ -68,14 +69,22 @@ public class PJeu extends JPanel  {
 		}
 		
 		int mask = 0x3FFFF000;
-
+		int mask2 = 0x80FF00FF;
 		imBirdDown = new BufferedImage(imBirdTempDown.getWidth(null),imBirdTempDown.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		imBirdDown.getGraphics().drawImage(imBirdTempDown, 0, 0 , null);
-		imBirdDown = createColorImage(imBirdDown,mask);
-		
+		if(Main.sizePop>1) {
+			imBirdDown = createColorImage(imBirdDown,mask);
+		}else {
+			imBirdDown = createColorImage(imBirdDown,mask2);
+		}
 		imBirdUp = new BufferedImage(imBirdTempUp.getWidth(null),imBirdTempUp.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		imBirdUp.getGraphics().drawImage(imBirdTempUp, 0, 0 , null);
-		imBirdUp = createColorImage(imBirdUp,mask);
+		if(Main.sizePop>1) {
+			imBirdUp = createColorImage(imBirdUp,mask);
+		}else {
+			imBirdUp = createColorImage(imBirdUp,mask2);
+		}
+		
 		
 		/// rocks & icebergs
 		Image imRockTemp = null;
