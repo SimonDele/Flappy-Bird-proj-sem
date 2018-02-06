@@ -1,54 +1,82 @@
 package ia;
 
-import Main.Main;
-import Modele.Bird;
-import Modele.Obstacle;
+import ia.dna.DNA;
+import model.Obstacle;
+import model.Whale;
 
-public class Individual {
-	private int fitness;
-	private Boolean[][] genes;
-	private int nrow;
-	private int ncol;
+/**
+ * An Individual, in the sense of the Genetic Algorithm - hence a tuple (fitness, DNA). Implements Comparable to be sorted fitnesswise; else heavily relies on its DNA.
+ */
+public class Individual implements Comparable<Individual> {
+	/**
+	 * The individual's score in his environment
+	 */
+	protected int fitness;
+	/**
+	 * The individual's DNA, responsible for its behaviour.
+	 */
+	protected DNA dna;
+	
+	/**
+	 * Sets the fitness to 0 and the dna to the given value
+	 * @param dna for the field of the same name
+	 */
+	public Individual(DNA dna) {
+		this.fitness = 0;
+		this.dna = dna;
+	}
+	
+	/**
+	 * Uses the generic constructor of the Class passed in argument to initialize its DNA. For gen 0
+	 * @param dnaImpl the Class to be used as DNA
+	 */
+	public Individual(Class<? extends DNA> dnaImpl) {
+		this.fitness = 0;
+		try {
+			this.dna = dnaImpl.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			System.out.println("Error in instanciating the implementation of DNA");
+			e.printStackTrace();
+		}
+	}
 
-	public Individual(int nrow, int ncol) {
-		this.nrow = nrow;
-		this.ncol = ncol;
-		fitness = 0;
-		genes = new Boolean[nrow][ncol];
-		
-		float probaJump = 0.05f;
-		for(int i=0;i<nrow;i++) {
-			for(int j=0; j<ncol; j++) {
-				genes[i][j]= (Main.rand.nextFloat() < probaJump);
-			}
-		}/*
-		for(int i=0;i<nrow;i++) {
-			for(int j=0; j<ncol; j++) {
-				genes[i][j] = (i > nrow/2 - 5);
-			}
-		}*/
-		this.printArray(genes, nrow, ncol);
+	// main methods of an individual
+	/**
+	 * Calls the Individual's DNA "decideJump" method, as the Individual's behaviour is completely determined by its DNA.
+	 * @param obstacle the obstacle to dodge
+	 * @param whale the bird the Individual is controlling
+	 * @return a boolean = (whether to jump or not)
+	 */
+	public boolean decideJump(Obstacle obstacle, Whale whale) {
+		return dna.decidejump(obstacle, whale);
 	}
-	private void printArray(Boolean[][] array, int dimX, int dimY) {
-		for (int i = 0; i < dimX; i++) {
-			for (int j = 0; j < dimY; j++) {
-				System.out.print(array[i][j]? 1 : 0);
-			}
-			System.out.println("");
-		}
-		//System.out.println("\n");
+	/**
+	 * Never used in practice, usually mutation are nested in crossover; but some Selection methods might require some function to mutate afterwards (e.g. "keepers")
+	 * @param mutAmpl the amplitude of the mutation, when it makes sense
+	 * @param mutProba the probability of the mutation, when it makes sense
+	 * @deprecated
+	 */
+	public void mutate(double mutAmpl, double mutProba) {
+		dna.mutate(mutAmpl, mutProba);
 	}
-	public boolean decideJump(Obstacle obstacle, Bird bird) {
-		int diffX = (obstacle.getPosX() - bird.getPosX())/Obstacle.getSpeed();
-		if((diffX > 0) && (diffX < ncol - 1)) { // if bird is at the left of the obstacle and their distance is less than ncol
-			System.out.println("if");
-			return genes[(bird.getPosY()-obstacle.getPosY())/Obstacle.getSpeed()+nrow/2][diffX];
-			
-		}else { // handling the bound (i.e. bird is at the right of the obstacle or their distance is more than ncol
-			System.out.println("else");
-			return genes[bird.getPosY()/Obstacle.getSpeed() + nrow/4][ncol-1];
-			
-		}
-		
+	/**
+	 * Breeding of an Individual with another, giving birth to an offsrping as some arrangement of their genes, with some mutations
+	 * @param otherParent the parent to breed this one with
+	 * @return the new Individual born from both parents
+	 */
+	public Individual crossover(Individual otherParent, double mutAmpl, double mutProba) {
+		return new Individual(this.dna.crossover(otherParent.getDNA(), mutAmpl, mutProba));
+	}
+
+	// Getters and setters
+	public int getFitness(){return fitness;}
+	public void setFitness(int fitness) {this.fitness = fitness;}
+	public DNA getDNA() {return this.dna;}
+	
+	/**
+	 * Comparing method used for sorting the array
+	 */
+	public int compareTo(Individual ind) { // descending order
+		return ind.getFitness() - this.fitness;
 	}
 }
